@@ -5,10 +5,11 @@ export class File {
     path: string;
     parent: Folder;
 
-    constructor(n: string, p: string, pF: Folder) {
+    constructor(n: string, pF: Folder) {
         this.name = n;
-        this.path = p;
         this.parent = pF;
+        this.parent.addChild(this);
+        this.path = this.setPath();
     }
 
     /*

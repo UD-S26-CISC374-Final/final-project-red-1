@@ -10,6 +10,7 @@ export class Folder {
     constructor(n: string, pF: Folder | null) {
         this.name = n;
         this.parent = pF;
+        this.parent?.addChild(this);
         this.path = this.setPath();
         this.children = [];
     }
@@ -29,6 +30,7 @@ export class Folder {
     }
 
     public addChild(child: Folder | File): void {
+        child.parent = this;
         this.children.push(child);
     }
 

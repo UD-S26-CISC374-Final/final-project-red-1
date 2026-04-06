@@ -6,9 +6,13 @@ export class Navigator {
     root: Folder;
     current: Folder;
 
-    constructor() {
-        this.root = new Folder("root", null);
+    constructor(f: Folder) {
+        this.root = f;
         this.current = this.root;
+    }
+
+    public showContent(): string {
+        return "../, ./, " + this.current.showContents();
     }
 
     /*
