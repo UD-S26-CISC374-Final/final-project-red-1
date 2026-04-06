@@ -51,4 +51,22 @@ export class Folder {
 
         return contents;
     }
+
+    /*
+        Name: getChild
+        Description: given a name of a filder/file, will return the index in which to access it. -1 error case
+        Input: name (string): the name of the element needed
+        Output: number: index of wanted element
+    */
+    public getChild(name: string): number {
+        let index = -1; //default error case
+
+        for (let i = 0; i < this.children.length; i++) {
+            if (this.children[i].name == name) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 }
