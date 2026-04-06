@@ -27,4 +27,28 @@ export class Folder {
             return this.name;
         }
     }
+
+    public addChild(child: Folder | File): void {
+        this.children.push(child);
+    }
+
+    /*
+        Name: showContents
+        Description: Lists out all of the items currently in this folder
+        Input: N/A
+        Output: string (a list of all of the files and folders in this current folder)
+    */
+    public showContents(): string {
+        let contents = "";
+
+        for (let i = 0; i < this.children.length; i++) {
+            if (i == this.children.length - 1) {
+                contents += this.children[i].name;
+            } else {
+                contents += this.children[i].name + ", ";
+            }
+        }
+
+        return contents;
+    }
 }
