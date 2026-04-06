@@ -6,6 +6,7 @@ export class Folder {
     path: string;
     parent: Folder | null;
     children: (Folder | File)[];
+    height: number;
 
     constructor(n: string, pF: Folder | null) {
         this.name = n;
@@ -13,6 +14,12 @@ export class Folder {
         this.parent?.addChild(this);
         this.path = this.setPath();
         this.children = [];
+
+        if (this.parent === null) {
+            this.height = 0;
+        } else {
+            this.height = this.parent.height + 1;
+        }
     }
 
     /*

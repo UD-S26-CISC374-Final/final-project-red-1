@@ -4,12 +4,15 @@ export class File {
     name: string;
     path: string;
     parent: Folder;
+    height: number;
 
     constructor(n: string, pF: Folder) {
         this.name = n;
         this.parent = pF;
         this.parent.addChild(this);
         this.path = this.setPath();
+
+        this.height = this.parent.height + 1;
     }
 
     /*
