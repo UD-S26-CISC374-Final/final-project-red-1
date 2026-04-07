@@ -8,7 +8,6 @@ export class MainMenu extends Scene implements ChangeableScene {
     logo: GameObjects.Image;
     title: GameObjects.Text;
     logoTween: Phaser.Tweens.Tween | null;
-
     constructor() {
         super("MainMenu");
     }
@@ -38,8 +37,6 @@ export class MainMenu extends Scene implements ChangeableScene {
             this.logoTween.stop();
             this.logoTween = null;
         }
-
-        this.scene.start("Level1");
     }
 
     moveSprite(callback: ({ x, y }: { x: number; y: number }) => void) {
