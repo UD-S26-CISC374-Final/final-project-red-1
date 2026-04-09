@@ -1,15 +1,16 @@
 import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 
-import PhaserLogo from "../objects/phaser-logo";
 import FpsText from "../objects/fps-text";
 
 export class Level1 extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
-    phaserLogo: PhaserLogo;
     fpsText: FpsText;
+    private ground: Phaser.Physics.Arcade.StaticGroup;
+    private wall: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
+    private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private crowbar: Phaser.GameObjects.Image;
     private prisoncells: Phaser.Physics.Arcade.StaticGroup;
 
@@ -29,6 +30,24 @@ export class Level1 extends Scene {
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
+        this.ground = this.physics.add.staticGroup();
+        const g = this.ground.create(
+            512,
+            768,
+            "ground",
+        ) as Phaser.Physics.Arcade.Sprite;
+        g.setScale(2).refreshBody();
+        this.physics.add.collider(this.ground, this.player);
+
+        this.wall = this.physics.add.staticGroup();
+        const w = this.wall.create(
+            0,
+            384,
+            "wall",
+        ) as Phaser.Physics.Arcade.Sprite;
+        w.setScale(2).refreshBody();
+        this.physics.add.collider(this.wall, this.player);
+        this.cursors = this.input.keyboard?.createCursorKeys();
         this.prisoncells = this.physics.add.staticGroup();
         this.prisoncells.create(400, 300, "prisoncells");
         this.prisoncells.create(450, 300, "prisoncells");
@@ -36,10 +55,27 @@ export class Level1 extends Scene {
 
         this.crowbar = this.add.image(
             200,
-            600,
+            700,
             "crowbar",
         ) as Phaser.Physics.Arcade.Image;
-        this.player = this.physics.add.sprite(100, 600, "player");
+        this.player = this.physics.add.sprite(100, 700, "player");
+
+        this.anims.create({
+            key: "turn",
+            frames: [{ key: "dude", frame: 4 }],
+            frameRate: 10,
+        });
+
+        this.anims.create({
+            key: "right",
+            frames: this.anims.generateFrameNumbers("dude", {
+                start: 5,
+                end: 8,
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });
+
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, this.prisoncells);
         this.physics.add.collider(this.crowbar, this.prisoncells);
@@ -57,22 +93,33 @@ export class Level1 extends Scene {
             undefined,
             this,
         );
-        this.phaserLogo = new PhaserLogo(this, this.cameras.main.width / 2, 0);
         this.fpsText = new FpsText(this);
 
         EventBus.emit("current-scene-ready", this);
     }
 
     private hitPrisonCell() {
-        this.prisoncellHealth -= this.crowstrength;
-        if (this.prisoncellHealth == 0) {
-            this.prisoncellHealth = 8;
-            this.torturechamber = true;
-            this.prisoncells.children.each((cell) => {
-                const prisoncell = cell as Phaser.Physics.Arcade.Sprite;
-                prisoncell.disableBody(true, true);
-                return true;
-            });
+        if (
+            this.physics.overlap(this.player, this.prisoncells) &&
+            !this.hasCrowbar
+        ) {
+            console.log("You need a crowbar to break the prison cell!");
+            this.prisoncellHealth = this.prisoncellHealth - 0;
+        }
+        if (
+            this.physics.overlap(this.player, this.prisoncells) &&
+            this.hasCrowbar
+        ) {
+            this.prisoncellHealth -= this.crowstrength;
+            if (this.prisoncellHealth == 0) {
+                this.prisoncellHealth = 8;
+                this.torturechamber = true;
+                this.prisoncells.children.each((cell) => {
+                    const prisoncell = cell as Phaser.Physics.Arcade.Sprite;
+                    prisoncell.disableBody(true, true);
+                    return true;
+                });
+            }
         }
     }
 
@@ -84,7 +131,7 @@ export class Level1 extends Scene {
 
     private handlecrowbarHit() {
         if (
-            this.physics.overlap(this.prisoncells, this.crowbar) &&
+            this.physics.overlap(this.prisoncells, this.player) &&
             this.hasCrowbar
         ) {
             this.hitPrisonCell();
@@ -92,6 +139,24 @@ export class Level1 extends Scene {
     }
 
     update() {
+        if (!this.cursors) {
+            return;
+        }
+
+        if (this.cursors.left.isDown) {
+            this.player.setVelocityX(-160);
+            this.player.anims.play("left", true);
+        } else if (this.cursors.right.isDown) {
+            this.player.setVelocityX(160);
+            this.player.anims.play("right", true);
+        } else {
+            this.player.setVelocityX(0);
+            this.player.anims.play("turn");
+        }
+
+        if (this.cursors.up.isDown && this.player.body?.touching.down) {
+            this.player.setVelocityY(-330);
+        }
         this.fpsText.update();
     }
 
