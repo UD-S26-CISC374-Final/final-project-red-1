@@ -24,11 +24,21 @@ export class Preloader extends Scene {
 
     preload() {
         //  Load the assets for the game - Replace with your own assets
-        this.load.setPath("assets");
-
-        this.load.image("logo", "logo.png");
-        this.load.image("star", "star.png");
-        this.load.image("phaser-logo", "phaser-logo.png");
+        this.load.image("ground", "assets/ground.png");
+        this.load.image("wall", "assets/wall.png");
+        this.load.image("prisoncells", "assets/prisoncell.png");
+        this.load.image("crowbar", "assets/crowbar.png");
+        this.load.image("chain", "assets/chain.png");
+        this.load.image("gloves", "assets/gloves.png");
+        this.load.image("guillotine", "assets/guillotine.png");
+        this.load.image("lever", "assets/lever.png");
+        this.load.image("logo", "assets/logo.png");
+        this.load.image("star", "assets/star.png");
+        this.load.image("phaser-logo", "assets/phaser-logo.png");
+        this.load.spritesheet("player", "assets/king.png", {
+            frameWidth: 32,
+            frameHeight: 48,
+        });
     }
 
     create() {
