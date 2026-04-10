@@ -21,7 +21,7 @@ export class Enviroment {
 
         //Records
         const records = new Folder("Records", hallway);
-        const shelf1 = new Folder("Shelf2", records);
+        const shelf1 = new Folder("Shelf1", records);
         new File("Book1", shelf1);
         new File("Book2", shelf1);
         new File("Book3", shelf1);

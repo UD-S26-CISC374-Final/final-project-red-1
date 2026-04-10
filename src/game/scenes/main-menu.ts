@@ -40,8 +40,12 @@ export class MainMenu extends Scene implements ChangeableScene {
         this.title.text += "\n" + env.nav.showContent();
         env.nav.travelDown("Records");
         this.title.text += "\n" + env.nav.showContent();
-        env.nav.travelUp();
-        this.title.text += "\n" + env.nav.showContent();
+        //env.nav.s2FTest("../Jail/Dirt");
+        this.title.text += "\n" + env.nav.s2FTest("../"); //should return "Hallway"
+        this.title.text += "\n" + env.nav.s2FTest("../Jail/"); //should return "Jail"
+        this.title.text += "\n" + env.nav.s2FTest("Shelf1/Book2/"); //should be "Book2"
+        this.title.text += "\n" + env.nav.s2FTest("../Jail/Dirt"); //should be "Dirt"
+        this.title.text += "\n" + env.nav.s2FTest("../../");
     }
 
     changeScene() {

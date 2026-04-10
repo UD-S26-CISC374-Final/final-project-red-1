@@ -1,14 +1,29 @@
-//import { File } from "./File";
+import { File } from "./File";
 import { Folder } from "./Folder";
 // ^ imports ^
+
+function cutdownFilePath(filePath: string): string[] {
+    const slashIndex = filePath.indexOf("/");
+
+    if (slashIndex === -1) {
+        return [filePath, ""];
+    }
+
+    const segment = filePath.slice(0, slashIndex);
+    const rest = filePath.slice(slashIndex + 1);
+
+    return [segment, rest];
+}
 
 export class Navigator {
     root: Folder;
     current: Folder;
 
-    constructor(f: Folder) {
+    constructor(f: Folder, f2?: Folder) {
         this.root = f;
         this.current = this.root;
+        if (f2 === undefined) this.current = this.root;
+        else this.current = f2;
     }
 
     public showContent(): string {
@@ -34,12 +49,126 @@ export class Navigator {
         Output: N/A
     */
     public travelDown(name: string) {
-        const index = this.current.getChild(name);
+        const temp = this.getFile(name);
 
-        if (index != -1) {
-            if (this.current.children[index] instanceof Folder) {
-                this.current = this.current.children[index];
+        if (temp instanceof Folder) {
+            this.current = temp;
+        }
+    }
+
+    /*
+        Name: getFile
+        Description: when given the name of a file, grabs said file
+        Input: name (string): the name of the file that should be grabbed
+        Output: File/Folder: the returned file.
+            null: error case
+    */
+    private getFile(name: string): File | Folder | null {
+        if (this.doesFileExist(name)) {
+            const temp = this.current.children[this.current.getChild(name)];
+
+            if (temp instanceof Folder) {
+                return temp;
+            } else if (temp instanceof File) {
+                return temp;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /*
+        Name: doesFileExist
+        Description: when given a file, will return whether or not the file exists in the current folder
+        Input: name (string): the name of the file
+        Output: boolean: whether or not the file given exists
+    */
+    private doesFileExist(name: string): boolean {
+        return this.current.getChild(name) !== -1;
+    }
+
+    //for testing purposes
+    public s2FTest(filePath: string): string {
+        const temp = this.stringToFile(filePath);
+
+        if (temp instanceof Folder) {
+            return temp.name;
+        } else if (temp instanceof File) {
+            return temp.name;
+        } else if (typeof temp === "string") {
+            return temp;
+        } else {
+            return "it failed";
+        }
+    }
+
+    /*
+        Name: stringToFile
+        Description: when given the path to a file, produces said file at the location 
+        Input: filePath (string): the given file path
+        Output: File/Filder: the file at the end of the path provided
+            string: error catch
+    */
+    public stringToFile(filePath: string): File | Folder | string {
+        const nav = new Navigator(this.root, this.current);
+        let currentPath = filePath; //edited file path
+        let errorFound = false; //checks if an error is produced
+        let fileString = ""; //current file being iterated in the do-while
+        let tempFile: File | Folder | null;
+        tempFile = nav.current; //temp variable for storing files
+
+        do {
+            const tempVar = cutdownFilePath(currentPath);
+            currentPath = tempVar[1];
+            fileString = tempVar[0];
+
+            if (fileString === "..") {
+                nav.travelUp();
+            } else {
+                if (nav.doesFileExist(fileString)) {
+                    tempFile = nav.getFile(fileString);
+                    if (tempFile instanceof Folder) {
+                        nav.travelDown(fileString);
+                    } else {
+                        //catches file
+                        if (this.hasSlash(currentPath)) {
+                            errorFound = true;
+                        } //error catching
+                    }
+                } else {
+                    errorFound = true;
+                } //another error catch
+            }
+        } while (currentPath.length > 0 && !errorFound);
+
+        if (errorFound) {
+            return "ERROR";
+        } //error catch all
+
+        if (fileString === ".." || fileString === "") {
+            return nav.current;
+        } //I.E., moving up a file
+
+        if (tempFile instanceof File) {
+            return tempFile;
+        } //god I hate how multitype variables work, you gotta specify what the type is. Ignore the sloppy if statements
+
+        if (tempFile instanceof Folder) {
+            return tempFile;
+        }
+
+        return "ERROR"; // mostly used this for testing, but a final catch all return
+    }
+
+    private hasSlash(filePath: string): boolean {
+        for (let i = 0; i < filePath.length; i++) {
+            if (filePath[i] === "/") {
+                return true;
             }
         }
+
+        return false;
     }
 }
