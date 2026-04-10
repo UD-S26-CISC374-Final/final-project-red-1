@@ -71,8 +71,26 @@ export class Enviroment {
                 default:
                     return "ERROR: Too many arguments. Please use the following format: cd [filepath]";
             }
+        } else if (brokenUpCommand[0] === "ls") {
+            //list command
+            let tempFile: File | Folder | string;
+            switch (brokenUpCommand.length) {
+                case 1:
+                    return this.nav.showContent();
+                case 2:
+                    tempFile = this.nav.stringToFile(brokenUpCommand[1]);
+                    if (tempFile instanceof Folder) {
+                        return "../, ./, " + tempFile.showContents();
+                    } else if (tempFile instanceof File) {
+                        return "ERROR: Pathway lead to a file. Please use a directory";
+                    } else {
+                        return "ERROR: Directory does not exist.";
+                    }
+                default:
+                    return "ERROR: Too many arguments. Please use the following format: ls [filepath (optional)]";
+            }
         }
 
-        return "ERROR OVERALL";
+        return "ERROR: Command not found";
     }
 }
