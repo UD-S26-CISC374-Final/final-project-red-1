@@ -36,7 +36,7 @@ export class Navigator {
         Input: N/A
         Output: N/A
     */
-    public travelUp() {
+    private travelUp() {
         if (this.current.parent != null) {
             this.current = this.current.parent;
         }
@@ -48,11 +48,30 @@ export class Navigator {
         Input: name (String): the name of the folder to travel to
         Output: N/A
     */
-    public travelDown(name: string) {
+    private travelDown(name: string) {
         const temp = this.getFile(name);
 
         if (temp instanceof Folder) {
             this.current = temp;
+        }
+    }
+
+    /*
+        Name: travelTo
+        Description: When given a file path of a folder, will set the current folder to said file path
+        Input: path (string): The path to a directory/folder
+        Output: string: Returns either an error notifying the player of a mistake, or that it was succesful.
+    */
+    public travelTo(path: string): string {
+        const tempFile = this.stringToFile(path);
+
+        if (tempFile instanceof Folder) {
+            this.current = tempFile;
+            return "Succesfully changed directory";
+        } else if (tempFile instanceof File) {
+            return "ERROR: Pathway led to a file, not a folder.";
+        } else {
+            return "ERROR: File was not found or does not exist.";
         }
     }
 

@@ -34,6 +34,27 @@ export class MainMenu extends Scene implements ChangeableScene {
         const env = new Enviroment();
 
         this.title.text = env.nav.showContent();
+        this.title.text += "\n" + env.runCommand("test");
+        this.title.text += "\n" + env.runCommand("cd");
+        this.title.text += "\n" + env.runCommand("cd Hallway Jail");
+        this.title.text += "\n" + env.runCommand("cd Hallway/Jail");
+        this.title.text += "\n" + env.nav.showContent();
+    }
+
+    changeScene() {
+        if (this.logoTween) {
+            this.logoTween.stop();
+            this.logoTween = null;
+        }
+
+        this.scene.start("Level1");
+    }
+}
+
+/*
+TEST CODE USED BY LEIF TO TEST FUNCTIONALITY
+
+        this.title.text = env.nav.showContent();
         env.nav.travelDown("Hallway");
         this.title.text += "\n" + env.nav.showContent();
         env.nav.travelDown("Test");
@@ -46,14 +67,5 @@ export class MainMenu extends Scene implements ChangeableScene {
         this.title.text += "\n" + env.nav.s2FTest("Shelf1/Book2/"); //should be "Book2"
         this.title.text += "\n" + env.nav.s2FTest("../Jail/Dirt"); //should be "Dirt"
         this.title.text += "\n" + env.nav.s2FTest("../../");
-    }
 
-    changeScene() {
-        if (this.logoTween) {
-            this.logoTween.stop();
-            this.logoTween = null;
-        }
-
-        this.scene.start("Level1");
-    }
-}
+*/
