@@ -35,12 +35,13 @@ export class MainMenu extends Scene implements ChangeableScene {
 
         this.title.text = env.nav.showContent();
         env.runCommand("cd Hallway/Jail");
-        this.title.text += "\n" + env.nav.showContent();
-        this.title.text += "\n" + env.runCommand("");
         this.title.text += "\n" + env.runCommand("ls");
-        this.title.text += "\n" + env.runCommand("ls ../");
-        this.title.text += "\n" + env.runCommand("ls ../ ../");
-        this.title.text += "\n" + env.runCommand("ls ../../");
+        this.title.text += "\n" + env.runCommand("ls ../../../");
+        this.title.text += "\n" + env.runCommand("cd ..");
+        this.title.text += "\n" + env.runCommand("ls");
+        this.title.text += "\n" + env.runCommand("cd ../");
+        this.title.text += "\n" + env.runCommand("ls");
+        this.title.text += "\n" + env.runCommand("cd ../");
         this.title.text += "\n" + env.runCommand("ls");
     }
 
@@ -70,5 +71,12 @@ TEST CODE USED BY LEIF TO TEST FUNCTIONALITY
         this.title.text += "\n" + env.nav.s2FTest("Shelf1/Book2/"); //should be "Book2"
         this.title.text += "\n" + env.nav.s2FTest("../Jail/Dirt"); //should be "Dirt"
         this.title.text += "\n" + env.nav.s2FTest("../../");
+
+        this.title.text += "\n" + env.nav.showContent();
+        this.title.text += "\n" + env.runCommand("");
+        this.title.text += "\n" + env.runCommand("ls");
+        this.title.text += "\n" + env.runCommand("ls ../");
+        this.title.text += "\n" + env.runCommand("ls ../ ../");
+        this.title.text += "\n" + env.runCommand("ls ../../");
 
 */

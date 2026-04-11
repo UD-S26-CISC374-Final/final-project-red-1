@@ -68,25 +68,25 @@ export class Enviroment {
                 case 2: //case: both the command and the file path were inputted
                     return this.nav.travelTo(brokenUpCommand[1]);
 
-                default:
+                default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: cd [filepath]";
             }
         } else if (brokenUpCommand[0] === "ls") {
             //list command
             let tempFile: File | Folder | string;
             switch (brokenUpCommand.length) {
-                case 1:
+                case 1: //case: just "ls". Prints current directory
                     return this.nav.showContent();
-                case 2:
+                case 2: //case: "ls" + a file path
                     tempFile = this.nav.stringToFile(brokenUpCommand[1]);
                     if (tempFile instanceof Folder) {
                         return "../, ./, " + tempFile.showContents();
                     } else if (tempFile instanceof File) {
                         return "ERROR: Pathway lead to a file. Please use a directory";
                     } else {
-                        return "ERROR: Directory does not exist.";
+                        return tempFile;
                     }
-                default:
+                default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: ls [filepath (optional)]";
             }
         }

@@ -34,11 +34,15 @@ export class Navigator {
         Name: travelUp
         Description: If possible, will set the current directory to the parent of the current directory
         Input: N/A
-        Output: N/A
+        Output: boolean: whether or not a root exists
     */
-    private travelUp() {
+    private travelUp(): boolean {
         if (this.current.parent != null) {
+            //if not the root
             this.current = this.current.parent;
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -71,7 +75,7 @@ export class Navigator {
         } else if (tempFile instanceof File) {
             return "ERROR: Pathway led to a file, not a folder.";
         } else {
-            return "ERROR: File was not found or does not exist.";
+            return tempFile;
         }
     }
 
@@ -137,6 +141,7 @@ export class Navigator {
         let fileString = ""; //current file being iterated in the do-while
         let tempFile: File | Folder | null;
         tempFile = nav.current; //temp variable for storing files
+        let errorString = "";
 
         do {
             const tempVar = cutdownFilePath(currentPath);
@@ -144,7 +149,11 @@ export class Navigator {
             fileString = tempVar[0];
 
             if (fileString === "..") {
-                nav.travelUp();
+                const hasRoot = nav.travelUp();
+                if (!hasRoot) {
+                    errorFound = true;
+                    errorString = "ERROR: Filepath goes outside of bounds";
+                }
             } else {
                 if (nav.doesFileExist(fileString)) {
                     tempFile = nav.getFile(fileString);
@@ -154,16 +163,18 @@ export class Navigator {
                         //catches file
                         if (this.hasSlash(currentPath)) {
                             errorFound = true;
+                            errorString = "ERROR";
                         } //error catching
                     }
                 } else {
                     errorFound = true;
+                    errorString = "ERROR: Filepath does not exist";
                 } //another error catch
             }
         } while (currentPath.length > 0 && !errorFound);
 
         if (errorFound) {
-            return "ERROR";
+            return errorString;
         } //error catch all
 
         if (fileString === ".." || fileString === "") {
