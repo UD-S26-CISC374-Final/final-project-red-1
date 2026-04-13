@@ -10,7 +10,7 @@ export class Level1 extends Scene {
     private ground: Phaser.Physics.Arcade.StaticGroup;
     private wall: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
-    private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
+    //private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private crowbar: Phaser.GameObjects.Image;
     private prisoncells: Phaser.Physics.Arcade.StaticGroup;
 
@@ -47,7 +47,7 @@ export class Level1 extends Scene {
         ) as Phaser.Physics.Arcade.Sprite;
         w.setScale(2).refreshBody();
         this.physics.add.collider(this.wall, this.player);
-        this.cursors = this.input.keyboard?.createCursorKeys();
+        //this.cursors = this.input.keyboard?.createCursorKeys();
         this.prisoncells = this.physics.add.staticGroup();
         this.prisoncells.create(400, 300, "prisoncells");
         this.prisoncells.create(450, 300, "prisoncells");
@@ -61,14 +61,23 @@ export class Level1 extends Scene {
         this.player = this.physics.add.sprite(100, 700, "player");
 
         this.anims.create({
+            key: "left",
+            frames: this.anims.generateFrameNumbers("player", {
+                start: 5,
+                end: 8,
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });
+        this.anims.create({
             key: "turn",
-            frames: [{ key: "dude", frame: 4 }],
+            frames: [{ key: "player", frame: 4 }],
             frameRate: 10,
         });
 
         this.anims.create({
             key: "right",
-            frames: this.anims.generateFrameNumbers("dude", {
+            frames: this.anims.generateFrameNumbers("player", {
                 start: 5,
                 end: 8,
             }),
@@ -139,7 +148,7 @@ export class Level1 extends Scene {
     }
 
     update() {
-        if (!this.cursors) {
+        /*if (!this.cursors) {
             return;
         }
 
@@ -156,7 +165,7 @@ export class Level1 extends Scene {
 
         if (this.cursors.up.isDown && this.player.body?.touching.down) {
             this.player.setVelocityY(-330);
-        }
+        }*/
         this.fpsText.update();
     }
 
