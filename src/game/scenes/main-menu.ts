@@ -1,11 +1,11 @@
 import { GameObjects, Scene } from "phaser";
+import { Enviroment } from "../../classes/Enviroment";
 
 import { EventBus } from "../event-bus";
 import type { ChangeableScene } from "../reactable-scene";
 
 export class MainMenu extends Scene implements ChangeableScene {
     background: GameObjects.Image;
-    logo: GameObjects.Image;
     title: GameObjects.Text;
     logoTween: Phaser.Tweens.Tween | null;
     constructor() {
@@ -15,21 +15,33 @@ export class MainMenu extends Scene implements ChangeableScene {
     create() {
         this.background = this.add.image(512, 384, "background");
 
-        this.logo = this.add.image(512, 300, "logo").setDepth(100);
-
         this.title = this.add
-            .text(512, 460, "Main Menu", {
-                fontFamily: "Arial Black",
-                fontSize: 38,
+            .text(24, 24, "Main Menu", {
+                fontFamily: "Courier New",
+                fontSize: 16,
                 color: "#ffffff",
-                stroke: "#000000",
-                strokeThickness: 8,
-                align: "center",
+                align: "left",
             })
-            .setOrigin(0.5)
+            .setOrigin(0, 0)
             .setDepth(100);
 
+        this.title.setLineSpacing(10);
         EventBus.emit("current-scene-ready", this);
+    }
+
+    update() {
+        const env = new Enviroment();
+
+        this.title.text = env.nav.showContent();
+        env.runCommand("cd Hallway/Jail");
+        this.title.text += "\n" + env.runCommand("ls");
+        this.title.text += "\n" + env.runCommand("ls ../../../");
+        this.title.text += "\n" + env.runCommand("cd ..");
+        this.title.text += "\n" + env.runCommand("ls");
+        this.title.text += "\n" + env.runCommand("cd ../");
+        this.title.text += "\n" + env.runCommand("ls");
+        this.title.text += "\n" + env.runCommand("cd ../");
+        this.title.text += "\n" + env.runCommand("ls");
     }
 
     changeScene() {
@@ -38,28 +50,30 @@ export class MainMenu extends Scene implements ChangeableScene {
             this.logoTween = null;
         }
     }
-
-    moveSprite(callback: ({ x, y }: { x: number; y: number }) => void) {
-        if (this.logoTween) {
-            if (this.logoTween.isPlaying()) {
-                this.logoTween.pause();
-            } else {
-                this.logoTween.play();
-            }
-        } else {
-            this.logoTween = this.tweens.add({
-                targets: this.logo,
-                x: { value: 750, duration: 3000, ease: "Back.easeInOut" },
-                y: { value: 80, duration: 1500, ease: "Sine.easeOut" },
-                yoyo: true,
-                repeat: -1,
-                onUpdate: () => {
-                    callback({
-                        x: Math.floor(this.logo.x),
-                        y: Math.floor(this.logo.y),
-                    });
-                },
-            });
-        }
-    }
 }
+
+/*
+TEST CODE USED BY LEIF TO TEST FUNCTIONALITY
+
+        this.title.text = env.nav.showContent();
+        env.nav.travelDown("Hallway");
+        this.title.text += "\n" + env.nav.showContent();
+        env.nav.travelDown("Test");
+        this.title.text += "\n" + env.nav.showContent();
+        env.nav.travelDown("Records");
+        this.title.text += "\n" + env.nav.showContent();
+        //env.nav.s2FTest("../Jail/Dirt");
+        this.title.text += "\n" + env.nav.s2FTest("../"); //should return "Hallway"
+        this.title.text += "\n" + env.nav.s2FTest("../Jail/"); //should return "Jail"
+        this.title.text += "\n" + env.nav.s2FTest("Shelf1/Book2/"); //should be "Book2"
+        this.title.text += "\n" + env.nav.s2FTest("../Jail/Dirt"); //should be "Dirt"
+        this.title.text += "\n" + env.nav.s2FTest("../../");
+
+        this.title.text += "\n" + env.nav.showContent();
+        this.title.text += "\n" + env.runCommand("");
+        this.title.text += "\n" + env.runCommand("ls");
+        this.title.text += "\n" + env.runCommand("ls ../");
+        this.title.text += "\n" + env.runCommand("ls ../ ../");
+        this.title.text += "\n" + env.runCommand("ls ../../");
+
+*/
