@@ -11,7 +11,7 @@ export class Level1 extends Scene {
     private wall: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
     //private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
-    private crowbar: Phaser.GameObjects.Image;
+    private crowbar: Phaser.Physics.Arcade.Image;
     private prisoncells: Phaser.Physics.Arcade.StaticGroup;
 
     private hasCrowbar = false;
@@ -24,6 +24,7 @@ export class Level1 extends Scene {
     }
 
     create() {
+        this.add.image(400, 300, "dungeon");
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#000000");
 
@@ -33,32 +34,55 @@ export class Level1 extends Scene {
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
             512,
-            768,
+            724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         g.setScale(2).refreshBody();
+        const g1 = this.ground.create(
+            388,
+            724,
+            "ground",
+        ) as Phaser.Physics.Arcade.Sprite;
+        g1.setScale(2).refreshBody();
+        const g2 = this.ground.create(
+            636,
+            724,
+            "ground",
+        ) as Phaser.Physics.Arcade.Sprite;
+        g2.setScale(2).refreshBody();
         this.physics.add.collider(this.ground, this.player);
-
+        const pg = this.ground.create(
+            264,
+            724,
+            "ground",
+        ) as Phaser.Physics.Arcade.Sprite;
+        pg.setScale(2).refreshBody();
+        const wpg = this.ground.create(
+            140,
+            724,
+            "ground",
+        ) as Phaser.Physics.Arcade.Sprite;
+        wpg.setScale(2).refreshBody();
         this.wall = this.physics.add.staticGroup();
         const w = this.wall.create(
-            0,
-            384,
+            100,
+            484,
             "wall",
         ) as Phaser.Physics.Arcade.Sprite;
         w.setScale(2).refreshBody();
         this.physics.add.collider(this.wall, this.player);
         //this.cursors = this.input.keyboard?.createCursorKeys();
         this.prisoncells = this.physics.add.staticGroup();
-        this.prisoncells.create(400, 300, "prisoncells");
-        this.prisoncells.create(450, 300, "prisoncells");
-        this.prisoncells.create(500, 300, "prisoncells");
+        this.prisoncells.create(500, 500, "prisoncells");
+        this.prisoncells.create(550, 500, "prisoncells");
+        this.prisoncells.create(600, 500, "prisoncells");
 
         this.crowbar = this.add.image(
-            200,
-            700,
+            300,
+            675,
             "crowbar",
         ) as Phaser.Physics.Arcade.Image;
-        this.player = this.physics.add.sprite(100, 700, "player");
+        this.player = this.physics.add.sprite(200, 500, "player");
 
         this.anims.create({
             key: "left",
@@ -86,6 +110,22 @@ export class Level1 extends Scene {
         });
 
         this.player.setCollideWorldBounds(true);
+        this.physics.add.collider(this.player, this.ground);
+        this.physics.add.collider(this.player, this.wall);
+        this.physics.add.overlap(
+            this.player,
+            this.ground,
+            this.groundandwallCollisions.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.wall,
+            this.groundandwallCollisions.bind(this),
+            undefined,
+            this,
+        );
         this.physics.add.collider(this.player, this.prisoncells);
         this.physics.add.collider(this.crowbar, this.prisoncells);
         this.physics.add.overlap(
@@ -144,6 +184,15 @@ export class Level1 extends Scene {
             this.hasCrowbar
         ) {
             this.hitPrisonCell();
+        }
+    }
+
+    private groundandwallCollisions() {
+        if (this.physics.overlap(this.player, this.ground)) {
+            this.player.setVelocityY(0);
+        }
+        if (this.physics.overlap(this.player, this.wall)) {
+            this.player.setVelocityX(0);
         }
     }
 
