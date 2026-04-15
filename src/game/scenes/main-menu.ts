@@ -39,7 +39,7 @@ export class MainMenu extends Scene implements ChangeableScene {
         this.title.text += "\n" + env.runCommand("ls ../../../");
         this.title.text += "\n" + env.runCommand("cd ..");
         this.title.text += "\n" + env.runCommand("ls");
-        this.title.text += "\n" + env.runCommand("cd ../");
+        this.title.text += "\n" + env.runCommand("cd ../ ../");
         this.title.text += "\n" + env.runCommand("ls");
         this.title.text += "\n" + env.runCommand("cd ../");
         this.title.text += "\n" + env.runCommand("ls");

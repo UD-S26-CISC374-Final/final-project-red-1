@@ -4,6 +4,7 @@ import { Level1 as MainGame } from "./scenes/level1";
 import { MainMenu } from "./scenes/main-menu";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/preloader";
+import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
@@ -37,6 +38,15 @@ const config: Phaser.Types.Core.GameConfig = {
     render: {
         pixelArt: false,
         antialias: true,
+    },
+    plugins: {
+        scene: [
+            {
+                key: "rexUI",
+                plugin: RexUIPlugin,
+                mapping: "rexUI",
+            },
+        ],
     },
 };
 
