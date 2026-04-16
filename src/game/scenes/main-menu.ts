@@ -1,23 +1,59 @@
 import { GameObjects, Scene } from "phaser";
 import { Enviroment } from "../../classes/Enviroment";
-
+import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 import { EventBus } from "../event-bus";
 import type { ChangeableScene } from "../reactable-scene";
 
 export class MainMenu extends Scene implements ChangeableScene {
-    background: GameObjects.Image;
+    rexUI!: RexUIPlugin;
     title: GameObjects.Text;
+    textBox: GameObjects.GameObject;
     logoTween: Phaser.Tweens.Tween | null;
+
+    env: Enviroment;
+    lines: string[] = [];
+    maxLines: number = 25;
 
     constructor() {
         super("MainMenu");
     }
 
+    appendLine(line: string) {
+        this.lines.push(line);
+
+        // keep only last N lines (this is the “scroll” behavior)
+        if (this.lines.length > this.maxLines) {
+            this.lines.shift();
+        }
+
+        this.title.setText(this.lines.join("\n"));
+    }
+
     create() {
-        this.background = this.add.image(512, 384, "background");
+        this.env = new Enviroment(); // ✅ add this
+
+        this.textBox = this.rexUI.add.textBox({
+            x: 0,
+            y: 1000,
+            width: 1080,
+            height: 100,
+            background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, 0x000000),
+            text: this.add.text(0, 0, "", {
+                fontSize: "20px",
+                fontFamily: "Courier New",
+                color: "#ffffff",
+                wordWrap: { width: 380 },
+            }),
+            space: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10,
+            },
+        });
 
         this.title = this.add
-            .text(24, 24, "Main Menu", {
+            .text(24, 24, "", {
                 fontFamily: "Courier New",
                 fontSize: 16,
                 color: "#ffffff",
@@ -27,23 +63,34 @@ export class MainMenu extends Scene implements ChangeableScene {
             .setDepth(100);
 
         this.title.setLineSpacing(10);
+
+        const input = this.add.dom(512, 750, "input", {
+            width: "1024px",
+            fontSize: "16px",
+            fontFamily: "Courier New",
+        });
+
+        this.appendLine(this.env.runCommand("ls"));
+
+        const inputElement = input.node as HTMLInputElement;
+
+        inputElement.addEventListener("keydown", (event: KeyboardEvent) => {
+            if (event.key === "Enter") {
+                const value = (input.node as HTMLInputElement).value;
+
+                const output = this.env.runCommand(value);
+
+                this.appendLine("> " + value);
+                this.appendLine(output);
+
+                inputElement.value = "";
+            }
+        });
+
         EventBus.emit("current-scene-ready", this);
     }
 
-    update() {
-        const env = new Enviroment();
-
-        this.title.text = env.nav.showContent();
-        env.runCommand("cd Hallway/Jail");
-        this.title.text += "\n" + env.runCommand("ls");
-        this.title.text += "\n" + env.runCommand("ls ../../../");
-        this.title.text += "\n" + env.runCommand("cd ..");
-        this.title.text += "\n" + env.runCommand("ls");
-        this.title.text += "\n" + env.runCommand("cd ../ ../");
-        this.title.text += "\n" + env.runCommand("ls");
-        this.title.text += "\n" + env.runCommand("cd ../");
-        this.title.text += "\n" + env.runCommand("ls");
-    }
+    update() {}
 
     changeScene() {
         if (this.logoTween) {
