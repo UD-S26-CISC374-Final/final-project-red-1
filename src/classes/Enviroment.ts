@@ -59,7 +59,15 @@ export class Enviroment {
     public runCommand(command: string): string {
         const brokenUpCommand = splitCommandPrompt(command);
 
-        if (brokenUpCommand[0] === "cd") {
+        if (brokenUpCommand[0] === "help") {
+            switch (brokenUpCommand.length) {
+                case 1:
+                    return "Help Command";
+
+                default:
+                    return "ERROR: Too many arguments. Please use the following format: 'help'";
+            }
+        } else if (brokenUpCommand[0] === "cd") {
             //change directory command
             switch (brokenUpCommand.length) {
                 case 1: //case: only cd was inputted as the command
@@ -88,6 +96,23 @@ export class Enviroment {
                     }
                 default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: ls [filepath (optional)]";
+            }
+        } else if (brokenUpCommand[0] === "mv") {
+            switch (brokenUpCommand.length) {
+                case 1:
+                    return "ERROR: Too few arguments. Please use the format 'mv [file/folder path] [folderpath]'";
+
+                case 2:
+                    return "ERROR: Too few arguments. Please use the format 'mv [file/folder path] [folder path]'";
+
+                case 3:
+                    return this.nav.moveFile(
+                        brokenUpCommand[1],
+                        brokenUpCommand[2],
+                    );
+
+                default:
+                    return "ERROR: Too many arguments. Please use the format 'mv [file/folder path] [folder path]'";
             }
         }
 

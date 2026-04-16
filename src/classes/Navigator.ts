@@ -112,18 +112,48 @@ export class Navigator {
         return this.current.getChild(name) !== -1;
     }
 
-    //for testing purposes
-    public s2FTest(filePath: string): string {
-        const temp = this.stringToFile(filePath);
+    public moveFile(childPath: string, parentPath: string): string {
+        const childFile = this.stringToFile(childPath);
+        const parentFile = this.stringToFile(parentPath);
 
-        if (temp instanceof Folder) {
-            return temp.name;
-        } else if (temp instanceof File) {
-            return temp.name;
-        } else if (typeof temp === "string") {
-            return temp;
+        if (typeof childFile === "string") {
+            return "ERROR: File pathway for the file to be moved does not exist";
+        }
+
+        if (typeof parentFile === "string") {
+            return "ERROR: The file cannot be moved to a pathway that does not exist";
+        }
+
+        if (parentFile instanceof File) {
+            return "ERROR: File cannot be moved to another File";
+        }
+
+        if (childFile instanceof File) {
+            const oldParent = childFile.parent;
+            oldParent.removeChild(childFile.name);
+            parentFile.addChild(childFile);
+
+            return (
+                "Sucessfully moved the file " +
+                childFile.name +
+                " to the folder " +
+                parentFile.name
+            );
         } else {
-            return "it failed";
+            const oldParent = childFile.parent;
+
+            if (oldParent) {
+                oldParent.removeChild(childFile.name);
+            }
+
+            parentFile.addChild(childFile);
+
+            return (
+                "Sucessfully moved the folder " +
+                childFile.name +
+                " to the folder " +
+                parentFile.name
+            );
         }
     }
 
@@ -143,6 +173,10 @@ export class Navigator {
         tempFile = nav.current; //temp variable for storing files
         let errorString = "";
 
+        if (filePath === "./") {
+            return this.current;
+        }
+
         do {
             const tempVar = cutdownFilePath(currentPath);
             currentPath = tempVar[1];
@@ -154,7 +188,7 @@ export class Navigator {
                     errorFound = true;
                     errorString = "ERROR: Filepath goes outside of bounds";
                 }
-            } else {
+            } else if (fileString !== ".") {
                 if (nav.doesFileExist(fileString)) {
                     tempFile = nav.getFile(fileString);
                     if (tempFile instanceof Folder) {
