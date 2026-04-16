@@ -12,9 +12,10 @@ export class Level3 extends Scene {
     private ground: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
     private flasks: Phaser.Physics.Arcade.StaticGroup;
-    private chemicalsneutral: Phaser.Physics.Arcade.StaticGroup;
-    private chemicalsacid: Phaser.Physics.Arcade.StaticGroup;
-    private chemicalsbase: Phaser.Physics.Arcade.StaticGroup;
+    private chemicals: Phaser.Physics.Arcade.StaticGroup;
+    private chemicalsneutral: boolean;
+    private chemicalsacid: boolean;
+    private chemicalsbase: boolean;
     private key: Phaser.Physics.Arcade.Image;
     private door: Phaser.Physics.Arcade.Image;
 
@@ -24,7 +25,6 @@ export class Level3 extends Scene {
     private acidpoured = false;
     private basepoured = false;
     private doorunlocked = false;
-    private chemicalstrength = 1;
 
     constructor() {
         super("Level3");
@@ -48,8 +48,8 @@ export class Level3 extends Scene {
 
         this.flasks = this.physics.add.staticGroup();
         this.flasks.create(200, 600, "flasks");
-        this.chemicalsneutral = this.physics.add.staticGroup();
-        this.chemicalsneutral.create(400, 600, "chemicalsneutral");
+        this.chemicals = this.physics.add.staticGroup();
+        this.chemicals.create(200, 600, "chemicals");
 
         EventBus.emit("current-scene-ready", this);
     }
