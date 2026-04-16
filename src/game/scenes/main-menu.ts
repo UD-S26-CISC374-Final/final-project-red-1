@@ -12,38 +12,72 @@ export class MainMenu extends Scene implements ChangeableScene {
 
     env: Enviroment;
     lines: string[] = [];
-    maxLines: number = 25;
+    maxLines: number = 28;
+
+    textBoxText!: GameObjects.Text;
+    cursorVisible: boolean = true;
+    cursorChar: string = "█";
+
+    outputLines: string[] = [];
+    currentInput: string = "";
+    prompt: string = "> ";
 
     constructor() {
         super("MainMenu");
     }
 
     appendLine(line: string) {
-        this.lines.push(line);
+        this.outputLines.push(line);
 
-        // keep only last N lines (this is the “scroll” behavior)
-        if (this.lines.length > this.maxLines) {
-            this.lines.shift();
+        if (this.outputLines.length > this.maxLines) {
+            this.outputLines.shift();
         }
 
-        this.title.setText(this.lines.join("\n"));
+        this.renderTerminal();
+    }
+
+    renderTerminal() {
+        const output = this.outputLines.join("\n");
+
+        const cursor = this.cursorVisible ? this.cursorChar : " ";
+
+        const inputLine = this.prompt + this.currentInput + cursor;
+
+        const fullText = output + "\n" + inputLine;
+
+        this.textBoxText.setText(fullText);
     }
 
     create() {
-        this.env = new Enviroment(); // ✅ add this
+        this.env = new Enviroment();
 
+        //terminal text formatting
+        const terminalText = this.add.text(0, 0, "", {
+            fontSize: "16px",
+            fontFamily: "Courier New",
+            color: "#FFFFFF",
+            lineSpacing: 4,
+        });
+
+        //main textbox
         this.textBox = this.rexUI.add.textBox({
-            x: 0,
-            y: 1000,
-            width: 1080,
-            height: 100,
-            background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, 0x000000),
-            text: this.add.text(0, 0, "", {
-                fontSize: "20px",
-                fontFamily: "Courier New",
-                color: "#ffffff",
-                wordWrap: { width: 380 },
-            }),
+            x: 540,
+            y: 500,
+            width: 1040,
+            height: 900,
+
+            background: this.rexUI.add.roundRectangle(
+                0,
+                0,
+                2,
+                2,
+                10,
+                0x000000,
+                0.9,
+            ),
+
+            text: terminalText,
+
             space: {
                 left: 10,
                 right: 10,
@@ -51,6 +85,9 @@ export class MainMenu extends Scene implements ChangeableScene {
                 bottom: 10,
             },
         });
+
+        //actual display text
+        this.textBoxText = terminalText;
 
         this.title = this.add
             .text(24, 24, "", {
@@ -64,29 +101,57 @@ export class MainMenu extends Scene implements ChangeableScene {
 
         this.title.setLineSpacing(10);
 
-        const input = this.add.dom(512, 750, "input", {
+        const input = this.add.dom(512, 850, "input", {
             width: "1024px",
             fontSize: "16px",
             fontFamily: "Courier New",
+            backgroundColor: "transparent",
+            color: "transparent",
+            border: "none",
+            outline: "none",
         });
+
+        const inputElement = input.node as HTMLInputElement;
+        inputElement.focus();
 
         this.appendLine(this.env.runCommand("ls"));
 
-        const inputElement = input.node as HTMLInputElement;
-
         inputElement.addEventListener("keydown", (event: KeyboardEvent) => {
             if (event.key === "Enter") {
-                const value = (input.node as HTMLInputElement).value;
+                const value = this.currentInput;
+
+                this.appendLine(this.prompt + value);
 
                 const output = this.env.runCommand(value);
 
-                this.appendLine("> " + value);
-                this.appendLine(output);
+                if (output) {
+                    this.appendLine(output);
+                }
 
+                this.currentInput = "";
                 inputElement.value = "";
+
+                this.renderTerminal();
+                return;
             }
+
+            // live typing update
+            inputElement.addEventListener("input", () => {
+                this.currentInput = inputElement.value;
+                this.renderTerminal();
+            });
         });
 
+        this.time.addEvent({
+            delay: 500,
+            loop: true,
+            callback: () => {
+                this.cursorVisible = !this.cursorVisible;
+                this.renderTerminal();
+            },
+        });
+
+        // notify scene ready
         EventBus.emit("current-scene-ready", this);
     }
 
