@@ -4,7 +4,7 @@ Command the Dungeon
 
 # Team Color
 
-TEXT GOES HERE
+Team Red(1)
 
 # Developers
 
