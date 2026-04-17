@@ -1,4 +1,5 @@
 import { EventBus } from "../event-bus";
+/*import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 
 import PhaserLogo from "../objects/phaser-logo";
@@ -25,6 +26,12 @@ export class Level3 extends Scene {
     private acidpoured = false;
     private basepoured = false;
     private doorunlocked = false;
+    private player: Phaser.Physics.Arcade.Sprite;
+    private flasks: Phaser.GameObjects.Image;
+    private chemicals: Phaser.GameObjects.Image;
+    private key: Phaser.GameObjects.Image;
+    private door: Phaser.Physics.Arcade.StaticBody;
+    private inventory: Phaser.GameObjects.Components.Depth;
 
     constructor() {
         super("Level3");
@@ -54,3 +61,4 @@ export class Level3 extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 }
+}*/
