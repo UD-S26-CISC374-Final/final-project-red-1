@@ -1,6 +1,6 @@
 # Game Name
 
-TEXT GOES HERE
+Command the Dungeon
 
 # Team Color
 
