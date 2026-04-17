@@ -8,7 +8,7 @@ TEXT GOES HERE
 
 # Developers
 
-* Name (email)
+* George Zappone (georgeza@udel.edu)
 * Name (email)
 * Name (email)
 
