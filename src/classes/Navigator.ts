@@ -1,5 +1,6 @@
 import { File } from "./File";
 import { Folder } from "./Folder";
+import { combineFiles } from "./Concatenate";
 // ^ imports ^
 
 function cutdownFilePath(filePath: string): string[] {
@@ -253,6 +254,42 @@ export class Navigator {
             return "ERROR: Pathway leads to folder! Folders do not have file descriptions!";
         } else {
             return "ERROR: File does not exist!";
+        }
+    }
+
+    public concatenate(filePathA: string, filePathB: string): string {
+        const fileA = this.stringToFile(filePathA);
+
+        if (fileA instanceof File) {
+            if (fileA.isExe) {
+                return "ERROR: Cannot concatenate an executable";
+            }
+
+            const fileB = this.stringToFile(filePathB);
+
+            if (fileB instanceof File) {
+                if (fileB.isExe) {
+                    return "ERROR: Cannot concatenate an executable";
+                }
+
+                return combineFiles(fileA, fileB);
+            } else if (fileB instanceof Folder) {
+                return (
+                    "ERROR: " +
+                    fileB.name +
+                    "is a Folder, which cannot be concatenated"
+                );
+            } else {
+                return "ERROR: File B does not exist";
+            }
+        } else if (fileA instanceof Folder) {
+            return (
+                "ERROR: " +
+                fileA.name +
+                "is a Folder, which cannot be concatenated"
+            );
+        } else {
+            return "ERROR: File A does not exist";
         }
     }
 }
