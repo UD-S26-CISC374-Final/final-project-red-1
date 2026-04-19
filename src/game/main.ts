@@ -14,7 +14,10 @@ const config: Phaser.Types.Core.GameConfig = {
     version: "0.0.1",
     type: AUTO,
     parent: "game-container",
-    backgroundColor: "#ff0000",
+    backgroundColor: "#000000",
+    dom: {
+        createContainer: true,
+    },
     scene: [Boot, Preloader, MainMenu, Level1Game, Level2Game, GameOver],
     scale: {
         parent: "phaser-game",

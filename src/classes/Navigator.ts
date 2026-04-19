@@ -104,7 +104,7 @@ export class Navigator {
 
     /*
         Name: doesFileExist
-        Description: when given a file, will return whether or not the file exists in the current folder
+        Description: when given the name of a file, will return whether or not the file exists in the current folder
         Input: name (string): the name of the file
         Output: boolean: whether or not the file given exists
     */
@@ -112,6 +112,14 @@ export class Navigator {
         return this.current.getChild(name) !== -1;
     }
 
+    /*
+        Name: moveFile
+        Description: when given two file paths, the method will move the child into the parent if possible. If not, an error will be returned.
+        Input: childPath(string): the path that leads to the file that will be moved
+                parentPath(string): the path that leads to a folder in which the child will be moved to. If not a folder, or doesnt exist,
+                will be an error
+        Output: string: either an error or a message stating the success.
+    */
     public moveFile(childPath: string, parentPath: string): string {
         const childFile = this.stringToFile(childPath);
         const parentFile = this.stringToFile(parentPath);

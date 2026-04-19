@@ -9,6 +9,19 @@ export class MainMenu extends Scene implements ChangeableScene {
     title: GameObjects.Text;
     textBox: GameObjects.GameObject;
     logoTween: Phaser.Tweens.Tween | null;
+
+    env: Enviroment;
+    lines: string[] = [];
+    maxLines: number = 33;
+
+    textBoxText!: GameObjects.Text;
+    cursorVisible: boolean = true;
+    cursorChar: string = "█";
+
+    outputLines: string[] = [];
+    currentInput: string = "";
+    prompt: string = "> ";
+
     constructor() {
         super("MainMenu");
     }
@@ -38,7 +51,7 @@ export class MainMenu extends Scene implements ChangeableScene {
     create() {
         this.env = new Enviroment();
 
-        //terminal text formatting
+        // terminal text formatting
         const terminalText = this.add.text(0, 0, "", {
             fontSize: "16px",
             fontFamily: "Courier New",
@@ -46,7 +59,7 @@ export class MainMenu extends Scene implements ChangeableScene {
             lineSpacing: 4,
         });
 
-        //main textbox
+        // main textbox
         this.textBox = this.rexUI.add.textBox({
             x: 540,
             y: 500,
@@ -73,7 +86,6 @@ export class MainMenu extends Scene implements ChangeableScene {
             },
         });
 
-        //actual display text
         this.textBoxText = terminalText;
 
         this.title = this.add
@@ -88,6 +100,7 @@ export class MainMenu extends Scene implements ChangeableScene {
 
         this.title.setLineSpacing(10);
 
+        // hidden DOM input
         const input = this.add.dom(512, 850, "input", {
             width: "1024px",
             fontSize: "16px",
@@ -99,13 +112,35 @@ export class MainMenu extends Scene implements ChangeableScene {
         });
 
         const inputElement = input.node as HTMLInputElement;
+
+        // focus immediately
         inputElement.focus();
 
+        // regain focus if user clicks game
+        this.input.on("pointerdown", () => {
+            inputElement.focus();
+        });
+
+        // regain focus on keyboard activity too
+        this.input.keyboard?.on("keydown", () => {
+            inputElement.focus();
+        });
+
+        // initial terminal output
         this.appendLine(this.env.runCommand("ls"));
 
+        // LIVE TYPING (moved OUTSIDE keydown)
+        inputElement.addEventListener("input", () => {
+            this.currentInput = inputElement.value;
+            this.renderTerminal();
+        });
+
+        // ENTER handling
         inputElement.addEventListener("keydown", (event: KeyboardEvent) => {
             if (event.key === "Enter") {
-                const value = this.currentInput;
+                event.preventDefault();
+
+                const value = this.currentInput.trim();
 
                 this.appendLine(this.prompt + value);
 
@@ -119,16 +154,10 @@ export class MainMenu extends Scene implements ChangeableScene {
                 inputElement.value = "";
 
                 this.renderTerminal();
-                return;
             }
-
-            // live typing update
-            inputElement.addEventListener("input", () => {
-                this.currentInput = inputElement.value;
-                this.renderTerminal();
-            });
         });
 
+        // blinking cursor
         this.time.addEvent({
             delay: 500,
             loop: true,
@@ -138,7 +167,9 @@ export class MainMenu extends Scene implements ChangeableScene {
             },
         });
 
-        // notify scene ready
+        // initial draw
+        this.renderTerminal();
+
         EventBus.emit("current-scene-ready", this);
     }
 

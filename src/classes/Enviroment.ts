@@ -60,45 +60,6 @@ export class Enviroment {
         const brokenUpCommand = splitCommandPrompt(command);
 
         if (brokenUpCommand[0] === "help") {
-            //help command
-            switch (brokenUpCommand.length) {
-                case 1:
-                    return "Help Command"; //case: only 'help' inputed as command
-
-                default:
-                    return "ERROR: Too many arguments. Please use the following format: 'help'"; //case: too many arguments
-            }
-        } else if (brokenUpCommand[0] === "cd") {
-            //change directory command
-            switch (brokenUpCommand.length) {
-                case 1: //case: only cd was inputted as the command
-                    return "ERROR: Too few arguments. Please use the following format: cd [filepath]";
-
-                case 2: //case: both the command and the file path were inputted
-                    return this.nav.travelTo(brokenUpCommand[1]);
-
-                default: //case: too many arguments
-                    return "ERROR: Too many arguments. Please use the following format: cd [filepath]";
-            }
-        } else if (brokenUpCommand[0] === "ls") {
-            //list command
-            let tempFile: File | Folder | string;
-            switch (brokenUpCommand.length) {
-                case 1: //case: just "ls". Prints current directory
-                    return this.nav.showContent();
-                case 2: //case: "ls" + a file path
-                    tempFile = this.nav.stringToFile(brokenUpCommand[1]);
-                    if (tempFile instanceof Folder) {
-                        return "../, ./, " + tempFile.showContents();
-                    } else if (tempFile instanceof File) {
-                        return "ERROR: Pathway lead to a file. Please use a directory";
-                    } else {
-                        return tempFile;
-                    }
-                default: //case: too many arguments
-                    return "ERROR: Too many arguments. Please use the following format: ls [filepath (optional)]";
-            }
-        } else if (brokenUpCommand[0] === "help") {
             let helpFile: File | Folder | string;
             switch (brokenUpCommand.length) {
                 case 1: //case: just "help". Prints all commands
@@ -130,49 +91,50 @@ export class Enviroment {
                 default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: help [command (optional)]";
             }
-        } else if (brokenUpCommand[0] === "mv") {
-            let sourceFile: File | Folder | string;
-            let destinationFile: File | Folder | string;
+        } else if (brokenUpCommand[0] === "cd") {
+            //change directory command
             switch (brokenUpCommand.length) {
-                case 1: //case: just "mv". Not enough arguments
-                case 2: //case: "mv" + 1 argument. Not enough arguments
-                    return "ERROR: Too few arguments. Please use the following format: mv [source] [destination]";
-                case 3: //case: "mv" + 2 arguments.
-                    sourceFile = this.nav.stringToFile(brokenUpCommand[1]);
-                    destinationFile = this.nav.stringToFile(brokenUpCommand[2]);
-                    if (typeof sourceFile === "string") {
-                        return "ERROR: Source pathway is invalid. Please enter a valid source pathway.";
-                    } else if (typeof destinationFile === "string") {
-                        return "ERROR: Destination pathway is invalid. Please enter a valid destination pathway.";
-                    } else if (
-                        sourceFile instanceof Folder ||
-                        destinationFile instanceof Folder
-                    ) {
-                        return "ERROR: Cannot move a directory. Please ensure both source and destination are files.";
-                    } else if (
-                        sourceFile instanceof File &&
-                        destinationFile instanceof File
-                    ) {
-                        if (
-                            sourceFile === destinationFile ||
-                            sourceFile.parent === destinationFile.parent
-                        ) {
-                            return "ERROR: Source and destination are the same or in the same directory. Please enter a valid source and destination.";
-                        } else if (
-                            sourceFile.parent != destinationFile.parent &&
-                            sourceFile != destinationFile
-                        ) {
-                            sourceFile.parent.addChild(destinationFile);
-                            sourceFile.parent.children =
-                                sourceFile.parent.children.filter(
-                                    (child) => child !== sourceFile,
-                                );
-                            return "File moved successfully.";
-                        }
+                case 1: //case: only cd was inputted as the command
+                    return "ERROR: Too few arguments. Please use the following format: cd [filepath]";
+
+                case 2: //case: both the command and the file path were inputted
+                    return this.nav.travelTo(brokenUpCommand[1]);
+
+                default: //case: too many arguments
+                    return "ERROR: Too many arguments. Please use the following format: cd [filepath]";
+            }
+        } else if (brokenUpCommand[0] === "ls") {
+            //list command
+            let tempFile: File | Folder | string;
+            switch (brokenUpCommand.length) {
+                case 1: //case: just "ls". Prints current directory
+                    return this.nav.showContent();
+                case 2: //case: "ls" + a file path
+                    tempFile = this.nav.stringToFile(brokenUpCommand[1]);
+                    if (tempFile instanceof Folder) {
+                        return "../, ./, " + tempFile.showContents();
+                    } else if (tempFile instanceof File) {
+                        return "ERROR: Pathway lead to a file. Please use a directory";
                     } else {
-                        return "ERROR: An unexpected error occurred. Please ensure both source and destination are valid files.";
+                        return tempFile;
                     }
-                    break;
+                default: //case: too many arguments
+                    return "ERROR: Too many arguments. Please use the following format: ls [filepath (optional)]";
+            }
+        } else if (brokenUpCommand[0] === "mv") {
+            switch (brokenUpCommand.length) {
+                case 1: //just mv
+                    return "ERROR: Too few arguments. Please use the format 'mv [file/folder path] [folderpath]";
+
+                case 2: //case mv + file path
+                    return "ERROR: Too few arguments. Please use the format 'mv [file/folder path] [folder path]'";
+
+                case 3: //case mv + 2 file paths
+                    return this.nav.moveFile(
+                        brokenUpCommand[1],
+                        brokenUpCommand[2],
+                    );
+
                 default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: mv [source] [destination]";
             }
