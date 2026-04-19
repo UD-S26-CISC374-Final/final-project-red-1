@@ -12,7 +12,7 @@ export class MainMenu extends Scene implements ChangeableScene {
 
     env: Enviroment;
     lines: string[] = [];
-    maxLines: number = 33;
+    maxLines: number = 43;
 
     textBoxText!: GameObjects.Text;
     cursorVisible: boolean = true;
@@ -26,6 +26,12 @@ export class MainMenu extends Scene implements ChangeableScene {
         super("MainMenu");
     }
 
+    /*
+        Name: appendLine
+        Description: Separates lines out so the input text can be rendered properly
+        Input: line(string): The line that will be inputted
+        Output: N/A
+    */
     appendLine(line: string) {
         this.outputLines.push(line);
 
@@ -36,6 +42,12 @@ export class MainMenu extends Scene implements ChangeableScene {
         this.renderTerminal();
     }
 
+    /*
+        Name: renderTerminal
+        Description: Renders the terminal so it a) looks like a terminal, b) flashes when user input, and c) all previous commands are listed
+        Input: N/A
+        Output: N/A
+    */
     renderTerminal() {
         const output = this.outputLines.join("\n");
 
@@ -54,7 +66,7 @@ export class MainMenu extends Scene implements ChangeableScene {
 
         // terminal text formatting
         const terminalText = this.add.text(0, 0, "", {
-            fontSize: "16px",
+            fontSize: "12px",
             fontFamily: "Courier New",
             color: "#FFFFFF",
             lineSpacing: 4,

@@ -2,6 +2,12 @@ import { File } from "./File";
 import { Folder } from "./Folder";
 import { Navigator } from "./Navigator";
 
+/*
+    Name: splitCommandPrompt
+    Description: When given user input(command), it spits out an array of strings so that the overall command can be more easily parsed
+    Input: command(string): The command that is being parsed
+    Output: string[]: The afformentioned command split into an array, so each part of the array can be looked at seperately
+*/
 function splitCommandPrompt(command: string): string[] {
     const splitCommand: string[] = [];
 
@@ -56,6 +62,13 @@ export class Enviroment {
         this.nav = new Navigator(folderRoot);
     }
 
+    /*
+        Name: runCommand
+        Desciption: When given user input, it will then parse said input by splitting it into an array, then will produce an output that matches
+        the command prescent
+        Input: command(string): the user's input
+        Output: string: Will either let the user know of an error, OR will print out the output.
+    */
     public runCommand(command: string): string {
         const brokenUpCommand = splitCommandPrompt(command);
 
