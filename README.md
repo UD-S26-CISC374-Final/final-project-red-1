@@ -1,14 +1,14 @@
 # Game Name
 
-TEXT GOES HERE
+Command the Dungeon
 
 # Team Color
 
-TEXT GOES HERE
+Team Red(1)
 
 # Developers
 
-* Name (email)
+* George Zappone (georgeza@udel.edu)
 * Name (email)
 * Name (email)
 

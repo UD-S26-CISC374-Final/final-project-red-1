@@ -98,26 +98,85 @@ export class Enviroment {
                 default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: ls [filepath (optional)]";
             }
-        } else if (brokenUpCommand[0] === "mv") {
-            //move file command
+        } else if (brokenUpCommand[0] === "help") {
+            let helpFile: File | Folder | string;
             switch (brokenUpCommand.length) {
-                case 1: //case: just mv
-                    return "ERROR: Too few arguments. Please use the format 'mv [file/folder path] [folderpath]'";
-
-                case 2: //case: mv + File path
-                    return "ERROR: Too few arguments. Please use the format 'mv [file/folder path] [folder path]'";
-
-                case 3: //case: mv + 2 file paths
-                    return this.nav.moveFile(
-                        brokenUpCommand[1],
-                        brokenUpCommand[2],
-                    );
-
+                case 1: //case: just "help". Prints all commands
+                    return "Available commands: cd, ls, help, mv, /.sh, cat, sudo. If you want to quit, press cntrl + c.";
+                case 2: //case: "help" + a command. Prints that command's function
+                    helpFile = this.nav.stringToFile(brokenUpCommand[1]);
+                    if (helpFile instanceof Folder) {
+                        return "ERROR: Pathway lead to a folder. Please use a command";
+                    } else if (helpFile instanceof File) {
+                        switch (helpFile.name) {
+                            case "cd":
+                                return "Changes the current directory to the specified path.";
+                            case "ls":
+                                return "Lists the contents of the current directory or the specified path.";
+                            case "help":
+                                return "Displays available commands or detailed information about a specific command.";
+                            case "mv":
+                                return "Moves or renames a file or directory.";
+                            case "/.exe":
+                                return "Executes an executable file.";
+                            case "cat":
+                                return "Displays the contents of a file.";
+                            default:
+                                return "Command not found.";
+                        }
+                    } else {
+                        return "ERROR: Command not found. Please enter a valid command to receive help.";
+                    }
                 default: //case: too many arguments
-                    return "ERROR: Too many arguments. Please use the format 'mv [file/folder path] [folder path]'";
+                    return "ERROR: Too many arguments. Please use the following format: help [command (optional)]";
+            }
+        } else if (brokenUpCommand[0] === "mv") {
+            let sourceFile: File | Folder | string;
+            let destinationFile: File | Folder | string;
+            switch (brokenUpCommand.length) {
+                case 1: //case: just "mv". Not enough arguments
+                case 2: //case: "mv" + 1 argument. Not enough arguments
+                    return "ERROR: Too few arguments. Please use the following format: mv [source] [destination]";
+                case 3: //case: "mv" + 2 arguments.
+                    sourceFile = this.nav.stringToFile(brokenUpCommand[1]);
+                    destinationFile = this.nav.stringToFile(brokenUpCommand[2]);
+                    if (typeof sourceFile === "string") {
+                        return "ERROR: Source pathway is invalid. Please enter a valid source pathway.";
+                    } else if (typeof destinationFile === "string") {
+                        return "ERROR: Destination pathway is invalid. Please enter a valid destination pathway.";
+                    } else if (
+                        sourceFile instanceof Folder ||
+                        destinationFile instanceof Folder
+                    ) {
+                        return "ERROR: Cannot move a directory. Please ensure both source and destination are files.";
+                    } else if (
+                        sourceFile instanceof File &&
+                        destinationFile instanceof File
+                    ) {
+                        if (
+                            sourceFile === destinationFile ||
+                            sourceFile.parent === destinationFile.parent
+                        ) {
+                            return "ERROR: Source and destination are the same or in the same directory. Please enter a valid source and destination.";
+                        } else if (
+                            sourceFile.parent != destinationFile.parent &&
+                            sourceFile != destinationFile
+                        ) {
+                            sourceFile.parent.addChild(destinationFile);
+                            sourceFile.parent.children =
+                                sourceFile.parent.children.filter(
+                                    (child) => child !== sourceFile,
+                                );
+                            return "File moved successfully.";
+                        }
+                    } else {
+                        return "ERROR: An unexpected error occurred. Please ensure both source and destination are valid files.";
+                    }
+                    break;
+                default: //case: too many arguments
+                    return "ERROR: Too many arguments. Please use the following format: mv [source] [destination]";
             }
         }
-
         return "ERROR: Command not found";
     }
 }

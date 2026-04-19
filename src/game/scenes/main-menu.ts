@@ -9,19 +9,6 @@ export class MainMenu extends Scene implements ChangeableScene {
     title: GameObjects.Text;
     textBox: GameObjects.GameObject;
     logoTween: Phaser.Tweens.Tween | null;
-
-    env: Enviroment;
-    lines: string[] = [];
-    maxLines: number = 28;
-
-    textBoxText!: GameObjects.Text;
-    cursorVisible: boolean = true;
-    cursorChar: string = "█";
-
-    outputLines: string[] = [];
-    currentInput: string = "";
-    prompt: string = "> ";
-
     constructor() {
         super("MainMenu");
     }
@@ -162,8 +149,6 @@ export class MainMenu extends Scene implements ChangeableScene {
             this.logoTween.stop();
             this.logoTween = null;
         }
-
-        this.scene.start("Level1");
     }
 }
 

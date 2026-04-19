@@ -24,11 +24,37 @@ export class Preloader extends Scene {
 
     preload() {
         //  Load the assets for the game - Replace with your own assets
-        this.load.setPath("assets");
-
-        this.load.image("logo", "logo.png");
-        this.load.image("star", "star.png");
-        this.load.image("phaser-logo", "phaser-logo.png");
+        this.load.image(
+            "dungeon",
+            "assets/dungeon.png",
+        ); /* Credit goes to https://opengameart.org/content/dungeon-tileset-4 by author HorusKDI */
+        this.load.image(
+            "ground",
+            "assets/ground.png",
+        ); /* Credit goes to https://opengameart.org/content/ground-plate by author TyberiusGames */
+        this.load.image(
+            "wall",
+            "assets/wall.png",
+        ); /* Credit goes to https://opengameart.org/content/wall by author djonvincent */
+        this.load.image(
+            "prisoncells",
+            "assets/prisoncell.png",
+        ); /* Credit goes to https://opengameart.org/content/cementery-gate by author zerberros */
+        this.load.image(
+            "crowbar",
+            "assets/crowbar.png",
+        ); /* Credit goes to https://opengameart.org/content/crowbar by author Clint Bellanger */
+        // this.load.image("chain", "assets/chain.png");
+        // this.load.image("gloves", "assets/gloves.png");
+        // this.load.image("guillotine", "assets/guillotine.png");
+        // this.load.image("lever", "assets/lever.png");
+        this.load.image("logo", "assets/logo.png");
+        this.load.image("star", "assets/star.png");
+        this.load.image("phaser-logo", "assets/phaser-logo.png");
+        this.load.spritesheet("player", "assets/king.png", {
+            frameWidth: 120,
+            frameHeight: 120,
+        }); /* Credit goes to https://opengameart.org/content/gilead-king-in-armor by author Razare2015 */
     }
 
     create() {

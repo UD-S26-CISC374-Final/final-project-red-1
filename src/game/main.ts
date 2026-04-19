@@ -1,6 +1,7 @@
 import { Boot } from "./scenes/boot";
 import { GameOver } from "./scenes/game-over";
-import { Level1 as MainGame } from "./scenes/level1";
+import { Level1 as Level1Game } from "./scenes/level1";
+import { Level2 as Level2Game } from "./scenes/level2";
 import { MainMenu } from "./scenes/main-menu";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/preloader";
@@ -13,11 +14,8 @@ const config: Phaser.Types.Core.GameConfig = {
     version: "0.0.1",
     type: AUTO,
     parent: "game-container",
-    backgroundColor: "#000000",
-    dom: {
-        createContainer: true,
-    },
-    scene: [Boot, Preloader, MainMenu, MainGame, GameOver],
+    backgroundColor: "#ff0000",
+    scene: [Boot, Preloader, MainMenu, Level1Game, Level2Game, GameOver],
     scale: {
         parent: "phaser-game",
         mode: Phaser.Scale.FIT,
