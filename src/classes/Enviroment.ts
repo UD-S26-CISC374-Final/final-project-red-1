@@ -2,6 +2,12 @@ import { File } from "./File";
 import { Folder } from "./Folder";
 import { Navigator } from "./Navigator";
 
+/*
+    Name: splitCommandPrompt
+    Description: When given user input(command), it spits out an array of strings so that the overall command can be more easily parsed
+    Input: command(string): The command that is being parsed
+    Output: string[]: The afformentioned command split into an array, so each part of the array can be looked at seperately
+*/
 function splitCommandPrompt(command: string): string[] {
     const splitCommand: string[] = [];
 
@@ -30,32 +36,39 @@ export class Enviroment {
 
         //Hallway
         const hallway = new Folder("Hallway", folderRoot);
-        new File("Table", hallway);
-        new File("Candle", hallway);
+        new File("Table", hallway, false, "This is a table.");
+        new File("Candle", hallway, false, "This is a candle.");
 
         //Jail
         const jail = new Folder("Jail", hallway);
-        new File("Dirt", jail);
-        new File("Chain", jail);
+        new File("Dirt", jail, false, "mmmm dirt.");
+        new File("Chain", jail, false, "I GOT MY LUCKY BALL AND CHAIN!");
 
         //Records
         const records = new Folder("Records", hallway);
         const shelf1 = new Folder("Shelf1", records);
-        new File("Book1", shelf1);
-        new File("Book2", shelf1);
-        new File("Book3", shelf1);
+        new File("Book1", shelf1, true);
+        new File("Book2", shelf1, true);
+        new File("Book3", shelf1, true);
         const shelf2 = new Folder("Shelf2", records);
-        new File("Book1", shelf2);
-        new File("Book2", shelf2);
-        new File("Book3", shelf2);
+        new File("Book1", shelf2, true);
+        new File("Book2", shelf2, true);
+        new File("Book3", shelf2, true);
 
         //Lab
         const lab = new Folder("Lab", hallway);
-        new File("Potion", lab);
+        new File("Potion", lab, false, "3 days blinding stew.");
 
         this.nav = new Navigator(folderRoot);
     }
 
+    /*
+        Name: runCommand
+        Desciption: When given user input, it will then parse said input by splitting it into an array, then will produce an output that matches
+        the command prescent
+        Input: command(string): the user's input
+        Output: string: Will either let the user know of an error, OR will print out the output.
+    */
     public runCommand(command: string): string {
         const brokenUpCommand = splitCommandPrompt(command);
 
@@ -139,7 +152,10 @@ export class Enviroment {
                     return this.nav.displayFileDescription(brokenUpCommand[1]);
 
                 case 3: //cat + 2 file paths
-                    return "Temp";
+                    return this.nav.concatenate(
+                        brokenUpCommand[1],
+                        brokenUpCommand[2],
+                    );
 
                 default:
                     return "ERROR: Too many arguments. Please use the format 'cat [file1] [file2(optional)]";

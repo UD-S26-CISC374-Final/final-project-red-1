@@ -1,5 +1,6 @@
 import { File } from "./File";
 import { Folder } from "./Folder";
+import { combineFiles } from "./Concatenate";
 // ^ imports ^
 
 function cutdownFilePath(filePath: string): string[] {
@@ -234,6 +235,12 @@ export class Navigator {
         return "ERROR"; // mostly used this for testing, but a final catch all return
     }
 
+    /*
+        Name: hasSlash
+        Description: helper function. Determines whether or not the passed in filePath has a backslash or not
+        Input: filePath(string): the filePath being checked for a back slash
+        Output: boolean: whether or not it has a back slash
+    */
     private hasSlash(filePath: string): boolean {
         for (let i = 0; i < filePath.length; i++) {
             if (filePath[i] === "/") {
@@ -244,6 +251,12 @@ export class Navigator {
         return false;
     }
 
+    /*
+        Name: displayFileDescription
+        Description: when given a file path, will display the description IF it has one and is a file.
+        Input: filepath (string): the filepath that the user weants to see the description of
+        Output: string: either an error letting the user know of their faults, or the description of the file
+    */
     public displayFileDescription(filePath: string): string {
         const tempFile = this.stringToFile(filePath);
 
@@ -253,6 +266,48 @@ export class Navigator {
             return "ERROR: Pathway leads to folder! Folders do not have file descriptions!";
         } else {
             return "ERROR: File does not exist!";
+        }
+    }
+
+    /*
+        Name: concatenate
+        Description: when given two file paths, it will check if they are able to be concatenated. If so, will combine both files
+        Input: filePathA (string): filePathB (string): both file paths that lead to two files that will be combined
+        Output: string: either an error, or letting the user know that both files were combined
+    */
+    public concatenate(filePathA: string, filePathB: string): string {
+        const fileA = this.stringToFile(filePathA);
+
+        if (fileA instanceof File) {
+            if (fileA.isExe) {
+                return "ERROR: Cannot concatenate an executable";
+            }
+
+            const fileB = this.stringToFile(filePathB);
+
+            if (fileB instanceof File) {
+                if (fileB.isExe) {
+                    return "ERROR: Cannot concatenate an executable";
+                }
+
+                return combineFiles(fileA, fileB);
+            } else if (fileB instanceof Folder) {
+                return (
+                    "ERROR: " +
+                    fileB.name +
+                    "is a Folder, which cannot be concatenated"
+                );
+            } else {
+                return "ERROR: File B does not exist";
+            }
+        } else if (fileA instanceof Folder) {
+            return (
+                "ERROR: " +
+                fileA.name +
+                "is a Folder, which cannot be concatenated"
+            );
+        } else {
+            return "ERROR: File A does not exist";
         }
     }
 }
