@@ -50,6 +50,7 @@ export class MainMenu extends Scene implements ChangeableScene {
 
     create() {
         this.env = new Enviroment();
+        this.cameras.main.setViewport(700, 0, 324, 768);
 
         // terminal text formatting
         const terminalText = this.add.text(0, 0, "", {
@@ -61,10 +62,10 @@ export class MainMenu extends Scene implements ChangeableScene {
 
         // main textbox
         this.textBox = this.rexUI.add.textBox({
-            x: 540,
-            y: 500,
-            width: 1040,
-            height: 900,
+            x: 162,
+            y: 384,
+            width: 300,
+            height: 700,
 
             background: this.rexUI.add.roundRectangle(
                 0,
