@@ -59,7 +59,16 @@ export class Enviroment {
     public runCommand(command: string): string {
         const brokenUpCommand = splitCommandPrompt(command);
 
-        if (brokenUpCommand[0] === "cd") {
+        if (brokenUpCommand[0] === "help") {
+            //help command
+            switch (brokenUpCommand.length) {
+                case 1:
+                    return "Help Command"; //case: only 'help' inputed as command
+
+                default:
+                    return "ERROR: Too many arguments. Please use the following format: 'help'"; //case: too many arguments
+            }
+        } else if (brokenUpCommand[0] === "cd") {
             //change directory command
             switch (brokenUpCommand.length) {
                 case 1: //case: only cd was inputted as the command

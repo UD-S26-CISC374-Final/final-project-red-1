@@ -78,4 +78,17 @@ export class Folder {
         }
         return index;
     }
+
+    public removeChild(name: string): Folder | File | null {
+        const index = this.getChild(name);
+
+        if (index === -1) {
+            return null;
+        }
+
+        const removed = this.children.splice(index, 1)[0];
+        removed.parent = null;
+
+        return removed;
+    }
 }
