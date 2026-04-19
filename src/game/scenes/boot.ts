@@ -17,7 +17,6 @@ export class Boot extends Scene {
     }
 
     create() {
-        this.scene.start("Level1");
-        this.scene.launch("Preloader");
+        this.scene.start("Preloader");
     }
 }
