@@ -35,6 +35,12 @@ export class File {
         return this.parent.path + "/" + this.name;
     }
 
+    /*
+        Name: displayDescription
+        Desciption: when called, will send the description of the file so it can be displayed
+        Input: N/A
+        Output: string (the description of the file)
+    */
     public displayDescription(): string {
         if (!this.isExe) {
             if (this.description) {

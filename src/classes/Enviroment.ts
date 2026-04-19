@@ -60,33 +60,25 @@ export class Enviroment {
         const brokenUpCommand = splitCommandPrompt(command);
 
         if (brokenUpCommand[0] === "help") {
-            let helpFile: File | Folder | string;
             switch (brokenUpCommand.length) {
                 case 1: //case: just "help". Prints all commands
-                    return "Available commands: cd, ls, help, mv, /.sh, cat, sudo. If you want to quit, press cntrl + c.";
+                    return "Available commands: cd, ls, help, mv, /.exe, cat. If you want to quit an executable, press cntrl + c.";
                 case 2: //case: "help" + a command. Prints that command's function
-                    helpFile = this.nav.stringToFile(brokenUpCommand[1]);
-                    if (helpFile instanceof Folder) {
-                        return "ERROR: Pathway lead to a folder. Please use a command";
-                    } else if (helpFile instanceof File) {
-                        switch (helpFile.name) {
-                            case "cd":
-                                return "Changes the current directory to the specified path.";
-                            case "ls":
-                                return "Lists the contents of the current directory or the specified path.";
-                            case "help":
-                                return "Displays available commands or detailed information about a specific command.";
-                            case "mv":
-                                return "Moves or renames a file or directory.";
-                            case "/.exe":
-                                return "Executes an executable file.";
-                            case "cat":
-                                return "Displays the contents of a file.";
-                            default:
-                                return "Command not found.";
-                        }
-                    } else {
-                        return "ERROR: Command not found. Please enter a valid command to receive help.";
+                    switch (brokenUpCommand[1]) {
+                        case "cd":
+                            return "Changes the current directory to the specified path.";
+                        case "ls":
+                            return "Lists the contents of the current directory or the specified path.";
+                        case "help":
+                            return "Displays available commands or detailed information about a specific command.";
+                        case "mv":
+                            return "Moves or renames a file or directory.";
+                        case "/.exe":
+                            return "Executes an executable file.";
+                        case "cat":
+                            return "When given 1 file, will display its description. When given 2 files, will combine them";
+                        default:
+                            return "Command not found.";
                     }
                 default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: help [command (optional)]";
@@ -137,6 +129,20 @@ export class Enviroment {
 
                 default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: mv [source] [destination]";
+            }
+        } else if (brokenUpCommand[0] === "cat") {
+            switch (brokenUpCommand.length) {
+                case 1: //just cat
+                    return "ERROR: Too few arguments. Please use the format 'cat [file1] [file2(optional)]";
+
+                case 2: //cat + file path
+                    return this.nav.displayFileDescription(brokenUpCommand[1]);
+
+                case 3: //cat + 2 file paths
+                    return "Temp";
+
+                default:
+                    return "ERROR: Too many arguments. Please use the format 'cat [file1] [file2(optional)]";
             }
         }
         return "ERROR: Command not found";

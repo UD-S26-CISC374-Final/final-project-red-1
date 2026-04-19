@@ -243,4 +243,16 @@ export class Navigator {
 
         return false;
     }
+
+    public displayFileDescription(filePath: string): string {
+        const tempFile = this.stringToFile(filePath);
+
+        if (tempFile instanceof File) {
+            return tempFile.displayDescription();
+        } else if (tempFile instanceof Folder) {
+            return "ERROR: Pathway leads to folder! Folders do not have file descriptions!";
+        } else {
+            return "ERROR: File does not exist!";
+        }
+    }
 }
