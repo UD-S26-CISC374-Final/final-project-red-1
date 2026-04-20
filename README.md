@@ -9,7 +9,7 @@ Team Red(1)
 # Developers
 
 * George Zappone (georgeza@udel.edu)
-* Name (email)
+* Leif Kaine (email)
 * Name (email)
 
 # Blurb
