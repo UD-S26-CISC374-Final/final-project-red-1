@@ -1,5 +1,4 @@
 import { EventBus } from "../event-bus";
-/*import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 
 import PhaserLogo from "../objects/phaser-logo";
@@ -14,6 +13,8 @@ export class Level3 extends Scene {
     private player: Phaser.Physics.Arcade.Sprite;
     private flasks: Phaser.Physics.Arcade.StaticGroup;
     private chemicals: Phaser.Physics.Arcade.StaticGroup;
+    private hasFlasks: boolean;
+    private hasChemicals: boolean;
     private chemicalsneutral: boolean;
     private chemicalsacid: boolean;
     private chemicalsbase: boolean;
@@ -25,12 +26,11 @@ export class Level3 extends Scene {
     private chemicalspoured = false;
     private acidpoured = false;
     private basepoured = false;
+    private neutraldrank = false; // Neutral property is
+    private aciddrank = false;
+    private basedrank = false;
     private doorunlocked = false;
-    private player: Phaser.Physics.Arcade.Sprite;
-    private flasks: Phaser.GameObjects.Image;
-    private chemicals: Phaser.GameObjects.Image;
-    private key: Phaser.GameObjects.Image;
-    private door: Phaser.Physics.Arcade.StaticBody;
+    private storeroom = false;
     private inventory: Phaser.GameObjects.Components.Depth;
 
     constructor() {
@@ -57,8 +57,46 @@ export class Level3 extends Scene {
         this.flasks.create(200, 600, "flasks");
         this.chemicals = this.physics.add.staticGroup();
         this.chemicals.create(200, 600, "chemicals");
-
+        this.chemicals.create(200, 550, "chemicals");
+        this.chemicals.create(250, 550, "chemicals");
         EventBus.emit("current-scene-ready", this);
     }
+
+    private pourchemicals() {
+        if (this.hasFlasks && this.hasChemicals) {
+            this.madechemicals = true;
+            if (this.chemicalsneutral) {
+                this.chemicalspoured = true;
+            } else if (this.chemicalsacid) {
+                this.acidpoured = true;
+            } else if (this.chemicalsbase) {
+                this.basepoured = true;
+            }
+        } else {
+            this.madechemicals = false;
+        }
+    }
+    private chemicalKey() {
+        if (
+            (!this.chemicalspoured && !this.acidpoured && !this.basepoured) ||
+            this.chemicalspoured ||
+            this.basepoured
+        ) {
+            this.hasKey = false;
+        } else if (this.acidpoured) {
+            this.hasKey = true;
+        }
+    }
+
+    private handleDoor() {
+        if (!this.hasKey) {
+            this.doorunlocked = false;
+        }
+        if (this.hasKey) {
+            if (this.physics.overlap(this.player, this.door)) {
+                this.doorunlocked = true;
+                this.storeroom = true;
+            }
+        }
+    }
 }
-}*/
