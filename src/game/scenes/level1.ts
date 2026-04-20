@@ -1,17 +1,19 @@
 import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
-
+import { File } from "../../classes/File";
+import { Folder } from "../../classes/Folder";
+import { Navigator } from "../../classes/Navigator";
+import { splitCommandPrompt } from "../../classes/Enviroment";
 import FpsText from "../objects/fps-text";
 
 export class Level1 extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
-    start: GameObjects.Text;
     fpsText: FpsText;
+    command: string;
     private ground: Phaser.Physics.Arcade.StaticGroup;
     private wall: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
-    //private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private crowbar: Phaser.Physics.Arcade.Image;
     private prisoncells: Phaser.Physics.Arcade.StaticGroup;
 
@@ -19,6 +21,7 @@ export class Level1 extends Scene {
     private crowstrength = 1;
     private prisoncellHealth = 8;
     private torturechamber = false;
+    private inventory: Phaser.GameObjects.Components.Depth;
 
     constructor() {
         super("Level1");
@@ -36,6 +39,12 @@ export class Level1 extends Scene {
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
+        const Level1 = new Folder("Level1", null);
+        const level1Command = splitCommandPrompt(this.command);
+        new File("ground", Level1, false, "This is ground");
+        new File("wall", Level1, false, "This is a wall");
+        new File("crowbar", Level1, false, "This is a crowbar");
+        new File("prisoncells", Level1, false, "These are prisoncells");
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
             512,
@@ -76,7 +85,6 @@ export class Level1 extends Scene {
         ) as Phaser.Physics.Arcade.Sprite;
         w.setScale(2).refreshBody();
         this.physics.add.collider(this.wall, this.player);
-        //this.cursors = this.input.keyboard?.createCursorKeys();
         this.prisoncells = this.physics.add.staticGroup();
         this.prisoncells.create(500, 500, "prisoncells");
         this.prisoncells.create(550, 500, "prisoncells");
@@ -88,31 +96,6 @@ export class Level1 extends Scene {
             "crowbar",
         ) as Phaser.Physics.Arcade.Image;
         this.player = this.physics.add.sprite(200, 500, "player");
-
-        this.anims.create({
-            key: "left",
-            frames: this.anims.generateFrameNumbers("player", {
-                start: 5,
-                end: 8,
-            }),
-            frameRate: 10,
-            repeat: -1,
-        });
-        this.anims.create({
-            key: "turn",
-            frames: [{ key: "player", frame: 4 }],
-            frameRate: 10,
-        });
-
-        this.anims.create({
-            key: "right",
-            frames: this.anims.generateFrameNumbers("player", {
-                start: 5,
-                end: 8,
-            }),
-            frameRate: 10,
-            repeat: -1,
-        });
 
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, this.ground);
@@ -177,6 +160,9 @@ export class Level1 extends Scene {
         }
     }
 
+    private overlaps() {
+        if ()
+    }
     private collectCrowbar() {
         if (this.physics.overlap(this.player, this.crowbar)) {
             this.hasCrowbar = true;
@@ -201,34 +187,7 @@ export class Level1 extends Scene {
         }
     }
 
-    /*
-        Name : createText
-        Description:  Creates text before the start of the game, with controls being laid out before movement
-        Input: N/A
-        Output: string text
-    */
-
-    private createText() {}
-
     update() {
-        /*if (!this.cursors) {
-            return;
-        }
-
-        if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-160);
-            this.player.anims.play("left", true);
-        } else if (this.cursors.right.isDown) {
-            this.player.setVelocityX(160);
-            this.player.anims.play("right", true);
-        } else {
-            this.player.setVelocityX(0);
-            this.player.anims.play("turn");
-        }
-
-        if (this.cursors.up.isDown && this.player.body?.touching.down) {
-            this.player.setVelocityY(-330);
-        }*/
         this.fpsText.update();
     }
 

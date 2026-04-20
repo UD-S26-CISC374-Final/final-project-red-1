@@ -13,7 +13,7 @@ export class Level3 extends Scene {
     private player: Phaser.Physics.Arcade.Sprite;
     private flasks: Phaser.Physics.Arcade.StaticGroup;
     private chemicals: Phaser.Physics.Arcade.StaticGroup;
-    private hasFlasks: boolean;
+    /*private hasFlasks: boolean;
     private hasChemicals: boolean;
     private chemicalsneutral: boolean;
     private chemicalsacid: boolean;
@@ -26,12 +26,12 @@ export class Level3 extends Scene {
     private chemicalspoured = false;
     private acidpoured = false;
     private basepoured = false;
-    private neutraldrank = false; // Neutral property is
+    private neutraldrank = false;
     private aciddrank = false;
     private basedrank = false;
     private doorunlocked = false;
     private storeroom = false;
-    private inventory: Phaser.GameObjects.Components.Depth;
+    private inventory: Phaser.GameObjects.Components.Depth; */
 
     constructor() {
         super("Level3");
@@ -62,7 +62,7 @@ export class Level3 extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
-    private pourchemicals() {
+    /*private pourchemicals() {
         if (this.hasFlasks && this.hasChemicals) {
             this.madechemicals = true;
             if (this.chemicalsneutral) {
@@ -98,5 +98,5 @@ export class Level3 extends Scene {
                 this.storeroom = true;
             }
         }
-    }
+    } */
 }
