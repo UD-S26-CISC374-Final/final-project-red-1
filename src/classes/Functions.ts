@@ -11,6 +11,7 @@ import { combineFiles } from "./Concatenate";
     */
 
     public executeMove(sourceFolder: Folder, destinationFolder: Folder, movedfile: File) {
+        
     }
 
     /* 
@@ -56,6 +57,6 @@ import { combineFiles } from "./Concatenate";
     */
 
         public executeQuit() {
-            
+
         }
 
