@@ -6,6 +6,7 @@ import FpsText from "../objects/fps-text";
 export class Level1 extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
+    start: GameObjects.Text;
     fpsText: FpsText;
     private ground: Phaser.Physics.Arcade.StaticGroup;
     private wall: Phaser.Physics.Arcade.StaticGroup;
@@ -199,6 +200,15 @@ export class Level1 extends Scene {
             this.player.setVelocityX(0);
         }
     }
+
+    /*
+        Name : createText
+        Description:  Creates text before the start of the game, with controls being laid out before movement
+        Input: N/A
+        Output: string text
+    */
+
+    private createText() {}
 
     update() {
         /*if (!this.cursors) {
