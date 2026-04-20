@@ -83,6 +83,5 @@ export function combineFiles(fileA: File, fileB: File): string {
             break;
         }
     }
-
     return fileA.name + " is unable to be combined with " + fileB.name;
 }

@@ -8,7 +8,7 @@ import { Navigator } from "./Navigator";
     Input: command(string): The command that is being parsed
     Output: string[]: The afformentioned command split into an array, so each part of the array can be looked at seperately
 */
-function splitCommandPrompt(command: string): string[] {
+export function splitCommandPrompt(command: string): string[] {
     const splitCommand: string[] = [];
 
     do {
@@ -107,6 +107,15 @@ export class Enviroment {
 
                 default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: cd [filepath]";
+            }
+        } else if (brokenUpCommand[0] === "cd..") {
+            switch (brokenUpCommand.length) {
+                case 1: //case: they are at the folderRoot
+                    return "ERROR. There are no directories behind you.";
+                case 2: //case: You are at one directory in the folderRoot
+                    return this.nav.travelTo("Root");
+                default: //case: too many arguments
+                    return "ERROR: Too many arguments. Please use the following format: cd..";
             }
         } else if (brokenUpCommand[0] === "ls") {
             //list command

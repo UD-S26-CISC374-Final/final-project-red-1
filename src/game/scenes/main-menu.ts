@@ -68,7 +68,7 @@ export class MainMenu extends Scene implements ChangeableScene {
         const terminalText = this.add.text(0, 0, "", {
             fontSize: "12px",
             fontFamily: "Courier New",
-            color: "#FFFFFF",
+            color: "#0cd6fe",
             lineSpacing: 4,
         });
 
