@@ -39,12 +39,11 @@ export class Level1 extends Scene {
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
-        const Level1 = new Folder("Level1", null);
-        const level1Command = splitCommandPrompt(this.command);
-        new File("ground", Level1, false, "This is ground");
-        new File("wall", Level1, false, "This is a wall");
-        new File("crowbar", Level1, false, "This is a crowbar");
-        new File("prisoncells", Level1, false, "These are prisoncells");
+        const Hallway = new Folder("Hallway", null);
+        new File("ground", Hallway, false, "This is ground");
+        new File("wall", Hallway, false, "This is a wall");
+        new File("crowbar", Hallway, false, "This is a crowbar");
+        new File("prisoncells", Hallway, false, "These are prisoncells");
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
             512,
@@ -160,9 +159,31 @@ export class Level1 extends Scene {
         }
     }
 
-    private overlaps() {
-        if ()
+    private overlaps(command: string) {
+        const level1Command = splitCommandPrompt(command);
+        if (level1Command[0] === "cd") {
+            if (this.physics.overlap(this.player, this.prisoncells)) {
+                if (!this.hasCrowbar) {
+                    switch (level1Command.length) {
+                        default:
+                            return "ERROR: You cannot overlap a player with prisoncells unless you have a crowbar";
+                    }
+                } else if (this.prisoncellHealth > 0) {
+                    this.prisoncellHealth -= this.crowstrength;
+                    switch (level1Command.length) {
+                        default:
+                            return "Good job!";
+                    }
+                } else {
+                    switch (level1Command.length) {
+                        default:
+                            return "Congratulations!";
+                    }
+                }
+            }
+        }
     }
+
     private collectCrowbar() {
         if (this.physics.overlap(this.player, this.crowbar)) {
             this.hasCrowbar = true;
