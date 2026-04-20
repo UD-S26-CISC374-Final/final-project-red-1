@@ -2,8 +2,8 @@ import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 import { File } from "../../classes/File";
 import { Folder } from "../../classes/Folder";
-import { Navigator } from "../../classes/Navigator";
-import { splitCommandPrompt } from "../../classes/Enviroment";
+//import { Navigator } from "../../classes/Navigator";
+//import { splitCommandPrompt } from "../../classes/Enviroment";
 import FpsText from "../objects/fps-text";
 
 export class Level1 extends Scene {
@@ -40,7 +40,7 @@ export class Level1 extends Scene {
         this.background.setAlpha(0.5);
 
         const Level1 = new Folder("Level1", null);
-        const level1Command = splitCommandPrompt(this.command);
+        //const level1Command = splitCommandPrompt(this.command);
         new File("ground", Level1, false, "This is ground");
         new File("wall", Level1, false, "This is a wall");
         new File("crowbar", Level1, false, "This is a crowbar");
@@ -160,9 +160,9 @@ export class Level1 extends Scene {
         }
     }
 
-    private overlaps() {
+    /*private overlaps() {
         if ()
-    }
+    }*/
     private collectCrowbar() {
         if (this.physics.overlap(this.player, this.crowbar)) {
             this.hasCrowbar = true;
