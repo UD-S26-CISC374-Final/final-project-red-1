@@ -41,25 +41,40 @@ export class Enviroment {
 
         //Jail
         const jail = new Folder("Jail", hallway);
-        new File("Dirt", jail, false, "mmmm dirt.");
-        new File("Chain", jail, false, "I GOT MY LUCKY BALL AND CHAIN!");
+        new File("Ground", jail, false, "mmmmm, dirt.");
+        new File("Walls", jail, false, "Damp and dry at the same time.");
+        new File(
+            "Prison_Cell",
+            jail,
+            false,
+            "Old and worm. If only you could bend them.",
+        );
+        new File(
+            "Crowbar",
+            jail,
+            false,
+            "Reminds you of a black mesa you saw a while ago.",
+        );
 
-        //Records
-        const records = new Folder("Records", hallway);
-        const shelf1 = new Folder("Shelf1", records);
-        new File("Book1", shelf1, true);
-        new File("Book2", shelf1, true);
-        new File("Book3", shelf1, true);
-        const shelf2 = new Folder("Shelf2", records);
-        new File("Book1", shelf2, true);
-        new File("Book2", shelf2, true);
-        new File("Book3", shelf2, true);
+        //torturechamber
+        const tChamber = new Folder("Torture_Chamber", hallway);
+        new File("Ground", tChamber, false, "Cobblestone.");
+        new File(
+            "Chain",
+            tChamber,
+            false,
+            "If this werent the middle ages, you would get a tetanus shot",
+        );
+        new File("Gloves", tChamber, false, "Oooh, genuine leather!");
+        new File(
+            "Guillotine",
+            tChamber,
+            false,
+            "Probably good for cutting cake.",
+        );
+        new File("Lever", tChamber, true, "I think I can turn this on.");
 
-        //Lab
-        const lab = new Folder("Lab", hallway);
-        new File("Potion", lab, false, "3 days blinding stew.");
-
-        this.nav = new Navigator(folderRoot);
+        this.nav = new Navigator(jail);
     }
 
     /*
