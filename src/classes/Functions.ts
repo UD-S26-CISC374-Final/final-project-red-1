@@ -3,6 +3,14 @@ import { Folder } from "./Folder";
 import { splitCommandPrompt } from "./Enviroment";
 import { combineFiles } from "./Concatenate";
 
+export class Functions {
+    public file: File;
+    public folder: Folder;
+
+    constructor() {
+        const sourceFolder = new Folder("sourceFolder", null);
+        const destinationFolder = new Folder("destinationFolder", null);
+    }
     /* 
         Name: executeMove
         Description: Executes movement
@@ -10,9 +18,11 @@ import { combineFiles } from "./Concatenate";
         Output: Movement(within the game);
     */
 
-    public executeMove(sourceFolder: Folder, destinationFolder: Folder, movedfile: File) {
-        
-    }
+    public executeMove(
+        sourceFolder: Folder,
+        destinationFolder: Folder,
+        movedfile: File,
+    ) {}
 
     /* 
         Name: executeCombine
@@ -22,10 +32,9 @@ import { combineFiles } from "./Concatenate";
     */
 
     public executeCombine(combineFiles, block: boolean) {
-        if (block = true) {
+        if ((block = true)) {
             return "Combination has been blocked";
         } else {
-
         }
     }
 
@@ -35,8 +44,8 @@ import { combineFiles } from "./Concatenate";
         Input: Command line
         Output: Listing of objects(within the game);
     */
-   
-    public executeDisplay()
+
+    public executeDisplay() {}
 
     /*
         Name: executeFile
@@ -45,9 +54,7 @@ import { combineFiles } from "./Concatenate";
         Output: Executes file
     */
 
-    public executeFile(fileName: File) {
-
-    }
+    public executeFile(fileName: File) {}
 
     /*
         Name: executeQuit
@@ -56,7 +63,5 @@ import { combineFiles } from "./Concatenate";
         Output: Quits the puzzle
     */
 
-        public executeQuit() {
-
-        }
-
+    public executeQuit() {}
+}

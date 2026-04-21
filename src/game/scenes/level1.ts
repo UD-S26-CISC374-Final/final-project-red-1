@@ -186,7 +186,14 @@ export class Level1 extends Scene {
             if (this.physics.overlap(this.player, this.crowbar)) {
                 switch (level1Command.length) {
                     case 1: // crowbar has not been caught yet
-                        return;
+                        return "ERROR: Cannot move something that doesn't exist";
+                    case 2: //crowbar has been caught and is moved
+                        return this.nav.moveFile(
+                            level1Command[1],
+                            level1Command[2],
+                        );
+                    default:
+                        return "ERROR: This is not available.";
                 }
             }
         }
