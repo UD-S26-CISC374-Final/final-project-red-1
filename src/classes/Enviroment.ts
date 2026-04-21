@@ -49,6 +49,13 @@ export class Enviroment {
             "These cells are hard to break, like really hard",
         );
 
+        //Torture
+        const torture = new Folder("TortureChamber", hallway);
+        new File("Chain", torture, false, "Feel how hard the links are!");
+        new File("Guillotine", torture, false, "This is so French!");
+        new File("Gloves", torture, false, "If the glove...you know the rest");
+        new File("Lever", torture, false, "Pull that lever");
+
         //Records
         const records = new Folder("Records", hallway);
         const shelf1 = new Folder("Shelf1", records);
