@@ -41,8 +41,13 @@ export class Enviroment {
 
         //Jail
         const jail = new Folder("Jail", hallway);
-        new File("Dirt", jail, false, "mmmm dirt.");
-        new File("Chain", jail, false, "I GOT MY LUCKY BALL AND CHAIN!");
+        new File("Crowbar", jail, false, "Oh a crowbar! What are the odds!");
+        new File(
+            "Cells",
+            jail,
+            false,
+            "These cells are hard to break, like really hard",
+        );
 
         //Records
         const records = new Folder("Records", hallway);
