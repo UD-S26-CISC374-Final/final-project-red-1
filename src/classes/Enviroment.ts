@@ -36,16 +36,18 @@ export class Enviroment {
 
         //Hallway
         const hallway = new Folder("Hallway", folderRoot);
-        new File("Player", hallway, false, "Something is rotten in Denmark");
         new File("Table", hallway, false, "This is a table.");
         new File("Candle", hallway, false, "This is a candle.");
 
         //Jail
         const jail = new Folder("Jail", hallway);
-        new File("Crowbar", jail, false, "Oh a crowbar! What are the odds!");
+        const player = new Folder("Player", jail);
+        const level1 = new Folder("Level1", jail);
+        new File("King", player, false, "Something is rotten in Denmark!");
+        new File("Crowbar", level1, false, "Oh a crowbar! What are the odds!");
         new File(
             "Cells",
-            jail,
+            level1,
             false,
             "These cells are hard to break, like really hard",
         );

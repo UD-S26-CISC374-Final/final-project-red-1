@@ -73,5 +73,7 @@ export class Functions {
         Output: Quits the puzzle
     */
 
-    public executeQuit() {}
+    public executeQuit() {
+        if 
+    }
 }

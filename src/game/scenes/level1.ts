@@ -2,13 +2,15 @@ import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 import { File } from "../../classes/File";
 import { Folder } from "../../classes/Folder";
-//import { Navigator } from "../../classes/Navigator";
+import { Navigator } from "../../classes/Navigator";
 import { splitCommandPrompt } from "../../classes/Enviroment";
 import FpsText from "../objects/fps-text";
+import type PreGameText from "../objects/pre-game-text";
 
 export class Level1 extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
+    pregametext: PreGameText;
     fpsText: FpsText;
     command: string;
     private ground: Phaser.Physics.Arcade.StaticGroup;
@@ -40,46 +42,48 @@ export class Level1 extends Scene {
         this.background.setAlpha(0.5);
 
         const jail = new Folder("Jail", null);
+        const player = new Folder("Player", null);
+        new File("king", player, false, "He is weakening");
         new File("ground", jail, false, "This is ground");
         new File("wall", jail, false, "This is a wall");
         new File("crowbar", jail, false, "This is a crowbar");
         new File("prisoncells", jail, false, "These are prisoncells");
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
-            512,
+            100,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         g.setScale(2).refreshBody();
         const g1 = this.ground.create(
-            388,
+            200,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         g1.setScale(2).refreshBody();
         const g2 = this.ground.create(
-            636,
+            300,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         g2.setScale(2).refreshBody();
         this.physics.add.collider(this.ground, this.player);
         const pg = this.ground.create(
-            264,
+            400,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         pg.setScale(2).refreshBody();
         const wpg = this.ground.create(
-            140,
+            500,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         wpg.setScale(2).refreshBody();
         this.wall = this.physics.add.staticGroup();
         const w = this.wall.create(
-            100,
-            484,
+            20,
+            750,
             "wall",
         ) as Phaser.Physics.Arcade.Sprite;
         w.setScale(2).refreshBody();
@@ -94,7 +98,7 @@ export class Level1 extends Scene {
             675,
             "crowbar",
         ) as Phaser.Physics.Arcade.Image;
-        this.player = this.physics.add.sprite(200, 500, "player");
+        this.player = this.physics.add.sprite(200, 619, "player");
 
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, this.ground);
@@ -188,10 +192,7 @@ export class Level1 extends Scene {
                     case 1: // crowbar has not been caught yet
                         return "ERROR: Cannot move something that doesn't exist";
                     case 2: //crowbar has been caught and is moved
-                        return this.nav.moveFile(
-                            level1Command[1],
-                            level1Command[2],
-                        );
+                        return this.nav.moveFile(jail, player);
                     default:
                         return "ERROR: This is not available.";
                 }
@@ -225,6 +226,7 @@ export class Level1 extends Scene {
 
     update() {
         this.fpsText.update();
+        //this.pregametext.update();
     }
 
     changeScene() {
