@@ -36,6 +36,7 @@ export class Enviroment {
 
         //Hallway
         const hallway = new Folder("Hallway", folderRoot);
+        new File("Player", hallway, false, "Something is rotten in Denmark");
         new File("Table", hallway, false, "This is a table.");
         new File("Candle", hallway, false, "This is a candle.");
 
@@ -53,7 +54,12 @@ export class Enviroment {
         const torture = new Folder("TortureChamber", hallway);
         new File("Chain", torture, false, "Feel how hard the links are!");
         new File("Guillotine", torture, false, "This is so French!");
-        new File("Gloves", torture, false, "If the glove...you know the rest");
+        new File(
+            "Gloves",
+            torture,
+            false,
+            "Gloves...like the materials you use to protect your hands",
+        );
         new File("Lever", torture, false, "Pull that lever");
 
         //Records

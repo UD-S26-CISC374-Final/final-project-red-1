@@ -6,6 +6,10 @@ import { combineFiles } from "./Concatenate";
 export class Functions {
     public file: File;
     public folder: Folder;
+    public block: boolean;
+    public command: string;
+    public sourceFolder: Folder;
+    public destinationFolder: Folder;
 
     constructor() {
         const sourceFolder = new Folder("sourceFolder", null);
@@ -18,11 +22,7 @@ export class Functions {
         Output: Movement(within the game);
     */
 
-    public executeMove(
-        sourceFolder: Folder,
-        destinationFolder: Folder,
-        movedfile: File,
-    ) {}
+    public executeMove() {}
 
     /* 
         Name: executeCombine
@@ -31,10 +31,11 @@ export class Functions {
         Output: Creation of objects(within the game);
     */
 
-    public executeCombine(combineFiles, block: boolean) {
-        if ((block = true)) {
-            return "Combination has been blocked";
+    public executeCombine(block: boolean, fileA: File, fileB: File) {
+        if (!block) {
+            return combineFiles(fileA, fileB);
         } else {
+            return "ERROR: Combination has been blocked";
         }
     }
 
@@ -45,7 +46,9 @@ export class Functions {
         Output: Listing of objects(within the game);
     */
 
-    public executeDisplay() {}
+    public executeDisplay() {
+        const list = splitCommandPrompt(this.command);
+    }
 
     /*
         Name: executeFile
@@ -54,7 +57,14 @@ export class Functions {
         Output: Executes file
     */
 
-    public executeFile(fileName: File) {}
+    public executeFile(filename: File) {
+        const execute = splitCommandPrompt(this.command);
+        if (execute[0] == "./" + filename.name + "exe") {
+            return "File has been successfully executed.";
+        } else {
+            return "ERROR: File has not been successfully executed.";
+        }
+    }
 
     /*
         Name: executeQuit
