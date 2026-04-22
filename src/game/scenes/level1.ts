@@ -81,28 +81,50 @@ export class Level1 extends Scene {
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         wpg.setScale(2).refreshBody();
+        const dirt = this.ground.create(
+            50,
+            724,
+            "ground",
+        ) as Phaser.Physics.Arcade.Sprite;
+        dirt.setScale(2).refreshBody();
         this.wall = this.physics.add.staticGroup();
         const w = this.wall.create(
             20,
-            750,
+            590,
             "wall",
         ) as Phaser.Physics.Arcade.Sprite;
         w.setScale(2).refreshBody();
+        const w1 = this.wall.create(
+            20,
+            670,
+            "wall",
+        ) as Phaser.Physics.Arcade.Sprite;
+        w1.setScale(2).refreshBody();
         this.physics.add.collider(this.wall, this.player);
         this.prisoncells = this.physics.add.staticGroup();
+        this.prisoncells.create(500, 400, "prisoncells");
+        this.prisoncells.create(500, 425, "prisoncells");
+        this.prisoncells.create(500, 450, "prisoncells");
+        this.prisoncells.create(500, 475, "prisoncells");
         this.prisoncells.create(500, 500, "prisoncells");
-        this.prisoncells.create(550, 500, "prisoncells");
-        this.prisoncells.create(600, 500, "prisoncells");
+        this.prisoncells.create(500, 525, "prisoncells");
+        this.prisoncells.create(500, 550, "prisoncells");
+        this.prisoncells.create(500, 575, "prisoncells");
+        this.prisoncells.create(500, 600, "prisoncells");
+        this.prisoncells.create(500, 625, "prisoncells");
+        this.prisoncells.create(500, 650, "prisoncells");
+        this.prisoncells.create(500, 660, "prisoncells");
 
         this.crowbar = this.add.image(
             300,
-            675,
+            580,
             "crowbar",
         ) as Phaser.Physics.Arcade.Image;
         this.player = this.physics.add.sprite(200, 619, "player");
 
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, this.ground);
+        this.physics.add.collider(this.ground, this.prisoncells);
         this.physics.add.collider(this.player, this.wall);
         this.physics.add.overlap(
             this.player,
