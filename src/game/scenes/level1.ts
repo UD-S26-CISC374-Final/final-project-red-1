@@ -24,7 +24,7 @@ export class Level1 extends Scene {
     private crowstrength = 1;
     private prisoncellHealth = 8;
     private torturechamber = false;
-    private inventory: Phaser.GameObjects.Components.Depth;
+    //private inventory: Phaser.GameObjects.Components.Depth;
 
     constructor() {
         super("Level1");
