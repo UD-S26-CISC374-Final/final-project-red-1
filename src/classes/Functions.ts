@@ -3,6 +3,18 @@ import { Folder } from "./Folder";
 import { splitCommandPrompt } from "./Enviroment";
 import { combineFiles } from "./Concatenate";
 
+export class Functions {
+    public file: File;
+    public folder: Folder;
+    public block: boolean;
+    public command: string;
+    public sourceFolder: Folder;
+    public destinationFolder: Folder;
+
+    constructor() {
+        const sourceFolder = new Folder("sourceFolder", null);
+        const destinationFolder = new Folder("destinationFolder", null);
+    }
     /* 
         Name: executeMove
         Description: Executes movement
@@ -10,9 +22,7 @@ import { combineFiles } from "./Concatenate";
         Output: Movement(within the game);
     */
 
-    public executeMove(sourceFolder: Folder, destinationFolder: Folder, movedfile: File) {
-        
-    }
+    public executeMove() {}
 
     /* 
         Name: executeCombine
@@ -21,11 +31,11 @@ import { combineFiles } from "./Concatenate";
         Output: Creation of objects(within the game);
     */
 
-    public executeCombine(combineFiles, block: boolean) {
-        if (block = true) {
-            return "Combination has been blocked";
+    public executeCombine(block: boolean, fileA: File, fileB: File) {
+        if (!block) {
+            return combineFiles(fileA, fileB);
         } else {
-
+            return "ERROR: Combination has been blocked";
         }
     }
 
@@ -35,8 +45,10 @@ import { combineFiles } from "./Concatenate";
         Input: Command line
         Output: Listing of objects(within the game);
     */
-   
-    public executeDisplay()
+
+    public executeDisplay() {
+        const list = splitCommandPrompt(this.command);
+    }
 
     /*
         Name: executeFile
@@ -45,8 +57,13 @@ import { combineFiles } from "./Concatenate";
         Output: Executes file
     */
 
-    public executeFile(fileName: File) {
-
+    public executeFile(filename: File) {
+        const execute = splitCommandPrompt(this.command);
+        if (execute[0] == "./" + filename.name + "exe") {
+            return "File has been successfully executed.";
+        } else {
+            return "ERROR: File has not been successfully executed.";
+        }
     }
 
     /*
@@ -56,7 +73,7 @@ import { combineFiles } from "./Concatenate";
         Output: Quits the puzzle
     */
 
-        public executeQuit() {
-
-        }
-
+    public executeQuit() {
+        if 
+    }
+}

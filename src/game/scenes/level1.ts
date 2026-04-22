@@ -5,10 +5,12 @@ import { Folder } from "../../classes/Folder";
 import { Navigator } from "../../classes/Navigator";
 import { splitCommandPrompt } from "../../classes/Enviroment";
 import FpsText from "../objects/fps-text";
+import type PreGameText from "../objects/pre-game-text";
 
 export class Level1 extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
+    pregametext: PreGameText;
     fpsText: FpsText;
     command: string;
     private ground: Phaser.Physics.Arcade.StaticGroup;
@@ -16,6 +18,7 @@ export class Level1 extends Scene {
     private player: Phaser.Physics.Arcade.Sprite;
     private crowbar: Phaser.Physics.Arcade.Image;
     private prisoncells: Phaser.Physics.Arcade.StaticGroup;
+    private nav: Navigator;
 
     private hasCrowbar = false;
     private crowstrength = 1;
@@ -39,48 +42,49 @@ export class Level1 extends Scene {
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
-        const Level1 = new Folder("Level1", null);
-        const level1Command = splitCommandPrompt(this.command);
-        new File("ground", Level1, false, "This is ground");
-        new File("wall", Level1, false, "This is a wall");
-        new File("crowbar", Level1, false, "This is a crowbar");
-        new File("prisoncells", Level1, false, "These are prisoncells");
+        const jail = new Folder("Jail", null);
+        const player = new Folder("Player", null);
+        new File("king", player, false, "He is weakening");
+        new File("ground", jail, false, "This is ground");
+        new File("wall", jail, false, "This is a wall");
+        new File("crowbar", jail, false, "This is a crowbar");
+        new File("prisoncells", jail, false, "These are prisoncells");
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
-            512,
+            100,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         g.setScale(2).refreshBody();
         const g1 = this.ground.create(
-            388,
+            200,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         g1.setScale(2).refreshBody();
         const g2 = this.ground.create(
-            636,
+            300,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         g2.setScale(2).refreshBody();
         this.physics.add.collider(this.ground, this.player);
         const pg = this.ground.create(
-            264,
+            400,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         pg.setScale(2).refreshBody();
         const wpg = this.ground.create(
-            140,
+            500,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         wpg.setScale(2).refreshBody();
         this.wall = this.physics.add.staticGroup();
         const w = this.wall.create(
-            100,
-            484,
+            20,
+            750,
             "wall",
         ) as Phaser.Physics.Arcade.Sprite;
         w.setScale(2).refreshBody();
@@ -95,7 +99,7 @@ export class Level1 extends Scene {
             675,
             "crowbar",
         ) as Phaser.Physics.Arcade.Image;
-        this.player = this.physics.add.sprite(200, 500, "player");
+        this.player = this.physics.add.sprite(200, 619, "player");
 
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, this.ground);
@@ -130,6 +134,14 @@ export class Level1 extends Scene {
             undefined,
             this,
         );
+        this.physics.add.collider(this.player, this.crowbar);
+        this.physics.overlap(
+            this.player,
+            this.crowbar,
+            this.overlapCommands.bind(this),
+            undefined,
+            this,
+        );
         this.fpsText = new FpsText(this);
 
         EventBus.emit("current-scene-ready", this);
@@ -160,9 +172,48 @@ export class Level1 extends Scene {
         }
     }
 
-    private overlaps() {
-        if ()
+    private overlapCommands() {
+        const level1Command = splitCommandPrompt(this.command);
+        if (level1Command[0] === "cd") {
+            if (this.physics.overlap(this.player, this.prisoncells)) {
+                if (!this.hasCrowbar) {
+                    switch (level1Command.length) {
+                        default:
+                            return "ERROR: You cannot overlap a player with prisoncells unless you have a crowbar";
+                    }
+                } else if (this.prisoncellHealth > 0) {
+                    this.prisoncellHealth -= this.crowstrength;
+                    switch (level1Command.length) {
+                        default:
+                            return "Good job!";
+                    }
+                } else if (this.prisoncellHealth == 0) {
+                    this.torturechamber = true;
+                    switch (level1Command.length) {
+                        default:
+                            return "Congratulations!";
+                    }
+                }
+            }
+        } else if (level1Command[0] == "mv") {
+            if (this.physics.overlap(this.player, this.crowbar)) {
+                switch (level1Command.length) {
+                    case 1: // crowbar has not been caught yet
+                        return "ERROR: Cannot move something that doesn't exist";
+                    case 2: //crowbar has been caught and is moved
+                        this.crowbar = this.add.image(
+                            300,
+                            675,
+                            "crowbar",
+                        ) as Phaser.Physics.Arcade.Image;
+                        return this.nav.moveFile("Crowbar.txt", "Player");
+                    default:
+                        return "ERROR: This is not available.";
+                }
+            }
+        }
     }
+
     private collectCrowbar() {
         if (this.physics.overlap(this.player, this.crowbar)) {
             this.hasCrowbar = true;
@@ -189,6 +240,7 @@ export class Level1 extends Scene {
 
     update() {
         this.fpsText.update();
+        //this.pregametext.update();
     }
 
     changeScene() {

@@ -41,8 +41,28 @@ export class Enviroment {
 
         //Jail
         const jail = new Folder("Jail", hallway);
-        new File("Dirt", jail, false, "mmmm dirt.");
-        new File("Chain", jail, false, "I GOT MY LUCKY BALL AND CHAIN!");
+        const player = new Folder("Player", jail);
+        const level1 = new Folder("Level1", jail);
+        new File("King", player, false, "Something is rotten in Denmark!");
+        new File("Crowbar", level1, false, "Oh a crowbar! What are the odds!");
+        new File(
+            "Cells",
+            level1,
+            false,
+            "These cells are hard to break, like really hard",
+        );
+
+        //Torture
+        const torture = new Folder("TortureChamber", hallway);
+        new File("Chain", torture, false, "Feel how hard the links are!");
+        new File("Guillotine", torture, false, "This is so French!");
+        new File(
+            "Gloves",
+            torture,
+            false,
+            "Gloves...like the materials you use to protect your hands",
+        );
+        new File("Lever", torture, false, "Pull that lever");
 
         //Records
         const records = new Folder("Records", hallway);
