@@ -5,15 +5,14 @@ import { Folder } from "../../classes/Folder";
 import { Navigator } from "../../classes/Navigator";
 import { splitCommandPrompt } from "../../classes/Enviroment";
 import FpsText from "../objects/fps-text";
-import type PreGameText from "../objects/pre-game-text";
 
 export class Level1 extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
-    pregametext: PreGameText;
     fpsText: FpsText;
     command: string;
     private ground: Phaser.Physics.Arcade.StaticGroup;
+    private pregametext: Phaser.GameObjects.Text;
     private wall: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
     private crowbar: Phaser.Physics.Arcade.Image;
@@ -31,6 +30,17 @@ export class Level1 extends Scene {
     }
 
     create() {
+        this.pregametext = this.add
+            .text(
+                300,
+                150,
+                "Welcome to the game.\n Your mission is to save a former king from the dungeon.\nCd - change directories.\nHelp - Call for help.\nLs - list out files. \nMv - move files. Cat - combine or see the contents of files. \nControl + c - Quit the puzzles.\n ./filename.exe - Execute the files.\nGood luck, and god save the king!",
+                {
+                    fontSize: "16px",
+                    color: "#ffffff",
+                },
+            )
+            .setOrigin(0.5);
         this.camera = this.cameras.main;
 
         this.cameras.main.setViewport(0, 0, 700, 768);
@@ -262,7 +272,7 @@ export class Level1 extends Scene {
 
     update() {
         this.fpsText.update();
-        //this.pregametext.update();
+        this.pregametext.update();
     }
 
     changeScene() {
