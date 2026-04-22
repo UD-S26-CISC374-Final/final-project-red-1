@@ -5,15 +5,14 @@ import { Folder } from "../../classes/Folder";
 import { Navigator } from "../../classes/Navigator";
 import { splitCommandPrompt } from "../../classes/Enviroment";
 import FpsText from "../objects/fps-text";
-import type PreGameText from "../objects/pre-game-text";
 
 export class Level1 extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
-    pregametext: PreGameText;
     fpsText: FpsText;
     command: string;
     private ground: Phaser.Physics.Arcade.StaticGroup;
+    private pregametext: Phaser.GameObjects.Text;
     private wall: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
     private crowbar: Phaser.Physics.Arcade.Image;
@@ -31,6 +30,17 @@ export class Level1 extends Scene {
     }
 
     create() {
+        this.pregametext = this.add
+            .text(
+                300,
+                150,
+                "Welcome to the game.\n Your mission is to save a former king from the dungeon.\nCd - change directories.\nHelp - Call for help.\nLs - list out files. \nMv - move files. Cat - combine or see the contents of files. \nControl + c - Quit the puzzles.\n ./filename.exe - Execute the files.\nGood luck, and god save the king!",
+                {
+                    fontSize: "16px",
+                    color: "#ffffff",
+                },
+            )
+            .setOrigin(0.5);
         this.camera = this.cameras.main;
 
         this.cameras.main.setViewport(0, 0, 700, 768);
@@ -81,28 +91,50 @@ export class Level1 extends Scene {
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         wpg.setScale(2).refreshBody();
+        const dirt = this.ground.create(
+            50,
+            724,
+            "ground",
+        ) as Phaser.Physics.Arcade.Sprite;
+        dirt.setScale(2).refreshBody();
         this.wall = this.physics.add.staticGroup();
         const w = this.wall.create(
             20,
-            750,
+            590,
             "wall",
         ) as Phaser.Physics.Arcade.Sprite;
         w.setScale(2).refreshBody();
+        const w1 = this.wall.create(
+            20,
+            670,
+            "wall",
+        ) as Phaser.Physics.Arcade.Sprite;
+        w1.setScale(2).refreshBody();
         this.physics.add.collider(this.wall, this.player);
         this.prisoncells = this.physics.add.staticGroup();
+        this.prisoncells.create(500, 400, "prisoncells");
+        this.prisoncells.create(500, 425, "prisoncells");
+        this.prisoncells.create(500, 450, "prisoncells");
+        this.prisoncells.create(500, 475, "prisoncells");
         this.prisoncells.create(500, 500, "prisoncells");
-        this.prisoncells.create(550, 500, "prisoncells");
-        this.prisoncells.create(600, 500, "prisoncells");
+        this.prisoncells.create(500, 525, "prisoncells");
+        this.prisoncells.create(500, 550, "prisoncells");
+        this.prisoncells.create(500, 575, "prisoncells");
+        this.prisoncells.create(500, 600, "prisoncells");
+        this.prisoncells.create(500, 625, "prisoncells");
+        this.prisoncells.create(500, 650, "prisoncells");
+        this.prisoncells.create(500, 660, "prisoncells");
 
         this.crowbar = this.add.image(
             300,
-            675,
+            580,
             "crowbar",
         ) as Phaser.Physics.Arcade.Image;
         this.player = this.physics.add.sprite(200, 619, "player");
 
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, this.ground);
+        this.physics.add.collider(this.ground, this.prisoncells);
         this.physics.add.collider(this.player, this.wall);
         this.physics.add.overlap(
             this.player,
@@ -240,7 +272,7 @@ export class Level1 extends Scene {
 
     update() {
         this.fpsText.update();
-        //this.pregametext.update();
+        this.pregametext.update();
     }
 
     changeScene() {
