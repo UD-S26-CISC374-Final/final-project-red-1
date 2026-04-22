@@ -18,6 +18,7 @@ export class Level1 extends Scene {
     private player: Phaser.Physics.Arcade.Sprite;
     private crowbar: Phaser.Physics.Arcade.Image;
     private prisoncells: Phaser.Physics.Arcade.StaticGroup;
+    private nav: Navigator;
 
     private hasCrowbar = false;
     private crowstrength = 1;
@@ -133,6 +134,14 @@ export class Level1 extends Scene {
             undefined,
             this,
         );
+        this.physics.add.collider(this.player, this.crowbar);
+        this.physics.overlap(
+            this.player,
+            this.crowbar,
+            this.overlapCommands.bind(this),
+            undefined,
+            this,
+        );
         this.fpsText = new FpsText(this);
 
         EventBus.emit("current-scene-ready", this);
@@ -163,8 +172,8 @@ export class Level1 extends Scene {
         }
     }
 
-    private overlapCommands(command: string) {
-        const level1Command = splitCommandPrompt(command);
+    private overlapCommands() {
+        const level1Command = splitCommandPrompt(this.command);
         if (level1Command[0] === "cd") {
             if (this.physics.overlap(this.player, this.prisoncells)) {
                 if (!this.hasCrowbar) {
@@ -192,7 +201,12 @@ export class Level1 extends Scene {
                     case 1: // crowbar has not been caught yet
                         return "ERROR: Cannot move something that doesn't exist";
                     case 2: //crowbar has been caught and is moved
-                        return this.nav.moveFile(jail, player);
+                        this.crowbar = this.add.image(
+                            300,
+                            675,
+                            "crowbar",
+                        ) as Phaser.Physics.Arcade.Image;
+                        return this.nav.moveFile("Crowbar.txt", "Player");
                     default:
                         return "ERROR: This is not available.";
                 }
