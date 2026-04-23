@@ -62,13 +62,13 @@ export class MainMenu extends Scene implements ChangeableScene {
 
     create() {
         this.env = new Enviroment();
-        this.cameras.main.setViewport(700, 0, 324, 768);
+        this.cameras.main.setViewport(514, 0, 514, 768);
 
         // terminal text formatting
         const terminalText = this.add.text(0, 0, "", {
             fontSize: "12px",
             fontFamily: "Courier New",
-            color: "#0cd6fe",
+            color: "#ffffff",
             lineSpacing: 4,
         });
 
