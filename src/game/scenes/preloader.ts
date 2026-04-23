@@ -24,10 +24,10 @@ export class Preloader extends Scene {
 
     preload() {
         //  Load the assets for the game - Replace with your own assets
-        this.load.image(
-            "dungeon",
-            "assets/dungeon.png",
-        ); /* Credit goes to https://opengameart.org/content/dungeon-tileset-4 by author HorusKDI */
+        //this.load.image(
+        //"dungeon",
+        //"assets/dungeon.png",
+        //); /* Credit goes to https://opengameart.org/content/dungeon-tileset-4 by author HorusKDI */
         this.load.image(
             "ground",
             "assets/ground.png",
