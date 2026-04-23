@@ -18,12 +18,12 @@ export class Level1 extends Scene {
     private crowbar: Phaser.Physics.Arcade.Image;
     private prisoncells: Phaser.Physics.Arcade.StaticGroup;
     private nav: Navigator;
+    //private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
 
     private hasCrowbar = false;
     private crowstrength = 1;
     private prisoncellHealth = 8;
     private torturechamber = false;
-    //private inventory: Phaser.GameObjects.Components.Depth;
 
     constructor() {
         super("Level1");
@@ -124,7 +124,6 @@ export class Level1 extends Scene {
         this.prisoncells.create(500, 625, "prisoncells");
         this.prisoncells.create(500, 650, "prisoncells");
         this.prisoncells.create(500, 660, "prisoncells");
-
         this.crowbar = this.add.image(
             300,
             580,
@@ -174,6 +173,34 @@ export class Level1 extends Scene {
             undefined,
             this,
         );
+
+        /*this.anims.create({
+            key: "left",
+            frames: this.anims.generateFrameNumbers("player", {
+                start: 0,
+                end: 3,
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: "turn",
+            frames: [{ key: "player", frame: 4 }],
+            frameRate: 10,
+        });
+
+        this.anims.create({
+            key: "right",
+            frames: this.anims.generateFrameNumbers("player", {
+                start: 5,
+                end: 8,
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });*/
+
+        //this.cursors = this.input.keyboard?.createCursorKeys();
         this.fpsText = new FpsText(this);
 
         EventBus.emit("current-scene-ready", this);
@@ -271,6 +298,24 @@ export class Level1 extends Scene {
     }
 
     update() {
+        /*if (!this.cursors) {
+            return;
+        }
+
+        if (this.cursors.left.isDown) {
+            this.player.setVelocityX(-160);
+            this.player.anims.play("left", true);
+        } else if (this.cursors.right.isDown) {
+            this.player.setVelocityX(160);
+            this.player.anims.play("right", true);
+        } else {
+            this.player.setVelocityX(0);
+            this.player.anims.play("turn");
+        }
+
+        if (this.cursors.up.isDown && this.player.body?.touching.down) {
+            this.player.setVelocityY(-330);
+        }*/
         this.fpsText.update();
         this.pregametext.update();
     }
