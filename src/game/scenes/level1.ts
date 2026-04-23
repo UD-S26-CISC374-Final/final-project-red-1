@@ -45,7 +45,7 @@ export class Level1 extends Scene {
 
         this.cameras.main.setViewport(0, 0, 700, 768);
 
-        this.add.image(400, 300, "dungeon");
+        this.add.image(400, 400, "dungeon");
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#000000");
 
