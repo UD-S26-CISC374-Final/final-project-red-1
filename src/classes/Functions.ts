@@ -2,6 +2,16 @@ import { File } from "./File";
 import { Folder } from "./Folder";
 import { splitCommandPrompt } from "./Enviroment";
 import { combineFiles } from "./Concatenate";
+import { Navigator } from "./Navigator";
+
+export class Functions {
+    public file: File;
+    public folder: Folder;
+    public block: boolean;
+    public command: string;
+    public nav: Navigator;
+    public sourceFolder: Folder;
+    public destinationFolder: Folder;
 
     /* 
         Name: executeMove
@@ -10,8 +20,11 @@ import { combineFiles } from "./Concatenate";
         Output: Movement(within the game);
     */
 
-    public executeMove(sourceFolder: Folder, destinationFolder: Folder, movedfile: File) {
-        
+    public executeMove(sourceFolder: string, destinationFolder: string) {
+        const move = splitCommandPrompt(this.command);
+        if (move[0] == "mv") {
+            return this.nav.moveFile(sourceFolder, destinationFolder);
+        }
     }
 
     /* 
@@ -21,11 +34,12 @@ import { combineFiles } from "./Concatenate";
         Output: Creation of objects(within the game);
     */
 
-    public executeCombine(combineFiles, block: boolean) {
-        if (block = true) {
-            return "Combination has been blocked";
+    public executeCombine(block: boolean, fileA: File, fileB: File) {
+        const combine = splitCommandPrompt(this.command);
+        if (!block && combine[0] === "cat") {
+            return combineFiles(fileA, fileB);
         } else {
-
+            return "ERROR: Combination has been blocked";
         }
     }
 
@@ -35,8 +49,26 @@ import { combineFiles } from "./Concatenate";
         Input: Command line
         Output: Listing of objects(within the game);
     */
-   
-    public executeDisplay()
+
+    public executeDisplay() {
+        const list = splitCommandPrompt(this.command);
+        let otherfile: File | Folder | string;
+        if (list[0] == "ls") {
+            switch (list.length) {
+                case 1: // just ls
+                    return this.nav.showContent();
+                case 2: // ls + more file(s)
+                    otherfile = this.nav.stringToFile(list[1]);
+                    if (otherfile instanceof Folder) {
+                        return "../, ./, " + otherfile.showContents();
+                    } else if (otherfile instanceof File) {
+                        return "ERROR. Pathway leads to a file.";
+                    } else {
+                        return otherfile;
+                    }
+            }
+        }
+    }
 
     /*
         Name: executeFile
@@ -45,8 +77,13 @@ import { combineFiles } from "./Concatenate";
         Output: Executes file
     */
 
-    public executeFile(fileName: File) {
-
+    public executeFile(filename: File) {
+        const execute = splitCommandPrompt(this.command);
+        if (execute[0] == "./" + filename.name + "exe") {
+            return "File has been successfully executed.";
+        } else {
+            return "ERROR: File has not been successfully executed.";
+        }
     }
 
     /*
@@ -56,7 +93,10 @@ import { combineFiles } from "./Concatenate";
         Output: Quits the puzzle
     */
 
-        public executeQuit() {
-
+    public executeQuit() {
+        const quit = splitCommandPrompt(this.command);
+        if (quit[0] == "cntrl+c") {
+            return "You may go back to the beginning.";
         }
-
+    }
+}

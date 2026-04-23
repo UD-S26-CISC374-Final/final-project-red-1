@@ -30,7 +30,7 @@ TEXT GOES HERE
 
 # Educational Game Design Document
 
-Link to our [egdd](Educational Game Design Document)
+Link to our [egdd](https://github.com/GeorgeZapp/egdd/blob/main/index.md)
 
 # Credits
 

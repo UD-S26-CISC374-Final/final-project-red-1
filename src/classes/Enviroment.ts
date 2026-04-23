@@ -41,40 +41,45 @@ export class Enviroment {
 
         //Jail
         const jail = new Folder("Jail", hallway);
-        new File("Ground", jail, false, "mmmmm, dirt.");
-        new File("Walls", jail, false, "Damp and dry at the same time.");
+        const player = new Folder("Player", jail);
+        const level1 = new Folder("Level1", jail);
+        new File("King", player, false, "Something is rotten in Denmark!");
+        new File("Crowbar", level1, false, "Oh a crowbar! What are the odds!");
         new File(
-            "Prison_Cell",
-            jail,
+            "Cells",
+            level1,
             false,
-            "Old and worm. If only you could bend them.",
-        );
-        new File(
-            "Crowbar",
-            jail,
-            false,
-            "Reminds you of a black mesa you saw a while ago.",
+            "These cells are hard to break, like really hard",
         );
 
-        //torturechamber
-        const tChamber = new Folder("Torture_Chamber", hallway);
-        new File("Ground", tChamber, false, "Cobblestone.");
+        //Torture
+        const torture = new Folder("TortureChamber", hallway);
+        new File("Chain", torture, false, "Feel how hard the links are!");
+        new File("Guillotine", torture, false, "This is so French!");
         new File(
-            "Chain",
-            tChamber,
+            "Gloves",
+            torture,
             false,
-            "If this werent the middle ages, you would get a tetanus shot",
+            "Gloves...like the materials you use to protect your hands",
         );
-        new File("Gloves", tChamber, false, "Oooh, genuine leather!");
-        new File(
-            "Guillotine",
-            tChamber,
-            false,
-            "Probably good for cutting cake.",
-        );
-        new File("Lever", tChamber, true, "I think I can turn this on.");
+        new File("Lever", torture, false, "Pull that lever");
 
-        this.nav = new Navigator(jail);
+        //Records
+        const records = new Folder("Records", hallway);
+        const shelf1 = new Folder("Shelf1", records);
+        new File("Book1", shelf1, true);
+        new File("Book2", shelf1, true);
+        new File("Book3", shelf1, true);
+        const shelf2 = new Folder("Shelf2", records);
+        new File("Book1", shelf2, true);
+        new File("Book2", shelf2, true);
+        new File("Book3", shelf2, true);
+
+        //Lab
+        const lab = new Folder("Lab", hallway);
+        new File("Potion", lab, false, "3 days blinding stew.");
+
+        this.nav = new Navigator(folderRoot);
     }
 
     /*
