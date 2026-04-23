@@ -29,6 +29,7 @@ export function splitCommandPrompt(command: string): string[] {
 
 export class Enviroment {
     public nav: Navigator;
+    public Inventory: Folder;
 
     constructor() {
         //Root
@@ -77,8 +78,17 @@ export class Enviroment {
         new File("Potion", lab, false, "3 days blinding stew.");*/
 
         this.nav = new Navigator(jail);
+
+        //Blank Inventory
+        this.Inventory = new Folder("Inventory", this.nav.current);
     }
 
+    /*
+        Name: update
+        Description: main handler function for updating the overall game state
+        Input: command (string): a user's command. Will be parsed in this.runCommand();
+        Output: string: see runCommand for more details, but the jist is that it will return either user input or an error
+    */
     public update(command: string): string {
         this.updateEnviromentState();
 
@@ -96,11 +106,20 @@ export class Enviroment {
 
         if (currentFolder.name === "Jail") {
             if (
-                currentFolder.getChild("BrokenCells") !== -1 &&
+                (currentFolder.getChild("BrokenCells.txt") !== -1 ||
+                    this.Inventory.getChild("BrokenCells.txt") !== -1) &&
                 currentFolder.parent !== null
             ) {
                 currentFolder.parent.acessible = true;
             }
+        } //Unlocks Hallway
+
+        if (this.nav.current.getChild("Inventory") !== -1) {
+            this.nav.current.removeChild("Inventory");
+        }
+
+        if (this.nav.current.name !== "Inventory") {
+            this.nav.current.addChild(this.Inventory);
         }
     }
 

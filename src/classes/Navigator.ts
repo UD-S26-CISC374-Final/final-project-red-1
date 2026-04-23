@@ -157,6 +157,7 @@ export class Navigator {
                 parentFile.name
             );
         } else {
+            //child is a folder
             const oldParent = childFile.parent;
 
             if (oldParent) {
