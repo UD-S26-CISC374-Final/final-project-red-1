@@ -39,11 +39,11 @@ export class Preloader extends Scene {
         this.load.image(
             "prisoncells",
             "assets/prisoncell.png",
-        ); /* Credit goes to https://opengameart.org/content/cementery-gate by author zerberros */
+        ); /* Credit goes to https://opengameart.org/content/prison-tiles by author devnewton */
         this.load.image(
             "Crowbar.txt",
             "assets/crowbar.png",
-        ); /* Credit goes to https://opengameart.org/content/crowbar by author Clint Bellanger */
+        ); /* Credit goes to https://opengameart.org/content/crow-bar by author Lewis W. Veasey */
         // this.load.image("chain", "assets/chain.png");
         // this.load.image("gloves", "assets/gloves.png");
         // this.load.image("guillotine", "assets/guillotine.png");
