@@ -39,20 +39,17 @@ export class Enviroment {
         new File("Table", hallway, false, "This is a table.");
         new File("Candle", hallway, false, "This is a candle.");
 
-        //Jail
+        //Jail/Level1
         const jail = new Folder("Jail", hallway);
-        const player = new Folder("Player", jail);
-        const level1 = new Folder("Level1", jail);
-        new File("King", player, false, "Something is rotten in Denmark!");
-        new File("Crowbar", level1, false, "Oh a crowbar! What are the odds!");
+        new File("Crowbar", jail, false, "Oh a crowbar! What are the odds!");
         new File(
             "Cells",
-            level1,
+            jail,
             false,
             "These cells are hard to break, like really hard",
         );
 
-        //Torture
+        //Torture Chamber/Level2
         const torture = new Folder("TortureChamber", hallway);
         new File("Chain", torture, false, "Feel how hard the links are!");
         new File("Guillotine", torture, false, "This is so French!");
@@ -64,8 +61,8 @@ export class Enviroment {
         );
         new File("Lever", torture, false, "Pull that lever");
 
-        //Records
-        const records = new Folder("Records", hallway);
+        //Records (Add Back Later)
+        /*const records = new Folder("Records", hallway);
         const shelf1 = new Folder("Shelf1", records);
         new File("Book1", shelf1, true);
         new File("Book2", shelf1, true);
@@ -77,7 +74,7 @@ export class Enviroment {
 
         //Lab
         const lab = new Folder("Lab", hallway);
-        new File("Potion", lab, false, "3 days blinding stew.");
+        new File("Potion", lab, false, "3 days blinding stew.");*/
 
         this.nav = new Navigator(folderRoot);
     }
