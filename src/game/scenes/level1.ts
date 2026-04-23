@@ -20,7 +20,7 @@ export class Level1 extends Scene {
     private nav: Navigator;
     //private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
 
-    private hasCrowbar = false;
+    private inventory: Set<string> = new Set();
     private crowstrength = 1;
     private prisoncellHealth = 8;
     private torturechamber = false;
@@ -57,7 +57,7 @@ export class Level1 extends Scene {
         new File("king", player, false, "He is weakening");
         new File("ground", jail, false, "This is ground");
         new File("wall", jail, false, "This is a wall");
-        new File("crowbar", jail, false, "This is a crowbar");
+        new File("Crowbar.txt", jail, false, "This is a crowbar");
         new File("prisoncells", jail, false, "These are prisoncells");
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
@@ -127,7 +127,7 @@ export class Level1 extends Scene {
         this.crowbar = this.add.image(
             300,
             580,
-            "crowbar",
+            "Crowbar.txt",
         ) as Phaser.Physics.Arcade.Image;
         this.player = this.physics.add.sprite(200, 619, "player");
 
@@ -209,14 +209,14 @@ export class Level1 extends Scene {
     private hitPrisonCell() {
         if (
             this.physics.overlap(this.player, this.prisoncells) &&
-            !this.hasCrowbar
+            !this.inventory.has("Crowbar.txt")
         ) {
             console.log("You need a crowbar to break the prison cell!");
             this.prisoncellHealth = this.prisoncellHealth - 0;
         }
         if (
             this.physics.overlap(this.player, this.prisoncells) &&
-            this.hasCrowbar
+            this.inventory.has("Crowbar.txt")
         ) {
             this.prisoncellHealth -= this.crowstrength;
             if (this.prisoncellHealth == 0) {
@@ -235,39 +235,60 @@ export class Level1 extends Scene {
         const level1Command = splitCommandPrompt(this.command);
         if (level1Command[0] === "cd") {
             if (this.physics.overlap(this.player, this.prisoncells)) {
-                if (!this.hasCrowbar) {
+                if (!this.inventory.has("Crowbar.txt")) {
                     switch (level1Command.length) {
                         default:
                             return "ERROR: You cannot overlap a player with prisoncells unless you have a crowbar";
                     }
-                } else if (this.prisoncellHealth > 0) {
+                }
+                if (
+                    this.prisoncellHealth > 0 &&
+                    level1Command[1] == "prisoncells" &&
+                    this.inventory.has("Crowbar.txt")
+                ) {
                     this.prisoncellHealth -= this.crowstrength;
                     switch (level1Command.length) {
                         default:
-                            return "Good job!";
+                            return (
+                                "Good job! Prison health at: " +
+                                this.prisoncellHealth
+                            );
                     }
-                } else if (this.prisoncellHealth == 0) {
+                } else if (
+                    this.prisoncellHealth == 0 &&
+                    level1Command[1] == "Cells.txt" &&
+                    this.inventory.has("Crowbar.txt")
+                ) {
                     this.torturechamber = true;
+                    this.prisoncells.children.each((jail) => {
+                        const jailcell = jail as Phaser.Physics.Arcade.Sprite;
+                        jailcell.disableBody(true, true);
+                        return true;
+                    });
                     switch (level1Command.length) {
                         default:
-                            return "Congratulations!";
+                            return "Congratulations! Prison is opened!";
                     }
                 }
             }
         } else if (level1Command[0] == "mv") {
-            if (this.physics.overlap(this.player, this.crowbar)) {
+            if (
+                this.physics.overlap(this.player, this.crowbar) &&
+                level1Command[1] != "Crowbar.txt"
+            ) {
                 switch (level1Command.length) {
-                    case 1: // crowbar has not been caught yet
+                    default: // crowbar has not been caught yet
                         return "ERROR: Cannot move something that doesn't exist";
-                    case 2: //crowbar has been caught and is moved
-                        this.crowbar = this.add.image(
-                            300,
-                            675,
-                            "crowbar",
-                        ) as Phaser.Physics.Arcade.Image;
+                }
+            } else if (
+                this.physics.overlap(this.player, this.crowbar) &&
+                level1Command[1] == "Crowbar.txt"
+            ) {
+                this.inventory.add("Crowbar.txt");
+                this.crowbar.destroy();
+                switch (level1Command.length) {
+                    default: //crowbar has been caught and is moved
                         return this.nav.moveFile("Crowbar.txt", "Player");
-                    default:
-                        return "ERROR: This is not available.";
                 }
             }
         }
@@ -275,14 +296,14 @@ export class Level1 extends Scene {
 
     private collectCrowbar() {
         if (this.physics.overlap(this.player, this.crowbar)) {
-            this.hasCrowbar = true;
+            this.inventory.has("Crowbar.txt");
         }
     }
 
     private handlecrowbarHit() {
         if (
             this.physics.overlap(this.prisoncells, this.player) &&
-            this.hasCrowbar
+            this.inventory.has("Crowbar.txt")
         ) {
             this.hitPrisonCell();
         }
