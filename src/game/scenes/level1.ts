@@ -34,7 +34,7 @@ export class Level1 extends Scene {
             .text(
                 300,
                 150,
-                "Welcome to the game.\n Your mission is to save a former king from the dungeon.\nCd - change directories.\nHelp - Call for help.\nLs - list out files. \nMv - move files. Cat - combine or see the contents of files. \nControl + c - Quit the puzzles.\n ./filename.exe - Execute the files.\nGood luck, and god save the king!",
+                "Welcome to the game.\nYour mission is to save the king from the dungeon.\nCd - change directories.\nHelp - Call for help.\nLs - list out files. \nMv - move files. \nCat - combine or see the contents of files. \nControl + c - Quit the puzzles.\n ./filename.exe - Execute the files.\nGood luck, and god save the king!",
                 {
                     fontSize: "16px",
                     color: "#ffffff",
