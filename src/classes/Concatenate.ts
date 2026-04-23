@@ -13,22 +13,10 @@ function mergeFiles(fileA: File, fileB: File, index: number) {
 
     const combinedItems: File[] = [
         new File(
-            "DirtyCandle",
+            "BrokenCells",
             moveToFolder,
             false,
-            "Why'd you put dirt on a candle?",
-        ),
-        new File(
-            "BurntTable",
-            moveToFolder,
-            false,
-            "OH NO! OUR TABLE! ITS BURNT!",
-        ),
-        new File(
-            "ChainedTable",
-            moveToFolder,
-            false,
-            "Susan's gone. Shes been replaced... by Chain Bastard.",
+            "These look like you can fit through them easily",
         ),
     ];
 
@@ -49,8 +37,8 @@ function mergeFiles(fileA: File, fileB: File, index: number) {
     Output: string: either an error or a notificaiton letting the user know that both files were combined
  */
 export function combineFiles(fileA: File, fileB: File): string {
-    const fileACombine: string[] = ["Candle.txt", "Candle.txt", "Chain.txt"];
-    const fileBCombine: string[] = ["Dirt.txt", "Table.txt", "Table.txt"];
+    const fileACombine: string[] = [""];
+    const fileBCombine: string[] = [""];
 
     let fileAinCombines: number;
     let checkforA: string[];

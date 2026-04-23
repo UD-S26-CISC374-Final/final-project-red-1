@@ -140,7 +140,7 @@ export class MainMenu extends Scene implements ChangeableScene {
         });
 
         // initial terminal output
-        this.appendLine(this.env.runCommand("ls"));
+        this.appendLine(this.env.update("ls"));
 
         // LIVE TYPING (moved OUTSIDE keydown)
         inputElement.addEventListener("input", () => {
@@ -157,7 +157,7 @@ export class MainMenu extends Scene implements ChangeableScene {
 
                 this.appendLine(this.prompt + value);
 
-                const output = this.env.runCommand(value);
+                const output = this.env.update(value);
 
                 if (output) {
                     this.appendLine(output);

@@ -35,7 +35,7 @@ export class Enviroment {
         const folderRoot = new Folder("Root", null, false);
 
         //Hallway
-        const hallway = new Folder("Hallway", folderRoot);
+        const hallway = new Folder("Hallway", folderRoot, false);
         new File("Table", hallway, false, "This is a table.");
         new File("Candle", hallway, false, "This is a candle.");
 
@@ -79,6 +79,31 @@ export class Enviroment {
         this.nav = new Navigator(jail);
     }
 
+    public update(command: string): string {
+        this.updateEnviromentState();
+
+        return this.runCommand(command);
+    }
+
+    /*
+        Name: updateEnviromentState
+        Desciption: Makes sure the game state updates whenever the user does something
+        Input: N/A
+        Output: N/A
+    */
+    private updateEnviromentState() {
+        const currentFolder = this.nav.current;
+
+        if (currentFolder.name === "Jail") {
+            if (
+                currentFolder.getChild("BrokenCells") !== -1 &&
+                currentFolder.parent !== null
+            ) {
+                currentFolder.parent.acessible = true;
+            }
+        }
+    }
+
     /*
         Name: runCommand
         Desciption: When given user input, it will then parse said input by splitting it into an array, then will produce an output that matches
@@ -86,7 +111,7 @@ export class Enviroment {
         Input: command(string): the user's input
         Output: string: Will either let the user know of an error, OR will print out the output.
     */
-    public runCommand(command: string): string {
+    private runCommand(command: string): string {
         const brokenUpCommand = splitCommandPrompt(command);
 
         if (brokenUpCommand[0] === "help") {
