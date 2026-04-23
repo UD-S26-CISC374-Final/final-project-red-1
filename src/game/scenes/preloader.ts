@@ -44,10 +44,10 @@ export class Preloader extends Scene {
             "Crowbar.txt",
             "assets/crowbar.png",
         ); /* Credit goes to https://opengameart.org/content/crow-bar by author Lewis W. Veasey */
-        // this.load.image("chain", "assets/chain.png");
-        // this.load.image("gloves", "assets/gloves.png");
-        // this.load.image("guillotine", "assets/guillotine.png");
-        // this.load.image("lever", "assets/lever.png");
+        this.load.image("chain", "assets/chain.png");
+        this.load.image("gloves", "assets/gloves.png");
+        this.load.image("guillotine", "assets/guillotine.png");
+        this.load.image("lever", "assets/lever.png");
         this.load.image("logo", "assets/logo.png");
         this.load.image("star", "assets/star.png");
         this.load.image("phaser-logo", "assets/phaser-logo.png");
@@ -62,7 +62,7 @@ export class Preloader extends Scene {
         //  For example, you can define global animations here, so we can use them in other scenes.
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        this.scene.start("Level1");
+        this.scene.launch("Level1");
         this.scene.launch("MainMenu");
     }
 }

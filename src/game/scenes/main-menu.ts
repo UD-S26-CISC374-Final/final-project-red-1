@@ -22,8 +22,23 @@ export class MainMenu extends Scene implements ChangeableScene {
     currentInput: string = "";
     prompt: string = "> ";
 
+    currentLevel: string = "Level1";
+
     constructor() {
         super("MainMenu");
+    }
+
+    getSceneFromFolder(folderName: string): string | null {
+        switch (folderName) {
+            case "Jail":
+                return "Level1";
+            case "TortureChamber":
+                return "Level2";
+            case "Hallway":
+                return "Hallway";
+            default:
+                return null;
+        }
     }
 
     /*
@@ -63,6 +78,7 @@ export class MainMenu extends Scene implements ChangeableScene {
     create() {
         this.env = new Enviroment();
         this.cameras.main.setViewport(514, 0, 514, 768);
+        this.cameras.main.setBackgroundColor("#000000");
 
         // terminal text formatting
         const terminalText = this.add.text(0, 0, "", {
@@ -161,6 +177,16 @@ export class MainMenu extends Scene implements ChangeableScene {
 
                 if (output) {
                     this.appendLine(output);
+                }
+
+                const targetScene = this.getSceneFromFolder(
+                    this.env.nav.current.name,
+                );
+
+                if (targetScene && targetScene !== this.currentLevel) {
+                    this.scene.stop(this.currentLevel);
+                    this.scene.launch(targetScene);
+                    this.currentLevel = targetScene;
                 }
 
                 this.currentInput = "";
