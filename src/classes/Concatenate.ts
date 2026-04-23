@@ -37,8 +37,8 @@ function mergeFiles(fileA: File, fileB: File, index: number) {
     Output: string: either an error or a notificaiton letting the user know that both files were combined
  */
 export function combineFiles(fileA: File, fileB: File): string {
-    const fileACombine: string[] = [""];
-    const fileBCombine: string[] = [""];
+    const fileACombine: string[] = ["Crowbar.txt"];
+    const fileBCombine: string[] = ["Cells.txt"];
 
     let fileAinCombines: number;
     let checkforA: string[];
