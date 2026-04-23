@@ -22,11 +22,11 @@ export class Level1 extends Scene {
 
     private inventory: Set<string> = new Set();
     private crowstrength = 1;
-    private prisoncellHealth = 8;
+    private prisoncellHealth = 1;
     private torturechamber = false;
 
     constructor() {
-        super("Level1");
+        super("dungeon.png");
     }
 
     create() {
@@ -343,7 +343,7 @@ export class Level1 extends Scene {
 
     changeScene() {
         if (this.torturechamber) {
-            this.scene.start("Level2");
+            this.scene.start("torture.png");
         }
         this.scene.start("GameOver");
     }
