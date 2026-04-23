@@ -256,7 +256,7 @@ export class Level1 extends Scene {
                     }
                 } else if (
                     this.prisoncellHealth == 0 &&
-                    level1Command[1] == "prisoncells" &&
+                    level1Command[1] == "Cells.txt" &&
                     this.inventory.has("Crowbar.txt")
                 ) {
                     this.torturechamber = true;
