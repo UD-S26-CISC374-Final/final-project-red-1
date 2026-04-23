@@ -32,7 +32,7 @@ export class Enviroment {
 
     constructor() {
         //Root
-        const folderRoot = new Folder("Root", null);
+        const folderRoot = new Folder("Root", null, false);
 
         //Hallway
         const hallway = new Folder("Hallway", folderRoot);
@@ -76,7 +76,7 @@ export class Enviroment {
         const lab = new Folder("Lab", hallway);
         new File("Potion", lab, false, "3 days blinding stew.");*/
 
-        this.nav = new Navigator(folderRoot);
+        this.nav = new Navigator(jail);
     }
 
     /*
@@ -125,15 +125,6 @@ export class Enviroment {
                 default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: cd [filepath]";
             }
-        } else if (brokenUpCommand[0] === "cd..") {
-            switch (brokenUpCommand.length) {
-                case 1: //case: they are at the folderRoot
-                    return "ERROR. There are no directories behind you.";
-                case 2: //case: You are at one directory in the folderRoot
-                    return this.nav.travelTo("Root");
-                default: //case: too many arguments
-                    return "ERROR: Too many arguments. Please use the following format: cd..";
-            }
         } else if (brokenUpCommand[0] === "ls") {
             //list command
             let tempFile: File | Folder | string;
@@ -143,7 +134,11 @@ export class Enviroment {
                 case 2: //case: "ls" + a file path
                     tempFile = this.nav.stringToFile(brokenUpCommand[1]);
                     if (tempFile instanceof Folder) {
-                        return "../, ./, " + tempFile.showContents();
+                        if (tempFile.acessible) {
+                            return "../, ./, " + tempFile.showContents();
+                        } else {
+                            return "ERROR: Unable to access folder.";
+                        }
                     } else if (tempFile instanceof File) {
                         return "ERROR: Pathway lead to a file. Please use a directory";
                     } else {
