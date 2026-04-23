@@ -43,7 +43,7 @@ export class Level1 extends Scene {
             .setOrigin(0.5);
         this.camera = this.cameras.main;
 
-        this.cameras.main.setViewport(0, 0, 700, 768);
+        this.cameras.main.setViewport(0, 0, 514, 768);
 
         this.add.image(400, 400, "dungeon");
         this.camera = this.cameras.main;
@@ -174,7 +174,7 @@ export class Level1 extends Scene {
             this,
         );
 
-        /*this.anims.create({
+        this.anims.create({
             key: "left",
             frames: this.anims.generateFrameNumbers("player", {
                 start: 0,
@@ -198,7 +198,7 @@ export class Level1 extends Scene {
             }),
             frameRate: 10,
             repeat: -1,
-        });*/
+        });
 
         //this.cursors = this.input.keyboard?.createCursorKeys();
         this.fpsText = new FpsText(this);

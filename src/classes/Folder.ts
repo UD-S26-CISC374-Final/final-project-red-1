@@ -8,12 +8,18 @@ export class Folder {
     children: (Folder | File)[];
     height: number;
 
-    constructor(n: string, pF: Folder | null) {
+    acessible: boolean = true;
+
+    constructor(n: string, pF: Folder | null, a?: boolean) {
         this.name = n;
         this.parent = pF;
         this.parent?.addChild(this);
         this.path = this.setPath();
         this.children = [];
+
+        if (a !== undefined) {
+            this.acessible = a;
+        }
 
         if (this.parent === null) {
             this.height = 0;

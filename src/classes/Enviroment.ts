@@ -29,30 +29,28 @@ export function splitCommandPrompt(command: string): string[] {
 
 export class Enviroment {
     public nav: Navigator;
+    public Inventory: Folder;
 
     constructor() {
         //Root
-        const folderRoot = new Folder("Root", null);
+        const folderRoot = new Folder("Root", null, false);
 
         //Hallway
-        const hallway = new Folder("Hallway", folderRoot);
+        const hallway = new Folder("Hallway", folderRoot, false);
         new File("Table", hallway, false, "This is a table.");
         new File("Candle", hallway, false, "This is a candle.");
 
-        //Jail
+        //Jail/Level1
         const jail = new Folder("Jail", hallway);
-        const player = new Folder("Player", jail);
-        const level1 = new Folder("Level1", jail);
-        new File("King", player, false, "Something is rotten in Denmark!");
-        new File("Crowbar", level1, false, "Oh a crowbar! What are the odds!");
+        new File("Crowbar", jail, false, "Oh a crowbar! What are the odds!");
         new File(
             "Cells",
-            level1,
+            jail,
             false,
             "These cells are hard to break, like really hard",
         );
 
-        //Torture
+        //Torture Chamber/Level2
         const torture = new Folder("TortureChamber", hallway);
         new File("Chain", torture, false, "Feel how hard the links are!");
         new File("Guillotine", torture, false, "This is so French!");
@@ -64,8 +62,8 @@ export class Enviroment {
         );
         new File("Lever", torture, false, "Pull that lever");
 
-        //Records
-        const records = new Folder("Records", hallway);
+        //Records (Add Back Later)
+        /*const records = new Folder("Records", hallway);
         const shelf1 = new Folder("Shelf1", records);
         new File("Book1", shelf1, true);
         new File("Book2", shelf1, true);
@@ -77,9 +75,52 @@ export class Enviroment {
 
         //Lab
         const lab = new Folder("Lab", hallway);
-        new File("Potion", lab, false, "3 days blinding stew.");
+        new File("Potion", lab, false, "3 days blinding stew.");*/
 
-        this.nav = new Navigator(folderRoot);
+        this.nav = new Navigator(jail);
+
+        //Blank Inventory
+        this.Inventory = new Folder("Inventory", this.nav.current);
+    }
+
+    /*
+        Name: update
+        Description: main handler function for updating the overall game state
+        Input: command (string): a user's command. Will be parsed in this.runCommand();
+        Output: string: see runCommand for more details, but the jist is that it will return either user input or an error
+    */
+    public update(command: string): string {
+        this.updateEnviromentState();
+
+        return this.runCommand(command);
+    }
+
+    /*
+        Name: updateEnviromentState
+        Desciption: Makes sure the game state updates whenever the user does something
+        Input: N/A
+        Output: N/A
+    */
+    private updateEnviromentState() {
+        const currentFolder = this.nav.current;
+
+        if (currentFolder.name === "Jail") {
+            if (
+                (currentFolder.getChild("BrokenCells.txt") !== -1 ||
+                    this.Inventory.getChild("BrokenCells.txt") !== -1) &&
+                currentFolder.parent !== null
+            ) {
+                currentFolder.parent.acessible = true;
+            }
+        } //Unlocks Hallway
+
+        if (this.nav.current.getChild("Inventory") !== -1) {
+            this.nav.current.removeChild("Inventory");
+        }
+
+        if (this.nav.current.name !== "Inventory") {
+            this.nav.current.addChild(this.Inventory);
+        }
     }
 
     /*
@@ -89,7 +130,7 @@ export class Enviroment {
         Input: command(string): the user's input
         Output: string: Will either let the user know of an error, OR will print out the output.
     */
-    public runCommand(command: string): string {
+    private runCommand(command: string): string {
         const brokenUpCommand = splitCommandPrompt(command);
 
         if (brokenUpCommand[0] === "help") {
@@ -123,19 +164,15 @@ export class Enviroment {
                     return "ERROR: Too few arguments. Please use the following format: cd [filepath]";
 
                 case 2: //case: both the command and the file path were inputted
-                    return this.nav.travelTo(brokenUpCommand[1]);
+                    if (brokenUpCommand[1] === "Inventory") {
+                        //error handling for moving into inventory
+                        return "ERROR: Cannot move into inventory.";
+                    } else {
+                        return this.nav.travelTo(brokenUpCommand[1]);
+                    }
 
                 default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: cd [filepath]";
-            }
-        } else if (brokenUpCommand[0] === "cd..") {
-            switch (brokenUpCommand.length) {
-                case 1: //case: they are at the folderRoot
-                    return "ERROR. There are no directories behind you.";
-                case 2: //case: You are at one directory in the folderRoot
-                    return this.nav.travelTo("Root");
-                default: //case: too many arguments
-                    return "ERROR: Too many arguments. Please use the following format: cd..";
             }
         } else if (brokenUpCommand[0] === "ls") {
             //list command
@@ -146,7 +183,11 @@ export class Enviroment {
                 case 2: //case: "ls" + a file path
                     tempFile = this.nav.stringToFile(brokenUpCommand[1]);
                     if (tempFile instanceof Folder) {
-                        return "../, ./, " + tempFile.showContents();
+                        if (tempFile.acessible) {
+                            return "../, ./, " + tempFile.showContents();
+                        } else {
+                            return "ERROR: Unable to access folder.";
+                        }
                     } else if (tempFile instanceof File) {
                         return "ERROR: Pathway lead to a file. Please use a directory";
                     } else {

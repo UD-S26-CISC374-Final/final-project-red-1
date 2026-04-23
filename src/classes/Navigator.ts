@@ -71,8 +71,12 @@ export class Navigator {
         const tempFile = this.stringToFile(path);
 
         if (tempFile instanceof Folder) {
-            this.current = tempFile;
-            return "Succesfully changed directory";
+            if (tempFile.acessible) {
+                this.current = tempFile;
+                return "Succesfully changed directory";
+            } else {
+                return "ERROR: Pathway's folder is currently unaccesible.";
+            }
         } else if (tempFile instanceof File) {
             return "ERROR: Pathway led to a file, not a folder.";
         } else {
@@ -137,6 +141,10 @@ export class Navigator {
             return "ERROR: File cannot be moved to another File";
         }
 
+        if (!parentFile.acessible) {
+            return "ERROR: File cannot be moved to an unaccesible folder.";
+        }
+
         if (childFile instanceof File) {
             const oldParent = childFile.parent;
             oldParent.removeChild(childFile.name);
@@ -149,6 +157,7 @@ export class Navigator {
                 parentFile.name
             );
         } else {
+            //child is a folder
             const oldParent = childFile.parent;
 
             if (oldParent) {
