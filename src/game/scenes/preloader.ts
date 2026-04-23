@@ -27,7 +27,7 @@ export class Preloader extends Scene {
         this.load.image(
             "dungeon",
             "assets/dungeon.png",
-        ); /* Credit goes to https://opengameart.org/content/dungeon-tileset-4 by author HorusKDI */
+        ); /* Credit goes to https://opengameart.org/content/a-cute-dungeon by author Buch */
         this.load.image(
             "ground",
             "assets/ground.png",
