@@ -1,4 +1,4 @@
-/*import { EventBus } from "../event-bus";
+import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 
 import PhaserLogo from "../objects/phaser-logo";
@@ -14,9 +14,16 @@ export class Level4 extends Scene {
     private bucket: Phaser.GameObjects.Image;
     private boxes: Phaser.GameObjects.Image;
     private buttons: Phaser.GameObjects.Image;
-    private inventory: Phaser.GameObjects.Components.Depth;
-    
+    private inventory: Set<string> = new Set();
+
     constructor() {
         super("Level4");
     }
-}*/
+
+    create() {
+        this.camera = this.cameras.main;
+        this.camera.setBackgroundColor("#404040");
+
+        this.background = this.add.image(512, 384, "background");
+    }
+}

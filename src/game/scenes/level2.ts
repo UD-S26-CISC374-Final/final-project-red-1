@@ -16,8 +16,7 @@ export class Level2 extends Scene {
     private guillotine: Phaser.Physics.Arcade.StaticGroup;
     private lever: Phaser.GameObjects.Image;
 
-    private hasChain = false;
-    private hasgloves = false;
+    private inventory: Set<string> = new Set();
     private leverpulled = false;
     private guillotineactive = false;
     private alchemylab = false;
@@ -102,25 +101,40 @@ export class Level2 extends Scene {
     }
 
     private handleGloveCollect() {
-        if (this.physics.overlap(this.player, this.gloves) && !this.hasgloves) {
-            this.hasgloves = true;
+        if (
+            this.physics.overlap(this.player, this.gloves) &&
+            !this.inventory.has("gloves")
+        ) {
+            this.inventory.has("gloves");
         }
     }
 
     private handleChainCollect() {
-        if (this.physics.overlap(this.player, this.chain) && !this.hasgloves) {
+        if (
+            this.physics.overlap(this.player, this.chain) &&
+            !this.inventory.has("gloves")
+        ) {
             console.log("You need gloves to pick up the chain!");
         }
-        if (this.physics.overlap(this.player, this.chain) && this.hasgloves) {
-            this.hasChain = true;
+        if (
+            this.physics.overlap(this.player, this.chain) &&
+            this.inventory.has("gloves")
+        ) {
+            this.inventory.has("chain");
         }
     }
 
     private handleLeverPull() {
-        if (this.physics.overlap(this.player, this.lever) && !this.hasChain) {
+        if (
+            this.physics.overlap(this.player, this.lever) &&
+            !this.inventory.has("chain")
+        ) {
             console.log("You need the chain to pull the lever!");
         }
-        if (this.physics.overlap(this.player, this.lever) && this.hasChain) {
+        if (
+            this.physics.overlap(this.player, this.lever) &&
+            this.inventory.has("chain")
+        ) {
             this.leverpulled = true;
             this.guillotineactive = true;
             this.guillotine.children.each((guill) => {
@@ -150,8 +164,8 @@ export class Level2 extends Scene {
         if (
             this.physics.overlap(this.player, this.guillotine) &&
             !this.guillotineactive &&
-            this.hasgloves &&
-            this.hasChain
+            this.inventory.has("gloves") &&
+            this.inventory.has("chain")
         ) {
             this.alchemylab = true;
             this.time.addEvent({

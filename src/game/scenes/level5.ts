@@ -1,4 +1,4 @@
-/*import { EventBus } from "../event-bus";
+import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 
 import PhaserLogo from "../objects/phaser-logo";
@@ -10,4 +10,6 @@ export class Level5 extends Scene {
     phaserLogo: PhaserLogo;
     fpsText: FpsText;
     private player: Phaser.Physics.Arcade.Sprite;
-}*/
+
+    private throne: Phaser.
+}
