@@ -62,6 +62,28 @@ export class Enviroment {
         );
         new File("Lever", torture, false, "Pull that lever");
 
+        //AlchemyRoom/Level3
+        const alchemy = new Folder("AlchemyRoom", hallway);
+        new File("Flasks", alchemy, false, "These feel super hard");
+        new File("Chemicals", alchemy, false, "Oh...chemicals. Be careful now");
+        new File(
+            "Switch",
+            alchemy,
+            false,
+            "A switch, like the one that you use to turn on and off stuff",
+        );
+        new File(
+            "Key",
+            alchemy,
+            false,
+            "The magic key! You aren't out of the woods yet, but you're getting close!",
+        );
+        new File(
+            "Door",
+            alchemy,
+            false,
+            "It's a door. What'd you expect...once you've gotten this far, it's quite simplistic.",
+        );
         //Records (Add Back Later)
         /*const records = new Folder("Records", hallway);
         const shelf1 = new Folder("Shelf1", records);

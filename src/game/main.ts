@@ -1,5 +1,6 @@
 import { Boot } from "./scenes/boot";
 import { GameOver } from "./scenes/game-over";
+import { Tutorial } from "./scenes/tutorial";
 import { Level1 as Level1Game } from "./scenes/level1";
 import { Level2 as Level2Game } from "./scenes/level2";
 import { MainMenu } from "./scenes/main-menu";
@@ -15,10 +16,22 @@ const config: Phaser.Types.Core.GameConfig = {
     type: AUTO,
     parent: "game-container",
     backgroundColor: "#000000",
+    audio: {
+        disableWebAudio: false,
+        noAudio: false,
+    },
     dom: {
         createContainer: true,
     },
-    scene: [Boot, Preloader, MainMenu, Level1Game, Level2Game, GameOver],
+    scene: [
+        Boot,
+        Preloader,
+        MainMenu,
+        Tutorial,
+        Level1Game,
+        Level2Game,
+        GameOver,
+    ],
     scale: {
         parent: "phaser-game",
         mode: Phaser.Scale.FIT,

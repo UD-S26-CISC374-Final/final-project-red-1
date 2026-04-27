@@ -8,6 +8,7 @@ import FpsText from "../objects/fps-text";
 
 export class Level1 extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
+    minimap: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     fpsText: FpsText;
     command: string;
@@ -34,7 +35,7 @@ export class Level1 extends Scene {
             .text(
                 300,
                 150,
-                "Welcome to the game.\n Your mission is to save a former king from the dungeon.\nCd - change directories.\nHelp - Call for help.\nLs - list out files. \nMv - move files. Cat - combine or see the contents of files. \nControl + c - Quit the puzzles.\n ./filename.exe - Execute the files.\nGood luck, and god save the king!",
+                "Welcome to the game.\nYour mission is to save a former king from the dungeon.\ncd - change directories.\nhelp - Call for help.\nls - list out files. \nmv - move files. \ncat - combine or see the contents of files. \nControl + c - Quit the puzzles.\n ./filename.exe - Execute the files.\nGood luck, and god save the king!",
                 {
                     fontSize: "16px",
                     color: "#ffffff",
@@ -42,8 +43,13 @@ export class Level1 extends Scene {
             )
             .setOrigin(0.5);
         this.camera = this.cameras.main;
-
         this.cameras.main.setViewport(0, 0, 514, 768);
+
+        this.minimap = this.cameras
+            .add(0, 0, 150, 150)
+            .setZoom(0.2)
+            .setName("minimap");
+        this.minimap.setBackgroundColor("#999900");
 
         this.add.image(400, 400, "dungeon");
         this.camera = this.cameras.main;

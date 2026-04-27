@@ -13,7 +13,7 @@ export class Level3 extends Scene {
     private player: Phaser.Physics.Arcade.Sprite;
     private flasks: Phaser.Physics.Arcade.StaticGroup;
     private chemicals: Phaser.Physics.Arcade.StaticGroup;
-    /*private hasFlasks: boolean;
+    private hasFlasks: boolean;
     private hasChemicals: boolean;
     private chemicalsneutral: boolean;
     private chemicalsacid: boolean;
@@ -31,7 +31,7 @@ export class Level3 extends Scene {
     private basedrank = false;
     private doorunlocked = false;
     private storeroom = false;
-    private inventory: Phaser.GameObjects.Components.Depth; */
+    private inventory: Phaser.GameObjects.Components.Depth;
 
     constructor() {
         super("Level3");

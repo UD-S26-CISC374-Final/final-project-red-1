@@ -55,6 +55,10 @@ export class Preloader extends Scene {
             frameWidth: 120,
             frameHeight: 120,
         }); /* Credit goes to https://opengameart.org/content/gilead-king-in-armor by author Razare2015 */
+        this.load.spritesheet("bart", "assets/villain.png", {
+            frameWidth: 120,
+            frameHeight: 120,
+        });
     }
 
     create() {
