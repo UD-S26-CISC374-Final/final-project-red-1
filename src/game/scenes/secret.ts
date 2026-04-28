@@ -9,4 +9,18 @@ export class Secret extends Scene {
     private shoes: Phaser.Physics.Arcade.Image;
     private wand: Phaser.Physics.Arcade.Image;
     private crown: Phaser.Physics.Arcade.Image;
+
+    create() {}
+
+    bartMovement() {}
+
+    handleWand() {}
+
+    handleShoes() {}
+
+    handleCrown() {}
+
+    update() {}
+
+    changeScene() {}
 }

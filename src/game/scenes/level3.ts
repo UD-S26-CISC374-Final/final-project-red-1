@@ -18,6 +18,7 @@ export class Level3 extends Scene {
     private chemicalsneutral: boolean;
     private chemicalsacid: boolean;
     private chemicalsbase: boolean;
+    private seeKey: boolean;
     private key: Phaser.Physics.Arcade.Image;
     private door: Phaser.Physics.Arcade.Image;
 
@@ -31,7 +32,6 @@ export class Level3 extends Scene {
     private basedrank = false;
     private doorunlocked = false;
     private storeroom = false;
-    private inventory: Phaser.GameObjects.Components.Depth;
 
     constructor() {
         super("Level3");
@@ -62,7 +62,7 @@ export class Level3 extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
-    /*private pourchemicals() {
+    private pourchemicals() {
         if (this.hasFlasks && this.hasChemicals) {
             this.madechemicals = true;
             if (this.chemicalsneutral) {
@@ -76,18 +76,30 @@ export class Level3 extends Scene {
             this.madechemicals = false;
         }
     }
+
+    private chemicalComposition() {}
     private chemicalKey() {
         if (
             (!this.chemicalspoured && !this.acidpoured && !this.basepoured) ||
             this.chemicalspoured ||
             this.basepoured
         ) {
-            this.hasKey = false;
+            this.seeKey = false;
         } else if (this.acidpoured) {
-            this.hasKey = true;
+            this.seeKey = true;
         }
     }
 
+    private vision() {
+        if (!this.physics.overlap(this.player, this.key)) {
+            this.hasKey = false;
+        }
+        if (this.physics.overlap(this.player, this.key) && !this.seeKey) {
+            this.hasKey = false;
+        } else {
+            this.hasKey = true;
+        }
+    }
     private handleDoor() {
         if (!this.hasKey) {
             this.doorunlocked = false;
@@ -98,5 +110,15 @@ export class Level3 extends Scene {
                 this.storeroom = true;
             }
         }
-    } */
+    }
+
+    update() {
+        this.fpsText.update();
+    }
+
+    changeScene() {
+        if (this.storeroom) {
+            this.scene.start("Level4");
+        }
+    }
 }

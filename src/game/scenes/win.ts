@@ -5,6 +5,11 @@ export class Win extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
 
+    private player: Phaser.Physics.Arcade.Sprite;
+    private ground: Phaser.Physics.Arcade.StaticGroup;
+    private fountain: Phaser.Physics.Arcade.Image;
+    private paintings: Phaser.Physics.Arcade.Group;
+
     constructor() {
         super("Win");
     }
@@ -20,6 +25,9 @@ export class Win extends Scene {
     }
 
     changeScene() {
-        this.scene.start("MainMenu");
+        this.time.addEvent({
+            delay: 15000,
+            callback: () => this.scene.start("MainMenu"),
+        });
     }
 }
