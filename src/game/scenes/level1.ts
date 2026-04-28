@@ -1,9 +1,15 @@
 import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
-import { File } from "../../classes/File";
+export type Collidable =
+    | Phaser.GameObjects.Image
+    | Phaser.GameObjects.Sprite
+    | Phaser.Physics.Arcade.Sprite
+    | Phaser.Physics.Arcade.StaticGroup
+    | Phaser.GameObjects.Group;
+/*import { File } from "../../classes/File";
 import { Folder } from "../../classes/Folder";
 import { Navigator } from "../../classes/Navigator";
-import { splitCommandPrompt } from "../../classes/Enviroment";
+import { splitCommandPrompt } from "../../classes/Enviroment";*/
 import FpsText from "../objects/fps-text";
 
 export class Level1 extends Scene {
@@ -18,9 +24,8 @@ export class Level1 extends Scene {
     private player: Phaser.Physics.Arcade.Sprite;
     private crowbar: Phaser.Physics.Arcade.Image;
     private prisoncells: Phaser.Physics.Arcade.StaticGroup;
-    private nav: Navigator;
+    //private nav: Navigator;
     //private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
-
     private inventory: Set<string> = new Set();
     private crowstrength = 1;
     private prisoncellHealth = 8;
@@ -58,13 +63,13 @@ export class Level1 extends Scene {
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
-        const jail = new Folder("Jail", null);
+        /*const jail = new Folder("Jail", null);
         const player = new Folder("Player", null);
         new File("king", player, false, "He is weakening");
         new File("ground", jail, false, "This is ground");
         new File("wall", jail, false, "This is a wall");
         new File("Crowbar.txt", jail, false, "This is a crowbar");
-        new File("prisoncells", jail, false, "These are prisoncells");
+        new File("prisoncells", jail, false, "These are prisoncells");*/
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
             100,
@@ -238,66 +243,80 @@ export class Level1 extends Scene {
     }
 
     private overlapCommands() {
-        const level1Command = splitCommandPrompt(this.command);
-        if (level1Command[0] === "cd") {
-            if (this.physics.overlap(this.player, this.prisoncells)) {
-                if (!this.inventory.has("Crowbar.txt")) {
-                    switch (level1Command.length) {
-                        default:
-                            return "ERROR: You cannot overlap a player with prisoncells unless you have a crowbar";
-                    }
-                }
-                if (
-                    this.prisoncellHealth > 0 &&
-                    level1Command[1] == "prisoncells" &&
-                    this.inventory.has("Crowbar.txt")
-                ) {
-                    this.prisoncellHealth -= this.crowstrength;
-                    switch (level1Command.length) {
-                        default:
-                            return (
-                                "Good job! Prison health at: " +
-                                this.prisoncellHealth
-                            );
-                    }
-                } else if (
-                    this.prisoncellHealth == 0 &&
-                    level1Command[1] == "Cells.txt" &&
-                    this.inventory.has("Crowbar.txt")
-                ) {
-                    this.torturechamber = true;
-                    this.prisoncells.children.each((jail) => {
-                        const jailcell = jail as Phaser.Physics.Arcade.Sprite;
-                        jailcell.disableBody(true, true);
-                        return true;
-                    });
-                    switch (level1Command.length) {
-                        default:
-                            return "Congratulations! Prison is opened!";
-                    }
-                }
+        // WIP Code For Movement in game, which is the biggest weakness right now //
+        /*const items: Record<string, Collidable> = {};
+        items["player"] = this.player;
+        items["crowbar"] = this.crowbar;
+        items["prisoncells"] = this.prisoncells;
+
+        function managemovement(objects: Collidable): { x: number; y: number } {
+            if (objects instanceof Phaser.Physics.Arcade.StaticGroup) {
+                const obj = objects.children
+                    .entries[0] as Phaser.GameObjects.Sprite;
+                return { x: obj.x, y: obj.y };
             }
-        } else if (level1Command[0] == "mv") {
-            if (
-                this.physics.overlap(this.player, this.crowbar) &&
-                level1Command[1] != "Crowbar.txt"
-            ) {
-                switch (level1Command.length) {
-                    default: // crowbar has not been caught yet
-                        return "ERROR: Cannot move something that doesn't exist";
-                }
-            } else if (
-                this.physics.overlap(this.player, this.crowbar) &&
-                level1Command[1] == "Crowbar.txt"
-            ) {
-                this.inventory.add("Crowbar.txt");
-                this.crowbar.destroy();
-                switch (level1Command.length) {
-                    default: //crowbar has been caught and is moved
-                        return this.nav.moveFile("Crowbar.txt", "Player");
-                }
+
+            if (objects instanceof Phaser.GameObjects.Group) {
+                const o = objects.getFirstAlive() as Phaser.GameObjects.Sprite;
+                return { x: o.x, y: o.y };
             }
+
+            return { x: objects.x, y: objects.y };
         }
+
+        function move(move: string[]) {
+            if (move.length != 3) {
+                return {
+                    type: "error",
+                    message: "Usage: my player <objectName>",
+                } as const;
+            }
+
+            const target = move[1];
+            const objectName = move[2];
+
+            if (target !== "player") {
+                return {
+                    type: "error",
+                    message: `mv: unknown target '${target}'`,
+                } as const;
+            }
+
+            const ject = items[objectName];
+            if (!ject) {
+                return {
+                    type: "error",
+                    message: `mv: unknown object '${objectName}'`,
+                } as const;
+            }
+
+            return {
+                type: "moveToObject",
+                objectName,
+            } as const;
+        }
+
+        interface GoToScene {
+            type: "goto";
+            x: number;
+            y: number;
+        }
+
+        type movementScene = GoToScene;
+
+        const mqueue: movementScene[] = [];
+        let isMoving = false;
+
+        function queueMoveToObject(itemname: string) {
+            const it = items[itemname];
+            const pos = managemovement(it);
+
+            mqueue.push({
+                type: "goto",
+                x: pos.x,
+                y: pos.y,
+            });
+        }*/
     }
 
     private collectCrowbar() {
@@ -325,23 +344,17 @@ export class Level1 extends Scene {
     }
 
     update() {
-        /*if (!this.cursors) {
-            return;
-        }
+        /*if (!isMoving && mqueue.length) {
+            const step = mqueue.shift();
+            isMoving = true;
 
-        if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-160);
-            this.player.anims.play("left", true);
-        } else if (this.cursors.right.isDown) {
-            this.player.setVelocityX(160);
-            this.player.anims.play("right", true);
-        } else {
-            this.player.setVelocityX(0);
-            this.player.anims.play("turn");
-        }
-
-        if (this.cursors.up.isDown && this.player.body?.touching.down) {
-            this.player.setVelocityY(-330);
+            this.tweens.add({
+                targets: gameObjects["player"] as Phaser.GameObjects.Sprite,
+                x: step.x,
+                y: step.y,
+                duration: 100,
+                onComplete: () => (isMoving = false),
+            });
         }*/
         this.fpsText.update();
         this.pregametext.update();
