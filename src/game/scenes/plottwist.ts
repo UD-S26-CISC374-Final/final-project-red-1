@@ -1,4 +1,4 @@
-import { Event } from "../event-bus";
+import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 
 export class PlotTwist extends Scene {
@@ -32,6 +32,26 @@ export class PlotTwist extends Scene {
             ease: "Power1",
             onComplete: () => this.postext.setAlpha(0),
         });
+
+        this.negtext = this.add.text(
+            400,
+            200,
+            "Sorry, but your prize is in another castle...not in an another castle, but in another room",
+            {
+                fontSize: "32px",
+                color: "#ffffff",
+            },
+        );
+
+        this.tweens.add({
+            targets: this.negtext,
+            alpha: 1,
+            duration: 10000,
+            ease: "Power1",
+            onComplete: () => this.negtext.setAlpha(0),
+        });
+
+        EventBus.emit("current-scene-ready", this);
     }
 
     update() {}

@@ -22,5 +22,7 @@ export class Secret extends Scene {
 
     update() {}
 
-    changeScene() {}
+    changeScene() {
+        this.scene.start("Win");
+    }
 }

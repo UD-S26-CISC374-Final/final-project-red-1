@@ -33,6 +33,9 @@ export class Level2 extends Scene {
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
+        const sound = this.sound.add("cyberpunk", { loop: true });
+        sound.play();
+
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
             512,
@@ -109,7 +112,7 @@ export class Level2 extends Scene {
 
     private handleChainCollect() {
         if (this.physics.overlap(this.player, this.chain) && !this.hasgloves) {
-            console.log("You need gloves to pick up the chain!");
+            this.hasChain = false;
         }
         if (this.physics.overlap(this.player, this.chain) && this.hasgloves) {
             this.hasChain = true;
@@ -117,8 +120,11 @@ export class Level2 extends Scene {
     }
 
     private handleLeverPull() {
+        if (!this.physics.overlap(this.player, this.lever)) {
+            this.leverpulled = false;
+        }
         if (this.physics.overlap(this.player, this.lever) && !this.hasChain) {
-            console.log("You need the chain to pull the lever!");
+            this.leverpulled = false;
         }
         if (this.physics.overlap(this.player, this.lever) && this.hasChain) {
             this.leverpulled = true;

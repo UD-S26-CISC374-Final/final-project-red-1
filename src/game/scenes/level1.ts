@@ -63,6 +63,8 @@ export class Level1 extends Scene {
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
+        const sound = this.sound.add("battlemusic", { loop: true });
+        sound.play();
         /*const jail = new Folder("Jail", null);
         const player = new Folder("Player", null);
         new File("king", player, false, "He is weakening");

@@ -44,6 +44,9 @@ export class Level3 extends Scene {
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
+        const sound = this.sound.add("alchemyspace", { loop: true });
+        sound.play();
+
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
             512,
@@ -61,6 +64,46 @@ export class Level3 extends Scene {
         this.chemicals.create(200, 600, "chemicals");
         this.chemicals.create(200, 550, "chemicals");
         this.chemicals.create(250, 550, "chemicals");
+        this.physics.add.collider(this.player, this.flasks);
+        this.physics.add.collider(this.player, this.chemicals);
+        this.physics.add.collider(this.flasks, this.chemicals);
+        this.physics.add.collider(this.player, this.key);
+        this.physics.add.collider(this.player, this.door);
+        this.physics.overlap(
+            this.player,
+            this.flasks,
+            this.pourchemicals.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.overlap(
+            this.player,
+            this.chemicals,
+            this.pourchemicals.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.overlap(
+            this.player,
+            this.chemicals,
+            this.chemicalKey.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.overlap(
+            this.player,
+            this.key,
+            this.vision.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.overlap(
+            this.player,
+            this.door,
+            this.handleDoor.bind(this),
+            undefined,
+            this,
+        );
         EventBus.emit("current-scene-ready", this);
     }
 

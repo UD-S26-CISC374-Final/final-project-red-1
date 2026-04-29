@@ -26,8 +26,12 @@ export class Preloader extends Scene {
         //  Load the assets for the game - Replace with your own assets
         this.load.image(
             "dungeon",
-            "assets/dungeon.png",
-        ); /* Credit goes to https://opengameart.org/content/a-cute-dungeon by author Buch */
+            "assets/rooms/roomJail.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "torture",
+            "assets/rooms/roomChamber.png",
+        ); /* Credit goes to Leif Kaine */
         this.load.image(
             "ground",
             "assets/ground.png",
@@ -59,6 +63,20 @@ export class Preloader extends Scene {
             frameWidth: 120,
             frameHeight: 120,
         });
+
+        // load the music for the game
+        this.load.audio(
+            "battlemusic",
+            "assets/sounds/battle.mp3",
+        ); /* Credit goes to https://opengameart.org/content/battle-theme-a by cynicmusic */
+        this.load.audio(
+            "cyberpunk",
+            "assets/sounds/cyberpunk.mp3",
+        ); /* Credit goes to https://opengameart.org/content/cyberpunk-moonlight-sonata by Joth */
+        this.load.audio(
+            "alchemyspace",
+            "assets/sounds/alchemyspace.mp3",
+        ); /* Credit goes to https://opengameart.org/content/space-boss-battle-theme by Matthew Pablo */
     }
 
     create() {
