@@ -49,7 +49,7 @@ export class Enviroment {
             false,
             "These cells are hard to break, like really hard",
         );
-
+        /*
         //Torture Chamber/Level2
         const torture = new Folder("TortureChamber", hallway);
         new File("Chain", torture, false, "Feel how hard the links are!");
@@ -62,6 +62,7 @@ export class Enviroment {
         );
         new File("Lever", torture, false, "Pull that lever");
 
+        
         //AlchemyRoom/Level3
         const alchemy = new Folder("AlchemyRoom", hallway);
         new File("Flasks", alchemy, false, "These feel super hard");
@@ -130,7 +131,7 @@ export class Enviroment {
             false,
             "Torch the throne room. It's yours, but, whatever.",
         );
-        new File("Hammer", throneroom, false, "Escape with the hammer");
+        new File("Hammer", throneroom, false, "Escape with the hammer"); */
 
         //Records (Add Back Later)
         /*const records = new Folder("Records", hallway);
@@ -148,10 +149,10 @@ export class Enviroment {
         new File("Potion", lab, false, "3 days blinding stew.");*/
 
         this.nav = new Navigator(jail);
-        this.nav = new Navigator(torture);
+        /*this.nav = new Navigator(torture);
         this.nav = new Navigator(alchemy);
         this.nav = new Navigator(oldroom);
-        this.nav = new Navigator(throneroom);
+        this.nav = new Navigator(throneroom);*/
 
         //Blank Inventory
         this.Inventory = new Folder("Inventory", this.nav.current);
