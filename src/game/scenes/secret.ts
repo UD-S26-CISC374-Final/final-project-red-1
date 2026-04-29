@@ -21,15 +21,15 @@ export class Secret extends Scene {
 
     create() {}
 
-    bartMovement() {}
+    private bartMovement() {}
 
-    handleWand() {}
+    private handleWand() {}
 
-    handleShoes() {}
+    private handleShoes() {}
 
-    handleCrown() {}
+    private handleCrown() {}
 
-    openElevator() {
+    private openElevator() {
         if (this.hasShoes && this.hasWand && this.hasCrown) {
             this.elevatorOpen = true;
         } else {

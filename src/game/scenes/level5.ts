@@ -11,9 +11,19 @@ export class Level5 extends Scene {
     fpsText: FpsText;
     private player: Phaser.Physics.Arcade.Sprite;
     private throne: Phaser.Physics.Arcade.Image;
-    private clock: Phaser.Physics.Arcade.Image;
-    private torches: Phaser.Physics.Arcade.Group;
-    private sticks: Phaser.Physics.Arcade.Group;
     private hammer: Phaser.Physics.Arcade.Image;
+    private motionsensor: Phaser.Physics.Arcade.Image;
     private door: Phaser.Physics.Arcade.Image;
+
+    private thronebroken: boolean;
+    private msActivated: boolean;
+    private doorOpened: boolean;
+
+    create() {}
+
+    private openDoor() {}
+
+    update() {}
+
+    changeScene() {}
 }

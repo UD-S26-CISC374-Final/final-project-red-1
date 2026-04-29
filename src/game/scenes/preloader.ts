@@ -77,6 +77,10 @@ export class Preloader extends Scene {
             "alchemyspace",
             "assets/sounds/alchemyspace.mp3",
         ); /* Credit goes to https://opengameart.org/content/space-boss-battle-theme by Matthew Pablo */
+        this.load.audio(
+            "old",
+            "assets/sounds/old.mpa",
+        ); /* Credit goes to https://opengameart.org/content/mythica by congusbongus */
     }
 
     create() {
