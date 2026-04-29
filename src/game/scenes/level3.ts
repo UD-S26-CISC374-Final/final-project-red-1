@@ -55,6 +55,8 @@ export class Level3 extends Scene {
 
         this.flasks = this.physics.add.staticGroup();
         this.flasks.create(200, 600, "flasks");
+        this.flasks.create(200, 550, "flasks");
+        this.flasks.create(200, 500, "flasks");
         this.chemicals = this.physics.add.staticGroup();
         this.chemicals.create(200, 600, "chemicals");
         this.chemicals.create(200, 550, "chemicals");
@@ -63,8 +65,13 @@ export class Level3 extends Scene {
     }
 
     private pourchemicals() {
+        if (!this.hasFlasks || !this.hasChemicals) {
+            this.madechemicals = false;
+        }
         if (this.hasFlasks && this.hasChemicals) {
             this.madechemicals = true;
+        }
+        if (this.madechemicals) {
             if (this.chemicalsneutral) {
                 this.chemicalspoured = true;
             } else if (this.chemicalsacid) {
@@ -77,16 +84,21 @@ export class Level3 extends Scene {
         }
     }
 
-    private chemicalComposition() {}
     private chemicalKey() {
-        if (
-            (!this.chemicalspoured && !this.acidpoured && !this.basepoured) ||
-            this.chemicalspoured ||
-            this.basepoured
-        ) {
+        if (!this.acidpoured || !this.chemicalspoured || !this.basepoured) {
             this.seeKey = false;
-        } else if (this.acidpoured) {
-            this.seeKey = true;
+        }
+        if (this.acidpoured && this.chemicalspoured && this.basepoured) {
+            if (!this.aciddrank && !this.neutraldrank && !this.basedrank) {
+                this.seeKey = false;
+            }
+            if (this.aciddrank && this.basedrank) {
+                this.seeKey = true;
+            } else if (this.neutraldrank && this.basedrank) {
+                this.seeKey = false;
+            } else if (this.aciddrank && this.neutraldrank) {
+                this.seeKey = false;
+            }
         }
     }
 
@@ -107,8 +119,10 @@ export class Level3 extends Scene {
         if (this.hasKey) {
             if (this.physics.overlap(this.player, this.door)) {
                 this.doorunlocked = true;
-                this.storeroom = true;
             }
+        }
+        if (this.doorunlocked) {
+            this.storeroom = true;
         }
     }
 

@@ -14,7 +14,25 @@ export class PlotTwist extends Scene {
         super("PlotTwist");
     }
 
-    create() {}
+    create() {
+        this.postext = this.add.text(
+            400,
+            200,
+            "You have won this game! Wait for five seconds to get your prize!",
+            {
+                fontSize: "32px",
+                color: "#ffffff",
+            },
+        );
+
+        this.tweens.add({
+            targets: this.postext,
+            alpha: 1,
+            duration: 5000,
+            ease: "Power1",
+            onComplete: () => this.postext.setAlpha(0),
+        });
+    }
 
     update() {}
 

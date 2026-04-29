@@ -14,4 +14,6 @@ export class Level5 extends Scene {
     private clock: Phaser.Physics.Arcade.Image;
     private torches: Phaser.Physics.Arcade.Group;
     private sticks: Phaser.Physics.Arcade.Group;
+    private hammer: Phaser.Physics.Arcade.Image;
+    private door: Phaser.Physics.Arcade.Image;
 }
