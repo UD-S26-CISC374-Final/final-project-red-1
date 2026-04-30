@@ -301,7 +301,6 @@ export class Enviroment {
                         brokenUpCommand[1],
                         brokenUpCommand[2],
                     );
-
                 default:
                     return "ERROR: Too many arguments. Please use the format 'cat [file1] [file2(optional)]";
             }
