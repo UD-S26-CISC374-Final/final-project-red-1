@@ -27,6 +27,7 @@ export class Level2 extends Scene {
     }
 
     create() {
+        this.add.image(400, 400, "torture");
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#808080");
 
@@ -101,6 +102,7 @@ export class Level2 extends Scene {
             this,
         );
 
+        this.fpsText = new FpsText(this);
         EventBus.emit("current-scene-ready", this);
     }
 

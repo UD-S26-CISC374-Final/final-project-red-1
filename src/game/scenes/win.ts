@@ -24,6 +24,7 @@ export class Win extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
+    update() {}
     changeScene() {
         this.time.addEvent({
             delay: 15000,
