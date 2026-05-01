@@ -17,6 +17,9 @@ export class Level4 extends Scene {
     private boxes: Phaser.GameObjects.Image;
     private buttons: Phaser.GameObjects.Image;
 
+    private hasRake: boolean;
+    private hasWater: boolean;
+    private hasBucket: boolean;
     private waterbucket: boolean;
     private cobwebsRemoved: boolean;
     private boxeslifted: boolean;
@@ -46,9 +49,30 @@ export class Level4 extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
-    private bucketandwatercombination() {}
+    private bucketandwatercombination() {
+        if (!this.hasWater || !this.hasBucket) {
+            this.waterbucket = false;
+        } else {
+            this.waterbucket = true;
+        }
+    }
 
-    private removingCobwebs() {}
+    private removingCobwebs() {
+        if (!this.waterbucket) {
+            this.cobwebsRemoved = false;
+        }
+        if (
+            this.waterbucket &&
+            !this.physics.overlap(this.player, this.cobwebs)
+        ) {
+            this.cobwebsRemoved = false;
+        } else if (
+            this.waterbucket &&
+            this.physics.overlap(this.player, this.cobwebs)
+        ) {
+            this.cobwebsRemoved = true;
+        }
+    }
 
     private obtainingRake() {}
 

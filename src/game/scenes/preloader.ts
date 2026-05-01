@@ -79,8 +79,14 @@ export class Preloader extends Scene {
         ); /* Credit goes to https://opengameart.org/content/space-boss-battle-theme by Matthew Pablo */
         this.load.audio(
             "old",
-            "assets/sounds/old.mpa",
+            "assets/sounds/old.mp3",
         ); /* Credit goes to https://opengameart.org/content/mythica by congusbongus */
+
+        // Sound effects
+        this.load.audio(
+            "itempickup",
+            "assets/seffects/itemcombo.flac",
+        ); /* Credit goes to https://opengameart.org/content/life-pickup-yo-frankie by Blender Foundation(submitted by Lamoot) */
     }
 
     create() {
