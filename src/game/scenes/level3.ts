@@ -13,11 +13,12 @@ export class Level3 extends Scene {
     private player: Phaser.Physics.Arcade.Sprite;
     private flasks: Phaser.Physics.Arcade.StaticGroup;
     private chemicals: Phaser.Physics.Arcade.StaticGroup;
-    /*private hasFlasks: boolean;
+    private hasFlasks: boolean;
     private hasChemicals: boolean;
     private chemicalsneutral: boolean;
     private chemicalsacid: boolean;
     private chemicalsbase: boolean;
+    private seeKey: boolean;
     private key: Phaser.Physics.Arcade.Image;
     private door: Phaser.Physics.Arcade.Image;
 
@@ -31,7 +32,6 @@ export class Level3 extends Scene {
     private basedrank = false;
     private doorunlocked = false;
     private storeroom = false;
-    private inventory: Phaser.GameObjects.Components.Depth; */
 
     constructor() {
         super("Level3");
@@ -44,6 +44,9 @@ export class Level3 extends Scene {
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
+        const sound = this.sound.add("alchemyspace", { loop: true });
+        sound.play();
+
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
             512,
@@ -55,16 +58,63 @@ export class Level3 extends Scene {
 
         this.flasks = this.physics.add.staticGroup();
         this.flasks.create(200, 600, "flasks");
+        this.flasks.create(200, 550, "flasks");
+        this.flasks.create(200, 500, "flasks");
         this.chemicals = this.physics.add.staticGroup();
         this.chemicals.create(200, 600, "chemicals");
         this.chemicals.create(200, 550, "chemicals");
         this.chemicals.create(250, 550, "chemicals");
+        this.physics.add.collider(this.player, this.flasks);
+        this.physics.add.collider(this.player, this.chemicals);
+        this.physics.add.collider(this.flasks, this.chemicals);
+        this.physics.add.collider(this.player, this.key);
+        this.physics.add.collider(this.player, this.door);
+        this.physics.overlap(
+            this.player,
+            this.flasks,
+            this.pourchemicals.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.overlap(
+            this.player,
+            this.chemicals,
+            this.pourchemicals.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.overlap(
+            this.player,
+            this.chemicals,
+            this.chemicalKey.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.overlap(
+            this.player,
+            this.key,
+            this.vision.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.overlap(
+            this.player,
+            this.door,
+            this.handleDoor.bind(this),
+            undefined,
+            this,
+        );
         EventBus.emit("current-scene-ready", this);
     }
 
-    /*private pourchemicals() {
+    private pourchemicals() {
+        if (!this.hasFlasks || !this.hasChemicals) {
+            this.madechemicals = false;
+        }
         if (this.hasFlasks && this.hasChemicals) {
             this.madechemicals = true;
+        }
+        if (this.madechemicals) {
             if (this.chemicalsneutral) {
                 this.chemicalspoured = true;
             } else if (this.chemicalsacid) {
@@ -76,18 +126,35 @@ export class Level3 extends Scene {
             this.madechemicals = false;
         }
     }
+
     private chemicalKey() {
-        if (
-            (!this.chemicalspoured && !this.acidpoured && !this.basepoured) ||
-            this.chemicalspoured ||
-            this.basepoured
-        ) {
-            this.hasKey = false;
-        } else if (this.acidpoured) {
-            this.hasKey = true;
+        if (!this.acidpoured || !this.chemicalspoured || !this.basepoured) {
+            this.seeKey = false;
+        }
+        if (this.acidpoured && this.chemicalspoured && this.basepoured) {
+            if (!this.aciddrank && !this.neutraldrank && !this.basedrank) {
+                this.seeKey = false;
+            }
+            if (this.aciddrank && this.basedrank) {
+                this.seeKey = true;
+            } else if (this.neutraldrank && this.basedrank) {
+                this.seeKey = false;
+            } else if (this.aciddrank && this.neutraldrank) {
+                this.seeKey = false;
+            }
         }
     }
 
+    private vision() {
+        if (!this.physics.overlap(this.player, this.key)) {
+            this.hasKey = false;
+        }
+        if (this.physics.overlap(this.player, this.key) && !this.seeKey) {
+            this.hasKey = false;
+        } else {
+            this.hasKey = true;
+        }
+    }
     private handleDoor() {
         if (!this.hasKey) {
             this.doorunlocked = false;
@@ -95,8 +162,20 @@ export class Level3 extends Scene {
         if (this.hasKey) {
             if (this.physics.overlap(this.player, this.door)) {
                 this.doorunlocked = true;
-                this.storeroom = true;
             }
         }
-    } */
+        if (this.doorunlocked) {
+            this.storeroom = true;
+        }
+    }
+
+    update() {
+        this.fpsText.update();
+    }
+
+    changeScene() {
+        if (this.storeroom) {
+            this.scene.start("Level4");
+        }
+    }
 }

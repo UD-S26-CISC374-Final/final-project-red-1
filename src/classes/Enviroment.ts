@@ -49,7 +49,7 @@ export class Enviroment {
             false,
             "These cells are hard to break, like really hard",
         );
-
+        /*
         //Torture Chamber/Level2
         const torture = new Folder("TortureChamber", hallway);
         new File("Chain", torture, false, "Feel how hard the links are!");
@@ -61,6 +61,77 @@ export class Enviroment {
             "Gloves...like the materials you use to protect your hands",
         );
         new File("Lever", torture, false, "Pull that lever");
+
+        
+        //AlchemyRoom/Level3
+        const alchemy = new Folder("AlchemyRoom", hallway);
+        new File("Flasks", alchemy, false, "These feel super hard");
+        new File("Chemicals", alchemy, false, "Oh...chemicals. Be careful now");
+        new File(
+            "Switch",
+            alchemy,
+            false,
+            "A switch, like the one that you use to turn on and off stuff",
+        );
+        new File(
+            "Key",
+            alchemy,
+            false,
+            "The magic key! You aren't out of the woods yet, but you're getting close!",
+        );
+        new File(
+            "Door",
+            alchemy,
+            false,
+            "It's a door. What'd you expect...once you've gotten this far, it's quite simplistic.",
+        );
+
+        //OldRoom/Level4
+
+        const oldroom = new Folder("OldRoom", hallway);
+        new File("Water", oldroom, false, "It's water. Wet like Steph");
+        new File(
+            "Bucket",
+            oldroom,
+            false,
+            "It's a bucket. Can be filled with anything, like water, lava, fire, acid.",
+        );
+        new File(
+            "Cobwebs",
+            oldroom,
+            false,
+            "It's a cobweb. Old and annoying, like this room hasn't been touched in years.",
+        );
+        new File(
+            "Boxes",
+            oldroom,
+            false,
+            "Boxes. Like, the ones you store parts in.",
+        );
+        new File(
+            "Button",
+            oldroom,
+            false,
+            "Just a button. It's very insignificant. Won't help you escape",
+        );
+
+        //ThroneRoom/Level5
+
+        const throneroom = new Folder("ThroneRoom", hallway);
+        new File("Throne", throneroom, false, "Your rightful throne as king");
+        new File(
+            "Clock",
+            throneroom,
+            false,
+            "It's a clock, mocking you. Tick tick, you're done!",
+        );
+        new File(
+            "Torches",
+            throneroom,
+            false,
+            "Torch the throne room. It's yours, but, whatever.",
+        );
+        new File("Hammer", throneroom, false, "Escape with the hammer"); */
 
         //Records (Add Back Later)
         /*const records = new Folder("Records", hallway);
@@ -78,6 +149,10 @@ export class Enviroment {
         new File("Potion", lab, false, "3 days blinding stew.");*/
 
         this.nav = new Navigator(jail);
+        /*this.nav = new Navigator(torture);
+        this.nav = new Navigator(alchemy);
+        this.nav = new Navigator(oldroom);
+        this.nav = new Navigator(throneroom);*/
 
         //Blank Inventory
         this.Inventory = new Folder("Inventory", this.nav.current);
@@ -226,7 +301,6 @@ export class Enviroment {
                         brokenUpCommand[1],
                         brokenUpCommand[2],
                     );
-
                 default:
                     return "ERROR: Too many arguments. Please use the format 'cat [file1] [file2(optional)]";
             }

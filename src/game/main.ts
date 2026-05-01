@@ -1,7 +1,14 @@
 import { Boot } from "./scenes/boot";
 import { GameOver } from "./scenes/game-over";
+import { Tutorial } from "./scenes/tutorial";
 import { Level1 as Level1Game } from "./scenes/level1";
 import { Level2 as Level2Game } from "./scenes/level2";
+import { Level3 as Level3Game } from "./scenes/level3";
+import { Level4 as Level4Game } from "./scenes/level4";
+import { Level5 as Level5Game } from "./scenes/level5";
+import { PlotTwist as PlotTwistGame } from "./scenes/plottwist";
+import { Secret as SecretGame } from "./scenes/secret";
+
 import { MainMenu } from "./scenes/main-menu";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/preloader";
@@ -15,10 +22,27 @@ const config: Phaser.Types.Core.GameConfig = {
     type: AUTO,
     parent: "game-container",
     backgroundColor: "#000000",
+    audio: {
+        disableWebAudio: false,
+        noAudio: false,
+    },
     dom: {
         createContainer: true,
     },
-    scene: [Boot, Preloader, MainMenu, Level1Game, Level2Game, GameOver],
+    scene: [
+        Boot,
+        Preloader,
+        MainMenu,
+        Tutorial,
+        Level1Game,
+        Level2Game,
+        Level3Game,
+        Level4Game,
+        Level5Game,
+        PlotTwistGame,
+        SecretGame,
+        GameOver,
+    ],
     scale: {
         parent: "phaser-game",
         mode: Phaser.Scale.FIT,

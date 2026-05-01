@@ -26,8 +26,12 @@ export class Preloader extends Scene {
         //  Load the assets for the game - Replace with your own assets
         this.load.image(
             "dungeon",
-            "assets/dungeon.png",
-        ); /* Credit goes to https://opengameart.org/content/a-cute-dungeon by author Buch */
+            "assets/rooms/roomJail.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "torture",
+            "assets/rooms/roomChamber.png",
+        ); /* Credit goes to Leif Kaine */
         this.load.image(
             "ground",
             "assets/ground.png",
@@ -44,10 +48,10 @@ export class Preloader extends Scene {
             "Crowbar.txt",
             "assets/crowbar.png",
         ); /* Credit goes to https://opengameart.org/content/crow-bar by author Lewis W. Veasey */
-        // this.load.image("chain", "assets/chain.png");
-        // this.load.image("gloves", "assets/gloves.png");
-        // this.load.image("guillotine", "assets/guillotine.png");
-        // this.load.image("lever", "assets/lever.png");
+        this.load.image("chain", "assets/chain.png");
+        this.load.image("gloves", "assets/gloves.png");
+        this.load.image("guillotine", "assets/guillotine.png");
+        this.load.image("lever", "assets/lever.png");
         this.load.image("logo", "assets/logo.png");
         this.load.image("star", "assets/star.png");
         this.load.image("phaser-logo", "assets/phaser-logo.png");
@@ -55,6 +59,34 @@ export class Preloader extends Scene {
             frameWidth: 120,
             frameHeight: 120,
         }); /* Credit goes to https://opengameart.org/content/gilead-king-in-armor by author Razare2015 */
+        this.load.spritesheet("bart", "assets/villain.png", {
+            frameWidth: 120,
+            frameHeight: 120,
+        });
+
+        // load the music for the game
+        this.load.audio(
+            "battlemusic",
+            "assets/sounds/battle.mp3",
+        ); /* Credit goes to https://opengameart.org/content/battle-theme-a by cynicmusic */
+        this.load.audio(
+            "cyberpunk",
+            "assets/sounds/cyberpunk.mp3",
+        ); /* Credit goes to https://opengameart.org/content/cyberpunk-moonlight-sonata by Joth */
+        this.load.audio(
+            "alchemyspace",
+            "assets/sounds/alchemyspace.mp3",
+        ); /* Credit goes to https://opengameart.org/content/space-boss-battle-theme by Matthew Pablo */
+        this.load.audio(
+            "old",
+            "assets/sounds/old.mp3",
+        ); /* Credit goes to https://opengameart.org/content/mythica by congusbongus */
+
+        // Sound effects
+        this.load.audio(
+            "itempickup",
+            "assets/seffects/itemcombo.flac",
+        ); /* Credit goes to https://opengameart.org/content/life-pickup-yo-frankie by Blender Foundation(submitted by Lamoot) */
     }
 
     create() {
@@ -62,7 +94,7 @@ export class Preloader extends Scene {
         //  For example, you can define global animations here, so we can use them in other scenes.
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        this.scene.start("dungeon.png");
+        this.scene.launch("Level1");
         this.scene.launch("MainMenu");
     }
 }
