@@ -23,7 +23,7 @@ export class Level2 extends Scene {
     private alchemylab = false;
 
     constructor() {
-        super("Level2");
+        super("torture.png");
     }
 
     create() {

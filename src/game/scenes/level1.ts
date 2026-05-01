@@ -28,11 +28,11 @@ export class Level1 extends Scene {
     //private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private inventory: Set<string> = new Set();
     private crowstrength = 1;
-    private prisoncellHealth = 8;
+    private prisoncellHealth = 1;
     private torturechamber = false;
 
     constructor() {
-        super("Level1");
+        super("dungeon.png");
     }
 
     create() {
@@ -40,7 +40,7 @@ export class Level1 extends Scene {
             .text(
                 300,
                 150,
-                "Welcome to the game.\nYour mission is to save a former king from the dungeon.\ncd - change directories.\nhelp - Call for help.\nls - list out files. \nmv - move files. \ncat - combine or see the contents of files. \nControl + c - Quit the puzzles.\n ./filename.exe - Execute the files.\nGood luck, and god save the king!",
+                "Welcome to the game.\nYour mission is to save the king from the dungeon.\nCd - change directories.\nHelp - Call for help.\nLs - list out files. \nMv - move files. \nCat - combine or see the contents of files. \nControl + c - Quit the puzzles.\n ./filename.exe - Execute the files.\nGood luck, and god save the king!",
                 {
                     fontSize: "16px",
                     color: "#ffffff",
@@ -364,7 +364,7 @@ export class Level1 extends Scene {
 
     changeScene() {
         if (this.torturechamber) {
-            this.scene.start("Level2");
+            this.scene.start("torture.png");
         }
         this.scene.start("GameOver");
     }
