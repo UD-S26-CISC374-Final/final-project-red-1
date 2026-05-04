@@ -4,6 +4,7 @@ import { Scene } from "phaser";
 export class PlotTwist extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
+    fpsText: Phaser.GameObjects.Text;
     private postext: Phaser.GameObjects.Text;
     private negtext: Phaser.GameObjects.Text;
     private player: Phaser.Physics.Arcade.Sprite;
@@ -36,7 +37,7 @@ export class PlotTwist extends Scene {
         this.negtext = this.add.text(
             400,
             200,
-            "Sorry, but your prize is in another castle...not in an another castle, but in another room",
+            "Sorry, but your prize is in another room...not in an another castle, but in another room",
             {
                 fontSize: "32px",
                 color: "#ffffff",
@@ -54,7 +55,13 @@ export class PlotTwist extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
-    update() {}
+    update() {
+        this.fpsText.update();
+    }
 
-    changeScene() {}
+    changeScene() {
+        if (this.postext.alpha === 0 && this.negtext.alpha === 0) {
+            this.scene.start("Secret");
+        }
+    }
 }
