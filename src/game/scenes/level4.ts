@@ -74,15 +74,50 @@ export class Level4 extends Scene {
         }
     }
 
-    private obtainingRake() {}
+    private obtainingRake() {
+        if (!this.cobwebsRemoved) {
+            this.hasRake = false;
+        }
+        if (this.physics.overlap(this.player, this.rake) && !this.hasRake) {
+            this.hasRake = true;
+        } else {
+            this.hasRake = false;
+        }
+    }
 
-    private pushingBoxes() {}
+    private pushingBoxes() {
+        if (!this.hasRake) {
+            this.boxeslifted = false;
+        }
+        if (this.hasRake && this.physics.overlap(this.player, this.boxes)) {
+            this.boxeslifted = true;
+        } else {
+            this.boxeslifted = false;
+        }
+    }
 
-    private pressButton() {}
+    private pressButton() {
+        if (!this.boxeslifted) {
+            this.buttonpressed = false;
+        }
+        if (
+            this.boxeslifted &&
+            this.physics.overlap(this.player, this.buttons)
+        ) {
+            this.buttonpressed = true;
+        }
+        if (this.buttonpressed) {
+            this.throneroom = true;
+        }
+    }
 
     update() {
         this.fpsText.update();
     }
 
-    changeScene() {}
+    changeScene() {
+        if (this.throneroom) {
+            this.scene.start("Level5");
+        }
+    }
 }

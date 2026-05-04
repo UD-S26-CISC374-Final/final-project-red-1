@@ -66,6 +66,10 @@ export class Preloader extends Scene {
 
         // load the music for the game
         this.load.audio(
+            "tutorial",
+            "assets/sounds/carpediem.mp3",
+        ); /* Credit goes to https://opengameart.org/content/deus-ex-tempus by author Trevor Lentz */
+        this.load.audio(
             "battlemusic",
             "assets/sounds/battle.mp3",
         ); /* Credit goes to https://opengameart.org/content/battle-theme-a by cynicmusic */

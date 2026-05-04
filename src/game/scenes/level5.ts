@@ -18,8 +18,15 @@ export class Level5 extends Scene {
     private thronebroken: boolean;
     private msActivated: boolean;
     private doorOpened: boolean;
+    private fakeWin: boolean;
 
-    create() {}
+    create() {
+        EventBus.emit("current-scene-ready", this);
+    }
+
+    private breakThrone() {}
+
+    private activateMS() {}
 
     private openDoor() {}
 
