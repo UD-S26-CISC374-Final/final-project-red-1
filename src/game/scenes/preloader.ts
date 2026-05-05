@@ -64,7 +64,7 @@ export class Preloader extends Scene {
             frameHeight: 120,
         });
 
-        // load the music for the game
+        // Soundtrack for the game
         this.load.audio(
             "tutorial",
             "assets/sounds/carpediem.mp3",
