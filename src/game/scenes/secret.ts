@@ -19,7 +19,11 @@ export class Secret extends Scene {
     private bartCrown: boolean;
     private elevatorOpen: boolean;
 
-    create() {}
+    create() {
+        const sound = this.sound.add("secret", { loop: true });
+        sound.play();
+        EventBus.emit("current-scene-ready", this);
+    }
 
     private bartMovement() {}
 

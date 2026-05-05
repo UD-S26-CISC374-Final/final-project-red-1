@@ -4,6 +4,7 @@ import { Scene } from "phaser";
 export class Win extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
+    fpsText: Phaser.GameObjects.Text;
 
     private player: Phaser.Physics.Arcade.Sprite;
     private ground: Phaser.Physics.Arcade.StaticGroup;
@@ -18,13 +19,19 @@ export class Win extends Scene {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor();
 
+        const sound = this.sound.add("win", { loop: true });
+        sound.play();
+
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha();
 
         EventBus.emit("current-scene-ready", this);
     }
 
-    update() {}
+    update() {
+        this.fpsText.update();
+    }
+
     changeScene() {
         this.time.addEvent({
             delay: 15000,

@@ -19,6 +19,9 @@ export class Tutorial extends Scene implements ChangeableScene {
     private player: Phaser.Physics.Arcade.Sprite;
     private key: Phaser.Physics.Arcade.Image;
     private door: Phaser.Physics.Arcade.Image;
+
+    private pickupkey: boolean;
+    private dooropen: boolean;
     private changecomplete: boolean;
     private listcomplete: boolean;
     private catcomplete: boolean;
@@ -67,6 +70,67 @@ export class Tutorial extends Scene implements ChangeableScene {
             200,
             "Cd is to change directories. \nGo cd into the Tutorial directory",
         );
+
+        if (this.changecomplete) {
+            this.changetext.setAlpha(0);
+        }
+
+        this.listtext = this.add.text(
+            400,
+            200,
+            "Ls is to list files. \nGo ls to see the files",
+        );
+
+        if (this.listcomplete) {
+            this.listtext.setAlpha(0);
+        }
+
+        this.cattext = this.add.text(
+            400,
+            200,
+            "Cat can be used in two ways. \nOne way is to access the contents of the file. \nThe other way is to combine the two files. Use cat to see the contents of the file.",
+        );
+
+        if (this.catcomplete) {
+            this.cattext.setAlpha(0);
+        }
+
+        this.movetext = this.add.text(
+            400,
+            200,
+            "Mv is to move files. \nUse mv to move the key file to the player",
+        );
+
+        if (!this.pickupkey) {
+            this.movecomplete = false;
+        }
+
+        if (this.pickupkey) {
+            this.movecomplete = true;
+        }
+        if (this.movecomplete) {
+            this.movetext.setAlpha(0);
+        }
+
+        this.tuttext = this.add.text(
+            400,
+            200,
+            "Now that you know the commands, you can finish this level by escaping the room.",
+        );
+
+        if (!this.dooropen) {
+            this.tutorialcompleted = false;
+        }
+        if (this.dooropen) {
+            this.tutorialcompleted = true;
+        }
+        if (this.tutorialcompleted) {
+            this.tuttext.setAlpha(0);
+        }
+
+        const sound = this.sound.add("tutorial", { loop: true });
+        sound.play();
+
         EventBus.emit("current-scene-ready", this);
     }
 
@@ -80,7 +144,16 @@ export class Tutorial extends Scene implements ChangeableScene {
             delay: 13000,
             callback: () => this.commandstext.update(),
         });
+        this.changetext.update();
+        this.listtext.update();
+        this.cattext.update();
+        this.movetext.update();
+        this.tuttext.update();
     }
 
-    changeScene() {}
+    changeScene() {
+        if (this.tutorialcompleted) {
+            this.scene.start("Level1");
+        }
+    }
 }

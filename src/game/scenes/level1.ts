@@ -32,7 +32,7 @@ export class Level1 extends Scene {
     private torturechamber = false;
 
     constructor() {
-        super("dungeon.png");
+        super("Level1");
     }
 
     create() {
@@ -233,7 +233,7 @@ export class Level1 extends Scene {
         ) {
             this.prisoncellHealth -= this.crowstrength;
             if (this.prisoncellHealth == 0) {
-                this.prisoncellHealth = 8;
+                this.prisoncellHealth = 1;
                 this.torturechamber = true;
                 this.prisoncells.children.each((cell) => {
                     const prisoncell = cell as Phaser.Physics.Arcade.Sprite;
@@ -364,7 +364,7 @@ export class Level1 extends Scene {
 
     changeScene() {
         if (this.torturechamber) {
-            this.scene.start("torture.png");
+            this.scene.start("Level1");
         }
         this.scene.start("GameOver");
     }

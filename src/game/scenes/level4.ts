@@ -42,6 +42,16 @@ export class Level4 extends Scene {
 
         this.player = this.physics.add.sprite(100, 700, "player");
         this.player.setCollideWorldBounds(true);
+        this.water = this.physics.add.group();
+        this.water.create(300, 700, "water");
+        this.bucket = this.add.image(500, 700, "bucket");
+        this.cobwebs = this.physics.add.group();
+        this.cobwebs.create(700, 700, "cobwebs");
+        this.cobwebs.create(700, 670, "cobwebs");
+        this.cobwebs.create(670, 700, "cobwebs");
+        this.rake = this.add.image(450, 700, "rake");
+        this.boxes = this.add.image(600, 700, "boxes");
+        this.buttons = this.add.image(800, 700, "buttons");
         this.physics.add.collider(this.player, this.boxes);
         this.physics.add.collider(this.player, this.bucket);
         this.physics.add.collider(this.player, this.buttons);
@@ -74,15 +84,50 @@ export class Level4 extends Scene {
         }
     }
 
-    private obtainingRake() {}
+    private obtainingRake() {
+        if (!this.cobwebsRemoved) {
+            this.hasRake = false;
+        }
+        if (this.physics.overlap(this.player, this.rake) && !this.hasRake) {
+            this.hasRake = true;
+        } else {
+            this.hasRake = false;
+        }
+    }
 
-    private pushingBoxes() {}
+    private pushingBoxes() {
+        if (!this.hasRake) {
+            this.boxeslifted = false;
+        }
+        if (this.hasRake && this.physics.overlap(this.player, this.boxes)) {
+            this.boxeslifted = true;
+        } else {
+            this.boxeslifted = false;
+        }
+    }
 
-    private pressButton() {}
+    private pressButton() {
+        if (!this.boxeslifted) {
+            this.buttonpressed = false;
+        }
+        if (
+            this.boxeslifted &&
+            this.physics.overlap(this.player, this.buttons)
+        ) {
+            this.buttonpressed = true;
+        }
+        if (this.buttonpressed) {
+            this.throneroom = true;
+        }
+    }
 
     update() {
         this.fpsText.update();
     }
 
-    changeScene() {}
+    changeScene() {
+        if (this.throneroom) {
+            this.scene.start("Level5");
+        }
+    }
 }
