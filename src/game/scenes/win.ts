@@ -19,6 +19,9 @@ export class Win extends Scene {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor();
 
+        const sound = this.sound.add("win", { loop: true });
+        sound.play();
+
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha();
 

@@ -22,6 +22,8 @@ export class Level5 extends Scene {
     private fakeWin: boolean;
 
     create() {
+        const sound = this.sound.add("throne", { loop: true });
+        sound.play();
         EventBus.emit("current-scene-ready", this);
     }
 

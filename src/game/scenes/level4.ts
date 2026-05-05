@@ -42,6 +42,16 @@ export class Level4 extends Scene {
 
         this.player = this.physics.add.sprite(100, 700, "player");
         this.player.setCollideWorldBounds(true);
+        this.water = this.physics.add.group();
+        this.water.create(300, 700, "water");
+        this.bucket = this.add.image(500, 700, "bucket");
+        this.cobwebs = this.physics.add.group();
+        this.cobwebs.create(700, 700, "cobwebs");
+        this.cobwebs.create(700, 670, "cobwebs");
+        this.cobwebs.create(670, 700, "cobwebs");
+        this.rake = this.add.image(450, 700, "rake");
+        this.boxes = this.add.image(600, 700, "boxes");
+        this.buttons = this.add.image(800, 700, "buttons");
         this.physics.add.collider(this.player, this.boxes);
         this.physics.add.collider(this.player, this.bucket);
         this.physics.add.collider(this.player, this.buttons);

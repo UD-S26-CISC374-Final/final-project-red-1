@@ -85,6 +85,22 @@ export class Preloader extends Scene {
             "old",
             "assets/sounds/old.mp3",
         ); /* Credit goes to https://opengameart.org/content/mythica by congusbongus */
+        this.load.audio(
+            "throne",
+            "assets/sounds/fakelast.mp3",
+        ); /*Credit goes to https://opengameart.org/content/defying-commodus by Matthew Pablo */
+        this.load.audio(
+            "plottwist",
+            "assets/sounds/plottwist.mp3",
+        ); /* Credit goes to https://opengameart.org/content/arabesque by brianiac256 */
+        this.load.audio(
+            "secret",
+            "assets/sounds/secret.mp3",
+        ); /* Credit goes to https://opengameart.org/content/a-slave-to-no-one-rpg-orchestral-essentials-boss-music by author InspectorJ(composed by Jonathan Shaw) */
+        this.load.audio(
+            "win",
+            "assets/sounds/symphony.mp3",
+        ); /* Credit goes to https://opengameart.org/content/calm-relax-1-synthwave-421k by cynicmusic */
 
         // Sound effects
         this.load.audio(

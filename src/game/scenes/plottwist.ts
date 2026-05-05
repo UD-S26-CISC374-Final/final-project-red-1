@@ -52,6 +52,8 @@ export class PlotTwist extends Scene {
             onComplete: () => this.negtext.setAlpha(0),
         });
 
+        const sound = this.sound.add("plottwist", { loop: true });
+        sound.play();
         EventBus.emit("current-scene-ready", this);
     }
 
