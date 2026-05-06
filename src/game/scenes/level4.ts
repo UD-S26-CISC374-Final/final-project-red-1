@@ -55,7 +55,42 @@ export class Level4 extends Scene {
         this.physics.add.collider(this.player, this.boxes);
         this.physics.add.collider(this.player, this.bucket);
         this.physics.add.collider(this.player, this.buttons);
-
+        this.physics.add.collider(this.water, this.bucket);
+        this.physics.add.overlap(
+            this.bucket,
+            this.water,
+            this.bucketandwatercombination.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.cobwebs,
+            this.removingCobwebs.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.rake,
+            this.obtainingRake.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.boxes,
+            this.pushingBoxes.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.buttons,
+            this.pressButton.bind(this),
+            undefined,
+            this,
+        );
         EventBus.emit("current-scene-ready", this);
     }
 
