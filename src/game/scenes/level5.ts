@@ -22,6 +22,50 @@ export class Level5 extends Scene {
     private fakeWin: boolean;
 
     create() {
+        this.camera = this.cameras.main;
+        this.camera.setBackgroundColor("#202020");
+
+        this.background = this.add.image(512, 384, "background");
+        this.background.setAlpha(0.5);
+
+        this.player = this.physics.add.sprite(100, 700, "player");
+        this.player.setCollideWorldBounds(true);
+        this.throne = this.physics.add.image(400, 600, "throne");
+        this.hammer = this.physics.add.image(200, 700, "hammer");
+        this.motionsensor = this.physics.add.image(400, 700, "motionsensor");
+        this.door = this.physics.add.image(600, 700, "door");
+        this.physics.add.collider(this.player, this.throne);
+        this.physics.add.collider(this.player, this.hammer);
+        this.physics.add.collider(this.player, this.motionsensor);
+        this.physics.add.collider(this.player, this.door);
+        this.physics.add.overlap(
+            this.player,
+            this.hammer,
+            this.acquireHammer.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.throne,
+            this.breakThrone.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.motionsensor,
+            this.activateMS.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.door,
+            this.openDoor.bind(this),
+            undefined,
+            this,
+        );
         const sound = this.sound.add("throne", { loop: true });
         sound.play();
         EventBus.emit("current-scene-ready", this);
@@ -89,7 +133,7 @@ export class Level5 extends Scene {
 
     changeScene() {
         if (this.fakeWin) {
-            this.scene.start("PlotTwist");
+            this.scene.start("Win");
         }
     }
 }
