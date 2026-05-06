@@ -89,7 +89,7 @@ export class Level5 extends Scene {
 
     changeScene() {
         if (this.fakeWin) {
-            this.scene.start("PlotTwist");
+            this.scene.start("Win");
         }
     }
 }
