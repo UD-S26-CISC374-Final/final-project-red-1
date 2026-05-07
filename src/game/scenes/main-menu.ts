@@ -94,7 +94,7 @@ export class MainMenu extends Scene implements ChangeableScene {
 
             wrap: {
                 mode: "word",
-                width: 280,
+                width: 500,
             },
         });
 
