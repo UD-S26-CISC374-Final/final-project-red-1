@@ -13,7 +13,7 @@ export class MainMenu extends Scene implements ChangeableScene {
 
     env: Enviroment;
     lines: string[] = [];
-    maxLines: number = 43;
+    maxChars: number = 2000;
 
     textBoxText!: BBCodeText;
     cursorVisible: boolean = true;
@@ -22,6 +22,9 @@ export class MainMenu extends Scene implements ChangeableScene {
     outputLines: string[] = [];
     currentInput: string = "";
     prompt: string = "> ";
+
+    history: string[] = [];
+    historyIndex: number = -1;
 
     currentLevel: string = "Level1";
 
@@ -51,8 +54,11 @@ export class MainMenu extends Scene implements ChangeableScene {
     appendLine(line: string) {
         this.outputLines.push(line);
 
-        if (this.outputLines.length > this.maxLines) {
+        let total = this.outputLines.join("\n").length;
+
+        while (total > this.maxChars && this.outputLines.length > 0) {
             this.outputLines.shift();
+            total = this.outputLines.join("\n").length;
         }
 
         this.renderTerminal();
@@ -179,6 +185,42 @@ export class MainMenu extends Scene implements ChangeableScene {
 
         // ENTER handling
         inputElement.addEventListener("keydown", (event: KeyboardEvent) => {
+            if (event.key === "ArrowUp") {
+                event.preventDefault();
+
+                if (this.history.length > 0) {
+                    if (this.historyIndex === -1) {
+                        this.historyIndex = this.history.length - 1;
+                    } else {
+                        this.historyIndex = Math.max(0, this.historyIndex - 1);
+                    }
+
+                    this.currentInput = this.history[this.historyIndex];
+                    inputElement.value = this.currentInput;
+                    this.renderTerminal();
+                }
+                return;
+            }
+
+            if (event.key === "ArrowDown") {
+                event.preventDefault();
+
+                if (this.historyIndex !== -1) {
+                    this.historyIndex++;
+
+                    if (this.historyIndex >= this.history.length) {
+                        this.historyIndex = -1;
+                        this.currentInput = "";
+                    } else {
+                        this.currentInput = this.history[this.historyIndex];
+                    }
+
+                    inputElement.value = this.currentInput;
+                    this.renderTerminal();
+                }
+                return;
+            }
+
             if (event.key === "Enter") {
                 event.preventDefault();
 
@@ -201,6 +243,12 @@ export class MainMenu extends Scene implements ChangeableScene {
                     this.scene.launch(targetScene);
                     this.currentLevel = targetScene;
                 }
+
+                if (value.length > 0) {
+                    this.history.push(value);
+                }
+
+                this.historyIndex = -1;
 
                 this.currentInput = "";
                 inputElement.value = "";
