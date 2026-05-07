@@ -29,6 +29,18 @@ export class Tutorial extends Scene implements ChangeableScene {
     private tutorialcompleted: boolean;
 
     create() {
+        this.camera = this.cameras.main;
+        this.camera.setBackgroundColor("#101010");
+
+        this.background = this.add.image(512, 384, "background");
+        this.background.setAlpha(0.5);
+
+        this.player = this.physics.add.sprite(100, 700, "player");
+        this.player.setCollideWorldBounds(true);
+        this.key = this.physics.add.image(300, 700, "key");
+        this.door = this.physics.add.image(500, 700, "door");
+        this.physics.add.collider(this.player, this.key);
+        this.physics.add.collider(this.player, this.door);
         this.pregametext = this.add.text(
             400,
             200,

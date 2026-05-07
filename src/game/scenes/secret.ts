@@ -32,6 +32,34 @@ export class Secret extends Scene {
         this.physics.add.collider(this.player, this.wand);
         this.physics.add.collider(this.player, this.crown);
         this.physics.add.collider(this.player, this.elevator);
+        this.physics.add.overlap(
+            this.player,
+            this.wand,
+            this.handleWand.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.shoes,
+            this.handleShoes.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.crown,
+            this.handleCrown.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.elevator,
+            this.openElevator.bind(this),
+            undefined,
+            this,
+        );
         const sound = this.sound.add("secret", { loop: true });
         sound.play();
         EventBus.emit("current-scene-ready", this);
