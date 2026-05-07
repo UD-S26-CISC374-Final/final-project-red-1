@@ -1,42 +1,50 @@
 import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
-
-import PhaserLogo from "../objects/phaser-logo";
 import FpsText from "../objects/fps-text";
 
 export class Level2 extends Scene {
-    camera: Phaser.Cameras.Scene2D.Camera;
-    background: Phaser.GameObjects.Image;
-    phaserLogo: PhaserLogo;
-    fpsText: FpsText;
-    private ground: Phaser.Physics.Arcade.StaticGroup;
-    private player: Phaser.Physics.Arcade.Sprite;
-    private chain: Phaser.GameObjects.Image;
-    private gloves: Phaser.Physics.Arcade.StaticGroup;
-    private guillotine: Phaser.Physics.Arcade.StaticGroup;
-    private lever: Phaser.GameObjects.Image;
+    camera!: Phaser.Cameras.Scene2D.Camera;
+    background!: Phaser.GameObjects.Image;
+    fpsText!: FpsText;
+
+    private ground!: Phaser.Physics.Arcade.StaticGroup;
+    private player!: Phaser.Physics.Arcade.Sprite;
+
+    private chain!: Phaser.Physics.Arcade.Image;
+    private lever!: Phaser.Physics.Arcade.Image;
+
+    private gloves!: Phaser.Physics.Arcade.StaticGroup;
+    private guillotine!: Phaser.Physics.Arcade.Group;
 
     private hasChain = false;
-    private hasgloves = false;
-    private leverpulled = false;
-    private guillotineactive = false;
-    private alchemylab = false;
+    private hasGloves = false;
+    private leverPulled = false;
+    private guillotineActive = false;
+    private alchemyLab = false;
+    private transitioning = false;
 
     constructor() {
         super("Level2");
     }
 
     create() {
-        this.add.image(400, 400, "torture");
-        this.camera = this.cameras.main;
-        this.camera.setBackgroundColor("#808080");
+        // CAMERA
+        this.cameras.main.setViewport(0, 0, 514, 768);
+        this.cameras.main.setBackgroundColor("#808080");
 
+        // BACKGROUND
+        this.add.image(400, 400, "torture");
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
-        const sound = this.sound.add("cyberpunk", { loop: true });
-        sound.play();
+        // PLAYER (IMPORTANT: FIRST PHYSICS OBJECT)
+        this.player = this.physics.add.sprite(100, 700, "player");
+        this.player.setCollideWorldBounds(true);
 
+        // AUDIO
+        this.sound.add("cyberpunk", { loop: true }).play();
+
+        // GROUND
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
             512,
@@ -44,60 +52,53 @@ export class Level2 extends Scene {
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         g.setScale(2).refreshBody();
-        this.physics.add.collider(this.ground, this.player);
 
-        this.chain = this.add.image(
-            100,
-            700,
-            "chain",
-        ) as Phaser.Physics.Arcade.Image;
+        this.physics.add.collider(this.player, this.ground);
+
+        // OBJECTS (FIXED: immovable for stability)
+        this.chain = this.physics.add.image(100, 700, "chain");
+        this.chain.setImmovable(true);
+
+        this.lever = this.physics.add.image(200, 600, "lever");
+        this.lever.setImmovable(true);
+
         this.gloves = this.physics.add.staticGroup();
         this.gloves.create(400, 600, "gloves");
-        this.guillotine = this.physics.add.staticGroup();
+
+        this.guillotine = this.physics.add.group({ allowGravity: false });
         this.guillotine.create(800, 600, "guillotine");
-        this.lever = this.add.image(
-            200,
-            600,
-            "lever",
-        ) as Phaser.Physics.Arcade.Image;
-        this.player = this.physics.add.sprite(100, 700, "player");
-        this.player.setCollideWorldBounds(true);
-        this.physics.add.collider(this.player, this.gloves);
+
+        // COLLIDERS
         this.physics.add.collider(this.player, this.chain);
         this.physics.add.collider(this.player, this.lever);
+        this.physics.add.collider(this.player, this.gloves);
 
+        // OVERLAPS
         this.physics.add.overlap(
             this.player,
             this.gloves,
-            this.handleGloveCollect.bind(this),
+            this.handleGloveCollect,
             undefined,
             this,
         );
         this.physics.add.overlap(
             this.player,
             this.chain,
-            this.handleChainCollect.bind(this),
+            this.handleChainCollect,
             undefined,
             this,
         );
         this.physics.add.overlap(
             this.player,
             this.lever,
-            this.handleLeverPull.bind(this),
+            this.handleLeverPull,
             undefined,
             this,
         );
         this.physics.add.overlap(
             this.player,
             this.guillotine,
-            this.guillotineWorking.bind(this),
-            undefined,
-            this,
-        );
-        this.physics.add.overlap(
-            this.chain,
-            this.guillotine,
-            this.guillotineWorking.bind(this),
+            this.guillotineWorking,
             undefined,
             this,
         );
@@ -106,75 +107,51 @@ export class Level2 extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
-    private handleGloveCollect() {
-        if (this.physics.overlap(this.player, this.gloves) && !this.hasgloves) {
-            this.hasgloves = true;
+    private handleGloveCollect = () => {
+        if (!this.hasGloves) {
+            this.hasGloves = true;
         }
-    }
+    };
 
-    private handleChainCollect() {
-        if (this.physics.overlap(this.player, this.chain) && !this.hasgloves) {
-            this.hasChain = false;
-        }
-        if (this.physics.overlap(this.player, this.chain) && this.hasgloves) {
+    private handleChainCollect = () => {
+        if (this.hasGloves) {
             this.hasChain = true;
         }
-    }
+    };
 
-    private handleLeverPull() {
-        if (!this.physics.overlap(this.player, this.lever)) {
-            this.leverpulled = false;
-        }
-        if (this.physics.overlap(this.player, this.lever) && !this.hasChain) {
-            this.leverpulled = false;
-        }
-        if (this.physics.overlap(this.player, this.lever) && this.hasChain) {
-            this.leverpulled = true;
-            this.guillotineactive = true;
-            this.guillotine.children.each((guill) => {
-                const guillotine = guill as Phaser.Physics.Arcade.Sprite;
-                guillotine.setVelocityY(200);
+    private handleLeverPull = () => {
+        if (this.hasChain) {
+            this.leverPulled = true;
+            this.guillotineActive = true;
+
+            this.guillotine.children.each((g) => {
+                (g as Phaser.Physics.Arcade.Sprite).setVelocityY(200);
                 return true;
             });
         }
-    }
+    };
 
-    private guillotineWorking() {
-        if (
-            this.physics.overlap(this.player, this.guillotine) &&
-            this.guillotineactive
-        ) {
-            console.log(
-                "You would've been beheaded by the guillotine! Luckily, there's a check to prevent that due to the nature of this being educational software. You cannot die, but you still have to complete the level",
-            );
+    private guillotineWorking = () => {
+        if (this.guillotineActive) {
+            console.log("Avoided guillotine!");
+            return;
         }
-        if (
-            this.physics.overlap(this.chain, this.guillotine) &&
-            this.guillotineactive &&
-            this.leverpulled
-        ) {
-            this.guillotineactive = false;
-        }
-        if (
-            this.physics.overlap(this.player, this.guillotine) &&
-            !this.guillotineactive &&
-            this.hasgloves &&
-            this.hasChain
-        ) {
-            this.alchemylab = true;
-            this.time.addEvent({
-                delay: 2000,
-                callback: () => this.scene.start("Level3"),
+
+        if (this.hasGloves && this.hasChain && !this.transitioning) {
+            this.transitioning = true;
+
+            this.time.delayedCall(500, () => {
+                this.scene.start("Level3");
             });
         }
-    }
+    };
 
     update() {
         this.fpsText.update();
     }
 
     changeScene() {
-        if (this.alchemylab) {
+        if (this.alchemyLab) {
             this.scene.start("Level3");
         }
     }

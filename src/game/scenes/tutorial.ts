@@ -20,13 +20,13 @@ export class Tutorial extends Scene implements ChangeableScene {
     private key: Phaser.Physics.Arcade.Image;
     private door: Phaser.Physics.Arcade.Image;
 
-    private pickupkey: boolean;
-    private dooropen: boolean;
-    private changecomplete: boolean;
-    private listcomplete: boolean;
-    private catcomplete: boolean;
-    private movecomplete: boolean;
-    private tutorialcompleted: boolean;
+    private pickupkey: boolean = false;
+    private dooropen: boolean = false;
+    private changecomplete: boolean = false;
+    private listcomplete: boolean = false;
+    private catcomplete: boolean = false;
+    private movecomplete: boolean = false;
+    private tutorialcompleted: boolean = false;
 
     constructor() {
         super("Tutorial");
@@ -34,9 +34,11 @@ export class Tutorial extends Scene implements ChangeableScene {
 
     create() {
         this.camera = this.cameras.main;
+
+        this.cameras.main.setViewport(0, 0, 514, 768);
         this.camera.setBackgroundColor("#101010");
 
-        this.background = this.add.image(512, 384, "background");
+        this.background = this.add.image(257, 384, "background");
         this.background.setAlpha(0.5);
 
         this.player = this.physics.add.sprite(100, 700, "player");
@@ -46,7 +48,7 @@ export class Tutorial extends Scene implements ChangeableScene {
         this.physics.add.collider(this.player, this.key);
         this.physics.add.collider(this.player, this.door);
         this.pregametext = this.add.text(
-            400,
+            257,
             200,
             "Welcome to the game. \nLet us show you how to save the king",
             {
@@ -150,22 +152,7 @@ export class Tutorial extends Scene implements ChangeableScene {
         EventBus.emit("current-scene-ready", this);
     }
 
-    update() {
-        this.fpsText.update();
-        this.time.addEvent({
-            delay: 5000,
-            callback: () => this.pregametext.update(),
-        });
-        this.time.addEvent({
-            delay: 13000,
-            callback: () => this.commandstext.update(),
-        });
-        this.changetext.update();
-        this.listtext.update();
-        this.cattext.update();
-        this.movetext.update();
-        this.tuttext.update();
-    }
+    update() {}
 
     changeScene() {
         if (this.tutorialcompleted) {
