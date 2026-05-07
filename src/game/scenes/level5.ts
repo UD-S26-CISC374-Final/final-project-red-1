@@ -21,6 +21,10 @@ export class Level5 extends Scene {
     private doorOpened: boolean;
     private fakeWin: boolean;
 
+    constructor() {
+        super("Level5");
+    }
+
     create() {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#202020");

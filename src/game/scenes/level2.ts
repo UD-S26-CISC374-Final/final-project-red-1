@@ -23,7 +23,7 @@ export class Level2 extends Scene {
     private alchemylab = false;
 
     constructor() {
-        super("Level1");
+        super("Level2");
     }
 
     create() {

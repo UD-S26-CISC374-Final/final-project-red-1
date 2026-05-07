@@ -1,9 +1,10 @@
-import { EventBus } from "../event-bus";
+/*import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 
 export class Secret extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
+    fpsText: Phaser.GameObjects.Text;
     private player: Phaser.Physics.Arcade.Sprite;
     private shoes: Phaser.Physics.Arcade.Image;
     private wand: Phaser.Physics.Arcade.Image;
@@ -86,4 +87,4 @@ export class Secret extends Scene {
             this.scene.start("Win");
         }
     }
-}
+} */

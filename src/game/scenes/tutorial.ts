@@ -28,6 +28,10 @@ export class Tutorial extends Scene implements ChangeableScene {
     private movecomplete: boolean;
     private tutorialcompleted: boolean;
 
+    constructor() {
+        super("Tutorial");
+    }
+
     create() {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#101010");

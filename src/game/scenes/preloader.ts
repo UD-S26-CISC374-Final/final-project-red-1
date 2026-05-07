@@ -136,7 +136,7 @@ export class Preloader extends Scene {
         ); /* Credit goes to https://opengameart.org/content/calm-relax-1-synthwave-421k by cynicmusic */
 
         // Sound effects
-        this.load.audio(
+        /*this.load.audio(
             "itempickup",
             "assets/seffects/itemcombo.flac",
         ); /* Credit goes to https://opengameart.org/content/life-pickup-yo-frankie by Blender Foundation(submitted by Lamoot) */
