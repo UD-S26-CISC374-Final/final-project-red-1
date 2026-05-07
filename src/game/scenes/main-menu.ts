@@ -284,6 +284,18 @@ export class MainMenu extends Scene implements ChangeableScene {
         return tokens
             .map((token) => {
                 if (
+                    token === "Inventory" ||
+                    token === "Jail" ||
+                    token === "Hallway" ||
+                    token === "TortureChamber" ||
+                    token === "AlchemyRoom" ||
+                    token === "OldRoom" ||
+                    token === "ThroneRoom"
+                ) {
+                    return `[color=#4da3ff]${token}[/color]`;
+                } //the worlds most inelligant and brittle solution to a problem
+
+                if (
                     token === "../" ||
                     token === "./" ||
                     token.startsWith("../") ||
