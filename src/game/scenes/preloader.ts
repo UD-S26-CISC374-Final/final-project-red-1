@@ -48,10 +48,47 @@ export class Preloader extends Scene {
             "Crowbar.txt",
             "assets/crowbar.png",
         ); /* Credit goes to https://opengameart.org/content/crow-bar by author Lewis W. Veasey */
-        this.load.image("chain", "assets/chain.png");
-        this.load.image("gloves", "assets/gloves.png");
-        this.load.image("guillotine", "assets/guillotine.png");
-        this.load.image("lever", "assets/lever.png");
+        this.load.image(
+            "chain",
+            "assets/chain.png",
+        ); /* Credit goes to https://opengameart.org/content/chain-whip by Nineball */
+        this.load.image(
+            "gloves",
+            "assets/gloves.png",
+        ); /* Credit goes to https://opengameart.org/content/pointers-part-5 by yd */
+        this.load.image(
+            "guillotine",
+            "assets/guillotine.png",
+        ); /* Credit goes to https://opengameart.org/content/guillotine by author Rudy Phelippeau */
+        this.load.image(
+            "lever",
+            "assets/lever.png",
+        ); /* Credit goes to https://opengameart.org/content/bundle-events-assets by amaralzin9309 */
+        this.load.image(
+            "flasks",
+            "assets/flasks.png",
+        ); /* Credit goes to https://opengameart.org/content/isometric-alchemist-flasks-with-and-without-magic-symbols by Varkalandar */
+        this.load.image(
+            "chemicals",
+            "assets/chemicals.png",
+        ); /* Credit goes to https://opengameart.org/content/potions-7 by chabull */
+        this.load.image(
+            "key",
+            "assets/key.png",
+        ); /* Credit goes to https://opengameart.org/content/rusty-iron-key-povray-scene-file by Varkalandar */
+        this.load.image(
+            "door",
+            "assets/door.png",
+        ); /* Credit goes to https://opengameart.org/content/wood-door by wobba89 */
+        this.load.image("water", "assets/water.png");
+        this.load.image("bucket", "assets/bucket.png");
+        this.load.image("cobwebs", "assets/cobwebs.png");
+        this.load.image("rake", "assets/rake.png");
+        this.load.image("boxes", "assets/boxes.png");
+        this.load.image("buttons", "assets/buttons.png");
+        this.load.image("throne", "assets/throne.png");
+        this.load.image("motionsensor", "assets/motionsensor.png");
+        this.load.image("hammer", "assets/hammer.png");
         this.load.image("logo", "assets/logo.png");
         this.load.image("star", "assets/star.png");
         this.load.image("phaser-logo", "assets/phaser-logo.png");
@@ -59,10 +96,6 @@ export class Preloader extends Scene {
             frameWidth: 120,
             frameHeight: 120,
         }); /* Credit goes to https://opengameart.org/content/gilead-king-in-armor by author Razare2015 */
-        this.load.spritesheet("bart", "assets/villain.png", {
-            frameWidth: 120,
-            frameHeight: 120,
-        });
 
         // Soundtrack for the game
         this.load.audio(
