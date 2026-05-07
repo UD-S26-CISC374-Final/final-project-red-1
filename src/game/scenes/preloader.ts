@@ -96,7 +96,7 @@ export class Preloader extends Scene {
         this.load.image(
             "paintings",
             "assets/paintings.png",
-        ); /* Credit goes to https://opengameart.org/content/abstract-art by geoadel /*
+        ); /* Credit goes to https://opengameart.org/content/abstract-art by geoadel */
         this.load.image("logo", "assets/logo.png");
         this.load.image("star", "assets/star.png");
         this.load.image("phaser-logo", "assets/phaser-logo.png");
