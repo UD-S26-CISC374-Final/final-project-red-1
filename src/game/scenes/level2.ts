@@ -137,7 +137,12 @@ export class Level2 extends Scene {
             return;
         }
 
-        if (this.hasGloves && this.hasChain && !this.transitioning) {
+        if (
+            this.hasGloves &&
+            this.hasChain &&
+            !this.transitioning &&
+            this.leverPulled
+        ) {
             this.transitioning = true;
 
             this.time.delayedCall(500, () => {
