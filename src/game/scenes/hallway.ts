@@ -7,7 +7,7 @@ export class Level1 extends Scene {
     background: Phaser.GameObjects.Image;
     fpsText: FpsText;
     command: string;
-    private pregametext: Phaser.GameObjects.Text;
+    pregametext: Phaser.GameObjects.Text;
 
     constructor() {
         super("Hallway");

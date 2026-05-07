@@ -52,6 +52,24 @@ export class PlotTwist extends Scene {
             onComplete: () => this.negtext.setAlpha(0),
         });
 
+        this.player = this.physics.add.sprite(400, 700, "player");
+        this.player.setCollideWorldBounds(true);
+        this.ground = this.physics.add.staticGroup();
+        const g = this.ground.create(
+            400,
+            768,
+            "ground",
+        ) as Phaser.Physics.Arcade.Sprite;
+        g.setScale(2).refreshBody();
+        this.physics.add.collider(this.ground, this.player);
+        this.wall = this.physics.add.staticGroup();
+        const w = this.wall.create(
+            50,
+            384,
+            "wall",
+        ) as Phaser.Physics.Arcade.Sprite;
+        w.setScale(2).refreshBody();
+        this.physics.add.collider(this.wall, this.player);
         const sound = this.sound.add("plottwist", { loop: true });
         sound.play();
         EventBus.emit("current-scene-ready", this);

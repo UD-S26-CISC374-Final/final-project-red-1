@@ -5,7 +5,6 @@ export class Secret extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     private player: Phaser.Physics.Arcade.Sprite;
-    private bart: Phaser.Physics.Arcade.Sprite;
     private shoes: Phaser.Physics.Arcade.Image;
     private wand: Phaser.Physics.Arcade.Image;
     private crown: Phaser.Physics.Arcade.Image;
@@ -14,18 +13,29 @@ export class Secret extends Scene {
     private hasShoes: boolean;
     private hasWand: boolean;
     private hasCrown: boolean;
-    private bartShoes: boolean;
-    private bartWand: boolean;
-    private bartCrown: boolean;
     private elevatorOpen: boolean;
 
     create() {
+        this.camera = this.cameras.main;
+        this.camera.setBackgroundColor("#000000");
+
+        this.background = this.add.image(512, 384, "background");
+        this.background.setAlpha(0.5);
+
+        this.player = this.physics.add.sprite(100, 700, "player");
+        this.player.setCollideWorldBounds(true);
+        this.shoes = this.physics.add.image(300, 700, "shoes");
+        this.wand = this.physics.add.image(500, 700, "wand");
+        this.crown = this.physics.add.image(700, 700, "crown");
+        this.elevator = this.physics.add.image(900, 700, "elevator");
+        this.physics.add.collider(this.player, this.shoes);
+        this.physics.add.collider(this.player, this.wand);
+        this.physics.add.collider(this.player, this.crown);
+        this.physics.add.collider(this.player, this.elevator);
         const sound = this.sound.add("secret", { loop: true });
         sound.play();
         EventBus.emit("current-scene-ready", this);
     }
-
-    private bartMovement() {}
 
     private handleWand() {}
 
@@ -44,6 +54,8 @@ export class Secret extends Scene {
     update() {}
 
     changeScene() {
-        this.scene.start("Win");
+        if (this.elevatorOpen) {
+            this.scene.start("Win");
+        }
     }
 }
