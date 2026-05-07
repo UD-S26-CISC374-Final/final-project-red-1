@@ -3,6 +3,7 @@ import { Enviroment } from "../../classes/Enviroment";
 import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 import { EventBus } from "../event-bus";
 import type { ChangeableScene } from "../reactable-scene";
+import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
 export class MainMenu extends Scene implements ChangeableScene {
     rexUI!: RexUIPlugin;
@@ -14,7 +15,7 @@ export class MainMenu extends Scene implements ChangeableScene {
     lines: string[] = [];
     maxLines: number = 43;
 
-    textBoxText!: GameObjects.Text;
+    textBoxText!: BBCodeText;
     cursorVisible: boolean = true;
     cursorChar: string = "█";
 
@@ -64,11 +65,15 @@ export class MainMenu extends Scene implements ChangeableScene {
         Output: N/A
     */
     renderTerminal() {
-        const output = this.outputLines.join("\n");
+        const output = this.outputLines
+            .map((line) => this.formatLine(line))
+            .join("\n");
 
         const cursor = this.cursorVisible ? this.cursorChar : " ";
 
-        const inputLine = this.prompt + this.currentInput + cursor;
+        const inputLine =
+            `[color=#ffffff]${this.prompt}${this.currentInput}[/color]` +
+            cursor;
 
         const fullText = output + "\n" + inputLine;
 
@@ -81,11 +86,16 @@ export class MainMenu extends Scene implements ChangeableScene {
         this.cameras.main.setBackgroundColor("#000000");
 
         // terminal text formatting
-        const terminalText = this.add.text(0, 0, "", {
+        const terminalText = this.rexUI.add.BBCodeText(0, 0, "", {
             fontSize: "12px",
             fontFamily: "Courier New",
             color: "#ffffff",
             lineSpacing: 4,
+
+            wrap: {
+                mode: "word",
+                width: 280,
+            },
         });
 
         // main textbox
@@ -156,6 +166,9 @@ export class MainMenu extends Scene implements ChangeableScene {
         });
 
         // initial terminal output
+        this.appendLine(
+            "Hello! Welcome to the dungeon! Your goal is to get out of this area by using the commands at your disposal. Do ''help'' In order to see a list of commands.",
+        );
         this.appendLine(this.env.update("ls"));
 
         // LIVE TYPING (moved OUTSIDE keydown)
@@ -210,6 +223,67 @@ export class MainMenu extends Scene implements ChangeableScene {
         this.renderTerminal();
 
         EventBus.emit("current-scene-ready", this);
+    }
+
+    formatLine(line: string): string {
+        const tokens = line.split(" ");
+
+        return tokens
+            .map((token) => {
+                // 1. relative paths (always blue)
+                if (
+                    token === "../" ||
+                    token === "./" ||
+                    token === ".." ||
+                    token === "."
+                ) {
+                    return `[color=#4da3ff]${token}[/color]`;
+                }
+
+                // 2. file detection (has extension)
+                if (/\.[a-zA-Z0-9]+$/.test(token)) {
+                    return `[color=#ffffff]${token}[/color]`;
+                }
+
+                // 3. folder detection (no dot, not command text)
+                // BUT we must be careful not to color normal words
+                if (this.isLikelyFolder(token)) {
+                    return `[color=#4da3ff]${token}[/color]`;
+                }
+
+                // 4. everything else stays white
+                return `[color=#ffffff]${token}[/color]`;
+            })
+            .join(" ");
+    }
+
+    isLikelyFolder(token: string): boolean {
+        // ignore obvious non-path text
+        const blacklist = new Set([
+            "help",
+            "ls",
+            "cd",
+            "echo",
+            "Welcome!",
+            ">",
+        ]);
+
+        if (blacklist.has(token)) return false;
+
+        // ignore strings with punctuation or sentences
+        if (token.includes(" ") || token.includes(",")) return false;
+
+        // ignore files (already handled)
+        if (token.includes(".")) return false;
+
+        // treat navigation-like tokens as folders
+        const looksLikePath =
+            /^[a-zA-Z0-9_-]+$/.test(token) || // normal folder name
+            token.endsWith("/") || // explicit folder
+            token.startsWith("../") || // relative navigation
+            token.startsWith("./");
+
+        return looksLikePath;
     }
 
     update() {}

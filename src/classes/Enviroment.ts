@@ -42,14 +42,19 @@ export class Enviroment {
 
         //Jail/Level1
         const jail = new Folder("Jail", hallway);
-        new File("Crowbar", jail, false, "Oh a crowbar! What are the odds!");
+        new File(
+            "Crowbar",
+            jail,
+            false,
+            "Oh, a crowbar! Really hope this things half-life hasnt passed. If only I could use it on something...",
+        );
         new File(
             "Cells",
             jail,
             false,
-            "These cells are hard to break, like really hard",
+            "These cells are really hard to break. If I could maybe bend them, I could get out of this cell.",
         );
-        /*
+
         //Torture Chamber/Level2
         const torture = new Folder("TortureChamber", hallway);
         new File("Chain", torture, false, "Feel how hard the links are!");
@@ -62,7 +67,6 @@ export class Enviroment {
         );
         new File("Lever", torture, false, "Pull that lever");
 
-        
         //AlchemyRoom/Level3
         const alchemy = new Folder("AlchemyRoom", hallway);
         new File("Flasks", alchemy, false, "These feel super hard");
@@ -131,10 +135,10 @@ export class Enviroment {
             false,
             "Torch the throne room. It's yours, but, whatever.",
         );
-        new File("Hammer", throneroom, false, "Escape with the hammer"); */
+        new File("Hammer", throneroom, false, "Escape with the hammer");
 
         //Records (Add Back Later)
-        /*const records = new Folder("Records", hallway);
+        const records = new Folder("Records", hallway);
         const shelf1 = new Folder("Shelf1", records);
         new File("Book1", shelf1, true);
         new File("Book2", shelf1, true);
@@ -146,9 +150,9 @@ export class Enviroment {
 
         //Lab
         const lab = new Folder("Lab", hallway);
-        new File("Potion", lab, false, "3 days blinding stew.");*/
+        new File("Potion", lab, false, "3 days blinding stew.");
 
-        this.nav = new Navigator(jail);
+        this.nav = new Navigator(jail); //start of the game
         /*this.nav = new Navigator(torture);
         this.nav = new Navigator(alchemy);
         this.nav = new Navigator(oldroom);
@@ -211,21 +215,21 @@ export class Enviroment {
         if (brokenUpCommand[0] === "help") {
             switch (brokenUpCommand.length) {
                 case 1: //case: just "help". Prints all commands
-                    return "Available commands: cd, ls, help, mv, /.exe, cat. If you want to quit an executable, press cntrl + c.";
+                    return "Available commands:\n cd: changes directory to the specified folder indicated in blue.\nls: lists all of the contents of the current directory you are in\nhelp: displays either general descriptions of commands\nmv: moves a file to a given directory\ncat: will either display the contents of a text file, or combine two text files together.\n\nIf you want a more detailed description of a given command, please type help [command you want the description of].";
                 case 2: //case: "help" + a command. Prints that command's function
                     switch (brokenUpCommand[1]) {
                         case "cd":
-                            return "Changes the current directory to the specified path.";
+                            return "cd, or 'change directory', allows you to move between folders, or 'rooms'.\nIt should be noted, that if you move something to the Folder 'Inventory', the file will always be accessible, no matter where you are.\nYou can access a file in 'Inventory' by using the filepath 'Inventory/[file]'";
                         case "ls":
-                            return "Lists the contents of the current directory or the specified path.";
+                            return "ls, or  'list' allows you to see every single item in a folder.\nIf you just type 'ls', you will only be able to see the items in your current directory.\nIf you want to see the items in a different folder, you can use the format 'ls [path]'. For example, to see your inventory, type 'ls Inventory'.";
                         case "help":
                             return "Displays available commands or detailed information about a specific command.";
                         case "mv":
-                            return "Moves or renames a file or directory.";
+                            return "mv, or 'move', is a command that allows you to move files between folders via the format mv [file] [folder].\nIt should be noted, that if you move something to the Folder 'Inventory', the file will always be accessible, no matter where you are.\nYou can access a file in 'Inventory' by using the filepath 'Inventory/[file]'";
                         case "/.exe":
                             return "Executes an executable file.";
                         case "cat":
-                            return "When given 1 file, will display its description. When given 2 files, will combine them";
+                            return "cat, or 'concatenate', is a command that is used exclusively for text files, or files labeled with .txt.\n\nWhen used in the format: cat [file], the description of the text file will be presented.\nWhen used in the format: cat [file1] [file2], both of the text files will be combined into a new item, only if they are able to, however. NOTE: This is permenant.";
                         default:
                             return "Command not found.";
                     }
