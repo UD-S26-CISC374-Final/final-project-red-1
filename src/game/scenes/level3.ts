@@ -175,7 +175,7 @@ export class Level3 extends Scene {
 
     changeScene() {
         if (this.storeroom) {
-            this.scene.start("Level4");
+            this.scene.start("Win");
         }
     }
 }
