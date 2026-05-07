@@ -54,14 +54,19 @@ export class MainMenu extends Scene implements ChangeableScene {
     appendLine(line: string) {
         this.outputLines.push(line);
 
-        let total = this.outputLines.join("\n").length;
-
-        while (total > this.maxChars && this.outputLines.length > 0) {
-            this.outputLines.shift();
-            total = this.outputLines.join("\n").length;
-        }
-
         this.renderTerminal();
+
+        const lineHeight = 14;
+        const maxVisibleLines = 53;
+
+        while (
+            Math.floor(this.textBoxText.height / lineHeight) >
+                maxVisibleLines &&
+            this.outputLines.length > 0
+        ) {
+            this.outputLines.shift();
+            this.renderTerminal();
+        }
     }
 
     /*
@@ -278,60 +283,27 @@ export class MainMenu extends Scene implements ChangeableScene {
 
         return tokens
             .map((token) => {
-                // 1. relative paths (always blue)
                 if (
                     token === "../" ||
                     token === "./" ||
-                    token === ".." ||
-                    token === "."
+                    token.startsWith("../") ||
+                    token.startsWith("./")
                 ) {
                     return `[color=#4da3ff]${token}[/color]`;
                 }
 
-                // 2. file detection (has extension)
+                // file detection
                 if (/\.[a-zA-Z0-9]+$/.test(token)) {
                     return `[color=#ffffff]${token}[/color]`;
                 }
 
-                // 3. folder detection (no dot, not command text)
-                // BUT we must be careful not to color normal words
-                if (this.isLikelyFolder(token)) {
+                if (token.includes("/") && /^[\w./-]+$/.test(token)) {
                     return `[color=#4da3ff]${token}[/color]`;
                 }
 
-                // 4. everything else stays white
                 return `[color=#ffffff]${token}[/color]`;
             })
             .join(" ");
-    }
-
-    isLikelyFolder(token: string): boolean {
-        // ignore obvious non-path text
-        const blacklist = new Set([
-            "help",
-            "ls",
-            "cd",
-            "echo",
-            "Welcome!",
-            ">",
-        ]);
-
-        if (blacklist.has(token)) return false;
-
-        // ignore strings with punctuation or sentences
-        if (token.includes(" ") || token.includes(",")) return false;
-
-        // ignore files (already handled)
-        if (token.includes(".")) return false;
-
-        // treat navigation-like tokens as folders
-        const looksLikePath =
-            /^[a-zA-Z0-9_-]+$/.test(token) || // normal folder name
-            token.endsWith("/") || // explicit folder
-            token.startsWith("../") || // relative navigation
-            token.startsWith("./");
-
-        return looksLikePath;
     }
 
     update() {}
