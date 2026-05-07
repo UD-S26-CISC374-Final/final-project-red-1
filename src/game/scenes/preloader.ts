@@ -89,6 +89,14 @@ export class Preloader extends Scene {
         this.load.image("throne", "assets/throne.png");
         this.load.image("motionsensor", "assets/motionsensor.png");
         this.load.image("hammer", "assets/hammer.png"); */
+        this.load.image(
+            "fountain",
+            "assets/fountain.png",
+        ); /* Credit goes to https://opengameart.org/content/solarus-fountain by AntumDeluge */
+        this.load.image(
+            "paintings",
+            "assets/paintings.png",
+        ); /* Credit goes to https://opengameart.org/content/abstract-art by geoadel /*
         this.load.image("logo", "assets/logo.png");
         this.load.image("star", "assets/star.png");
         this.load.image("phaser-logo", "assets/phaser-logo.png");
