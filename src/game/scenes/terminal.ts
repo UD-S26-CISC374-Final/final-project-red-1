@@ -5,7 +5,7 @@ import { EventBus } from "../event-bus";
 import type { ChangeableScene } from "../reactable-scene";
 import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
-export class MainMenu extends Scene implements ChangeableScene {
+export class Terminal extends Scene implements ChangeableScene {
     rexUI!: RexUIPlugin;
     title: GameObjects.Text;
     textBox: GameObjects.GameObject;
@@ -29,7 +29,7 @@ export class MainMenu extends Scene implements ChangeableScene {
     currentLevel: string = "Level1";
 
     constructor() {
-        super("MainMenu");
+        super("Terminal");
     }
 
     getSceneFromFolder(folderName: string): string | null {
