@@ -54,6 +54,19 @@ export class Enviroment {
             false,
             "These cells are really hard to break. If I could maybe bend them, I could get out of this cell.",
         );
+        new File(
+            "Stick",
+            jail,
+            false,
+            "An inconspicuous stick that wishes to be combined with something.",
+        );
+        new File(
+            "Flint",
+            jail,
+            false,
+            "A pointy rock that wishes to be combined with something.",
+        );
+        new Folder("Hole", jail);
 
         //Torture Chamber/Level2
         const torture = new Folder("TortureChamber", hallway);
@@ -385,6 +398,7 @@ export class Enviroment {
                 return tempFile;
             }
         } else if (brokenUpCommand[0] === "pwd") {
+            //print working directory command
             if (brokenUpCommand.length !== 1) {
                 //obligatory "too many arguments"
                 return "ERROR: Too many arguments! You only need to type in the file path.";

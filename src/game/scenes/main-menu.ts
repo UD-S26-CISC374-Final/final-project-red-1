@@ -302,6 +302,7 @@ export class MainMenu extends Scene implements ChangeableScene {
                 // directories
                 if (
                     token === "Jail" ||
+                    token === "Hole" ||
                     token === "Hallway" ||
                     token === "TortureChamber" ||
                     token === "AlchemyRoom" ||
