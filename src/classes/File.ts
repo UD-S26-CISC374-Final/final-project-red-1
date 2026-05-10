@@ -22,7 +22,7 @@ export class File {
         this.parent.addChild(this);
         this.path = this.setPath();
         this.description = d;
-        if (c) {
+        if (c !== undefined) {
             this.canBeMoved = c;
         } else {
             this.canBeMoved = true;

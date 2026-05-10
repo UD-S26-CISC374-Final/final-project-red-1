@@ -290,64 +290,56 @@ export class MainMenu extends Scene implements ChangeableScene {
     }
 
     formatLine(line: string): string {
-        const tokens = line.split(/\s+/);
+        return line
+            .split("\n")
+            .map((singleLine) => {
+                const tokens = singleLine.split(/\s+/);
 
-        return tokens
-            .map((token) => {
-                // exe files
-                if (/\.exe\b/i.test(token)) {
-                    return `[color=#00ff00]${token}[/color]`;
-                }
+                return tokens
+                    .map((token) => {
+                        // exe files
+                        if (/\.exe\b/i.test(token)) {
+                            return `[color=#00ff00]${token}[/color]`;
+                        }
 
-                // directories
-                if (
-                    token === "Jail" ||
-                    token === "Hole" ||
-                    token === "Hallway" ||
-                    token === "TortureChamber" ||
-                    token === "AlchemyRoom" ||
-                    token === "OldRoom" ||
-                    token === "ThroneRoom"
-                ) {
-                    return `[color=#0088ff]${token}[/color]`;
-                }
+                        // directories
+                        if (
+                            token === "Jail" ||
+                            token === "Hole" ||
+                            token === "Hallway" ||
+                            token === "TortureChamber" ||
+                            token === "AlchemyRoom" ||
+                            token === "OldRoom" ||
+                            token === "ThroneRoom"
+                        ) {
+                            return `[color=#0088ff]${token}[/color]`;
+                        }
 
-                // Hi. I'm leif. I know I can do something better than this. I'm lazy. Let me have this.
-                if (
-                    token === "Jail," ||
-                    token === "Hole," ||
-                    token === "Hallway," ||
-                    token === "TortureChamber," ||
-                    token === "AlchemyRoom," ||
-                    token === "OldRoom," ||
-                    token === "ThroneRoom,"
-                ) {
-                    return `[color=#0088ff]${token}[/color]`;
-                }
+                        // relative paths
+                        if (
+                            token === "../" ||
+                            token === "./" ||
+                            token.startsWith("../") ||
+                            token.startsWith("./")
+                        ) {
+                            return `[color=#0088ff]${token}[/color]`;
+                        }
 
-                // relative paths
-                if (
-                    token === "../" ||
-                    token === "./" ||
-                    token.startsWith("../") ||
-                    token.startsWith("./")
-                ) {
-                    return `[color=#0088ff]${token}[/color]`;
-                }
+                        // generic files
+                        if (/\.[a-zA-Z0-9]+$/i.test(token)) {
+                            return `[color=#ffffff]${token}[/color]`;
+                        }
 
-                // generic files
-                if (/\.[a-zA-Z0-9]+$/i.test(token)) {
-                    return `[color=#ffffff]${token}[/color]`;
-                }
+                        // paths
+                        if (token.includes("/") && /^[\w./-]+$/.test(token)) {
+                            return `[color=#0088ff]${token}[/color]`;
+                        }
 
-                // paths
-                if (token.includes("/") && /^[\w./-]+$/.test(token)) {
-                    return `[color=#0088ff]${token}[/color]`;
-                }
-
-                return `[color=#ffffff]${token}[/color]`;
+                        return `[color=#ffffff]${token}[/color]`;
+                    })
+                    .join(" ");
             })
-            .join(" ");
+            .join("\n");
     }
 
     update() {}
