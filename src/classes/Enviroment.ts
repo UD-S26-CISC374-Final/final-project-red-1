@@ -308,7 +308,34 @@ export class Enviroment {
                 default:
                     return "ERROR: Too many arguments. Please use the format 'cat [file1] [file2(optional)]";
             }
+        } else if (brokenUpCommand[0].includes(".exe")) {
+            //executables
+            if (brokenUpCommand.length !== 1) {
+                //obligatory "too many arguments"
+                return "ERROR: Too many arguments! You only need to type in the file path.";
+            }
+
+            const tempFile = this.nav.stringToFile(brokenUpCommand[0]);
+
+            if (tempFile instanceof File) {
+                //correct case
+                if (tempFile.isExe) {
+                    //file actually is an exe
+                    return "Meow"; //TEMP HANDLE. Here for testing purposes
+                } else {
+                    //This will technically never proc, but because of how the error handler works, I kind of have to have this here
+                    return "ERROR: File is not an .exe";
+                }
+            } else if (tempFile instanceof Folder) {
+                //another "only here because of how the error handler works." That and Im too lazy to copy and paste
+                //the error message from nav's stringToFile
+                return "ERROR";
+            } else {
+                //is an error message
+                return tempFile;
+            }
         }
-        return "ERROR: Command not found";
+
+        return "ERROR: Command not found"; //default case
     }
 }
