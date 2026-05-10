@@ -279,10 +279,16 @@ export class MainMenu extends Scene implements ChangeableScene {
     }
 
     formatLine(line: string): string {
-        const tokens = line.split(" ");
+        const tokens = line.split(/\s+/);
 
         return tokens
             .map((token) => {
+                // exe files
+                if (/\.exe\b/i.test(token)) {
+                    return `[color=#00ff00]${token}[/color]`;
+                }
+
+                // directories
                 if (
                     token === "Inventory" ||
                     token === "Jail" ||
@@ -292,25 +298,27 @@ export class MainMenu extends Scene implements ChangeableScene {
                     token === "OldRoom" ||
                     token === "ThroneRoom"
                 ) {
-                    return `[color=#4da3ff]${token}[/color]`;
-                } //the worlds most inelligant and brittle solution to a problem
+                    return `[color=#0088ff]${token}[/color]`;
+                }
 
+                // relative paths
                 if (
                     token === "../" ||
                     token === "./" ||
                     token.startsWith("../") ||
                     token.startsWith("./")
                 ) {
-                    return `[color=#4da3ff]${token}[/color]`;
+                    return `[color=#0088ff]${token}[/color]`;
                 }
 
-                // file detection
-                if (/\.[a-zA-Z0-9]+$/.test(token)) {
+                // generic files
+                if (/\.[a-zA-Z0-9]+$/i.test(token)) {
                     return `[color=#ffffff]${token}[/color]`;
                 }
 
+                // paths
                 if (token.includes("/") && /^[\w./-]+$/.test(token)) {
-                    return `[color=#4da3ff]${token}[/color]`;
+                    return `[color=#0088ff]${token}[/color]`;
                 }
 
                 return `[color=#ffffff]${token}[/color]`;
