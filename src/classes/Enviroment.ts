@@ -29,7 +29,7 @@ export function splitCommandPrompt(command: string): string[] {
 
 export class Enviroment {
     public nav: Navigator;
-    public Inventory: Folder;
+    //public Inventory: Folder;
 
     constructor() {
         //Root
@@ -159,7 +159,7 @@ export class Enviroment {
         this.nav = new Navigator(throneroom);*/
 
         //Blank Inventory
-        this.Inventory = new Folder("Inventory", this.nav.current);
+        //this.Inventory = new Folder("Inventory", this.nav.current);
     }
 
     /*
@@ -191,14 +191,13 @@ export class Enviroment {
             }
         } //Unlocks Hallway*/
         //^ Former Logic for the first puzzle^
-
-        if (this.nav.current.getChild("Inventory") !== -1) {
+        /*if (this.nav.current.getChild("Inventory") !== -1) {
             this.nav.current.removeChild("Inventory");
         }
 
         if (this.nav.current.name !== "Inventory") {
             this.nav.current.addChild(this.Inventory);
-        }
+        }*/
     }
 
     /*
@@ -256,13 +255,13 @@ export class Enviroment {
                 case 2: //case: "help" + a command. Prints that command's function
                     switch (brokenUpCommand[1]) {
                         case "cd":
-                            return "cd, or 'change directory', allows you to move between folders, or 'rooms'.\nIt should be noted, that if you move something to the Folder 'Inventory', the file will always be accessible, no matter where you are.\nYou can access a file in 'Inventory' by using the filepath 'Inventory/[file]'";
+                            return "cd, or 'change directory', allows you to move between folders, or 'rooms'.\n";
                         case "ls":
-                            return "ls, or  'list' allows you to see every single item in a folder.\nIf you just type 'ls', you will only be able to see the items in your current directory.\nIf you want to see the items in a different folder, you can use the format 'ls [path]'. For example, to see your inventory, type 'ls Inventory'.";
+                            return "ls, or  'list' allows you to see every single item in a folder.\nIf you just type 'ls', you will only be able to see the items in your current directory.\nIf you want to see the items in a different folder, you can use the format 'ls [path]'..";
                         case "help":
                             return "Displays available commands or detailed information about a specific command.";
                         case "mv":
-                            return "mv, or 'move', is a command that allows you to move files between folders via the format mv [file] [folder].\nIt should be noted, that if you move something to the Folder 'Inventory', the file will always be accessible, no matter where you are.\nYou can access a file in 'Inventory' by using the filepath 'Inventory/[file]'";
+                            return "mv, or 'move', is a command that allows you to move files between folders via the format mv [file] [folder].";
                         case "/.exe":
                             return "Executes an executable file.";
                         case "cat":
