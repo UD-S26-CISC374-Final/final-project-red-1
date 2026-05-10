@@ -345,6 +345,13 @@ export class Enviroment {
                 default:
                     return "ERROR: Too many arguments. Please use the format 'cat [file1] [file2(optional)]";
             }
+        } else if (brokenUpCommand[0] === "clear") {
+            //clear command
+            if (brokenUpCommand.length !== 1) {
+                return "ERROR: Too many arguments! You only need to type in the file path.";
+            }
+
+            return "Cleared entire screen!";
         } else if (brokenUpCommand[0].includes(".exe")) {
             //NOTE: Does not check whether or not ".exe" is at the end of the string
             //executables

@@ -231,6 +231,17 @@ export class MainMenu extends Scene implements ChangeableScene {
 
                 const value = this.currentInput.trim();
 
+                //clear command inputted
+                if (value === "clear") {
+                    this.outputLines = ["All Cleared!"];
+                    this.currentInput = "";
+                    inputElement.value = "";
+
+                    this.renderTerminal();
+
+                    return;
+                }
+
                 this.appendLine(this.prompt + value);
 
                 const output = this.env.update(value);
