@@ -355,6 +355,16 @@ export class Enviroment {
                     return "ERROR: Too few arguments. Please use the format 'mv [file/folder path] [folder path]'";
 
                 case 3: //case mv + 2 file paths
+                    if (
+                        this.nav.stringToFile(brokenUpCommand[1]) ===
+                            this.nav.stringToFile(brokenUpCommand[2]) &&
+                        typeof this.nav.stringToFile(brokenUpCommand[1]) !==
+                            "string"
+                    ) {
+                        //check if players trying to move a file into itself
+                        return "ERROR: Cannot move a Folder into itself";
+                    }
+
                     return this.nav.moveFile(
                         brokenUpCommand[1],
                         brokenUpCommand[2],
