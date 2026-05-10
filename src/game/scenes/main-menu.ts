@@ -13,7 +13,7 @@ export class MainMenu extends Scene implements ChangeableScene {
 
     env: Enviroment;
     lines: string[] = [];
-    maxLines: number = 43;
+    maxChars: number = 2000;
 
     textBoxText!: BBCodeText;
     cursorVisible: boolean = true;
@@ -22,6 +22,9 @@ export class MainMenu extends Scene implements ChangeableScene {
     outputLines: string[] = [];
     currentInput: string = "";
     prompt: string = "> ";
+
+    history: string[] = [];
+    historyIndex: number = -1;
 
     currentLevel: string = "Level1";
 
@@ -51,11 +54,19 @@ export class MainMenu extends Scene implements ChangeableScene {
     appendLine(line: string) {
         this.outputLines.push(line);
 
-        if (this.outputLines.length > this.maxLines) {
-            this.outputLines.shift();
-        }
-
         this.renderTerminal();
+
+        const lineHeight = 14;
+        const maxVisibleLines = 53;
+
+        while (
+            Math.floor(this.textBoxText.height / lineHeight) >
+                maxVisibleLines &&
+            this.outputLines.length > 0
+        ) {
+            this.outputLines.shift();
+            this.renderTerminal();
+        }
     }
 
     /*
@@ -179,6 +190,42 @@ export class MainMenu extends Scene implements ChangeableScene {
 
         // ENTER handling
         inputElement.addEventListener("keydown", (event: KeyboardEvent) => {
+            if (event.key === "ArrowUp") {
+                event.preventDefault();
+
+                if (this.history.length > 0) {
+                    if (this.historyIndex === -1) {
+                        this.historyIndex = this.history.length - 1;
+                    } else {
+                        this.historyIndex = Math.max(0, this.historyIndex - 1);
+                    }
+
+                    this.currentInput = this.history[this.historyIndex];
+                    inputElement.value = this.currentInput;
+                    this.renderTerminal();
+                }
+                return;
+            }
+
+            if (event.key === "ArrowDown") {
+                event.preventDefault();
+
+                if (this.historyIndex !== -1) {
+                    this.historyIndex++;
+
+                    if (this.historyIndex >= this.history.length) {
+                        this.historyIndex = -1;
+                        this.currentInput = "";
+                    } else {
+                        this.currentInput = this.history[this.historyIndex];
+                    }
+
+                    inputElement.value = this.currentInput;
+                    this.renderTerminal();
+                }
+                return;
+            }
+
             if (event.key === "Enter") {
                 event.preventDefault();
 
@@ -201,6 +248,12 @@ export class MainMenu extends Scene implements ChangeableScene {
                     this.scene.launch(targetScene);
                     this.currentLevel = targetScene;
                 }
+
+                if (value.length > 0) {
+                    this.history.push(value);
+                }
+
+                this.historyIndex = -1;
 
                 this.currentInput = "";
                 inputElement.value = "";
@@ -226,64 +279,51 @@ export class MainMenu extends Scene implements ChangeableScene {
     }
 
     formatLine(line: string): string {
-        const tokens = line.split(" ");
+        const tokens = line.split(/\s+/);
 
         return tokens
             .map((token) => {
-                // 1. relative paths (always blue)
+                // exe files
+                if (/\.exe\b/i.test(token)) {
+                    return `[color=#00ff00]${token}[/color]`;
+                }
+
+                // directories
+                if (
+                    token === "Inventory" ||
+                    token === "Jail" ||
+                    token === "Hallway" ||
+                    token === "TortureChamber" ||
+                    token === "AlchemyRoom" ||
+                    token === "OldRoom" ||
+                    token === "ThroneRoom"
+                ) {
+                    return `[color=#0088ff]${token}[/color]`;
+                }
+
+                // relative paths
                 if (
                     token === "../" ||
                     token === "./" ||
-                    token === ".." ||
-                    token === "."
+                    token.startsWith("../") ||
+                    token.startsWith("./")
                 ) {
-                    return `[color=#4da3ff]${token}[/color]`;
+                    return `[color=#0088ff]${token}[/color]`;
                 }
 
-                // 2. file detection (has extension)
-                if (/\.[a-zA-Z0-9]+$/.test(token)) {
+                // generic files
+                if (/\.[a-zA-Z0-9]+$/i.test(token)) {
                     return `[color=#ffffff]${token}[/color]`;
                 }
 
-                // 3. folder detection (no dot, not command text)
-                // BUT we must be careful not to color normal words
-                if (this.isLikelyFolder(token)) {
-                    return `[color=#4da3ff]${token}[/color]`;
+                // paths
+                if (token.includes("/") && /^[\w./-]+$/.test(token)) {
+                    return `[color=#0088ff]${token}[/color]`;
                 }
 
-                // 4. everything else stays white
                 return `[color=#ffffff]${token}[/color]`;
             })
             .join(" ");
-    }
-
-    isLikelyFolder(token: string): boolean {
-        // ignore obvious non-path text
-        const blacklist = new Set([
-            "help",
-            "ls",
-            "cd",
-            "echo",
-            "Welcome!",
-            ">",
-        ]);
-
-        if (blacklist.has(token)) return false;
-
-        // ignore strings with punctuation or sentences
-        if (token.includes(" ") || token.includes(",")) return false;
-
-        // ignore files (already handled)
-        if (token.includes(".")) return false;
-
-        // treat navigation-like tokens as folders
-        const looksLikePath =
-            /^[a-zA-Z0-9_-]+$/.test(token) || // normal folder name
-            token.endsWith("/") || // explicit folder
-            token.startsWith("../") || // relative navigation
-            token.startsWith("./");
-
-        return looksLikePath;
     }
 
     update() {}
