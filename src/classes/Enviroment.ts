@@ -181,9 +181,7 @@ export class Enviroment {
         Output: N/A
     */
     private updateEnviromentState() {
-        const currentFolder = this.nav.current;
-
-        if (currentFolder.name === "Jail") {
+        /*if (currentFolder.name === "Jail") {
             if (
                 (currentFolder.getChild("BrokenCells.txt") !== -1 ||
                     this.Inventory.getChild("BrokenCells.txt") !== -1) &&
@@ -191,7 +189,8 @@ export class Enviroment {
             ) {
                 currentFolder.parent.acessible = true;
             }
-        } //Unlocks Hallway
+        } //Unlocks Hallway*/
+        //^ Former Logic for the first puzzle^
 
         if (this.nav.current.getChild("Inventory") !== -1) {
             this.nav.current.removeChild("Inventory");
@@ -200,6 +199,44 @@ export class Enviroment {
         if (this.nav.current.name !== "Inventory") {
             this.nav.current.addChild(this.Inventory);
         }
+    }
+
+    /*
+        Name: executeFile
+        Description: When given the name of an executible file, will then find what it should execute
+        Input: name (string): the name of the executible
+        Output: string: the output
+    */
+    private executeFile(name: string): string {
+        if (name === "Crowbar.exe") {
+            //activates crowbar text
+            if (this.nav.current.name === "Jail") {
+                if (!this.nav.current.acessible) {
+                    //oh wow you already used the bars
+                    return "...I dont think you need to bend these bars again, bucko.";
+                } else {
+                    //YAY IT WORKED!
+                    this.nav.current.removeChild("Cells.txt");
+                    new File(
+                        "BrokenCell",
+                        this.nav.current,
+                        false,
+                        "Mmmmm, bended metal. Something tells me that you can escape this room now.",
+                    );
+
+                    if (this.nav.current.parent !== null) {
+                        this.nav.current.parent.acessible = true;
+                    }
+
+                    return "With all of your strength and body mass, you push against the brittle bars, bending then enough to allow for your escape.\n\n You are now able to do 'cd ../' to escape the jail!";
+                }
+            } else {
+                //for some reason you used this in any other place but the jail
+                return "You look around to see if theres any pryable surfaces and it seems like there are none.";
+            }
+        }
+
+        return "Hi, this is just the default text"; //Default case incase the .exe file doesnt exist... somehow.
     }
 
     /*
@@ -309,6 +346,7 @@ export class Enviroment {
                     return "ERROR: Too many arguments. Please use the format 'cat [file1] [file2(optional)]";
             }
         } else if (brokenUpCommand[0].includes(".exe")) {
+            //NOTE: Does not check whether or not ".exe" is at the end of the string
             //executables
             if (brokenUpCommand.length !== 1) {
                 //obligatory "too many arguments"
@@ -321,7 +359,9 @@ export class Enviroment {
                 //correct case
                 if (tempFile.isExe) {
                     //file actually is an exe
-                    return "Meow"; //TEMP HANDLE. Here for testing purposes
+                    //return "Meow"; //TEMP HANDLE. Here for testing purposes
+
+                    return this.executeFile(tempFile.name);
                 } else {
                     //This will technically never proc, but because of how the error handler works, I kind of have to have this here
                     return "ERROR: File is not an .exe";
@@ -331,7 +371,7 @@ export class Enviroment {
                 //the error message from nav's stringToFile
                 return "ERROR";
             } else {
-                //is an error message
+                //is an error message/string
                 return tempFile;
             }
         }
