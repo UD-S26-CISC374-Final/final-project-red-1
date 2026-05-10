@@ -43,28 +43,17 @@ export class Enviroment {
         //Jail/Level1
         const jail = new Folder("Jail", hallway);
         new File(
-            "Crowbar",
-            jail,
-            true,
-            "Oh, a crowbar! Really hope this things half-life hasnt passed. If only I could use it on something...",
-        );
-        new File(
             "Cells",
             jail,
             false,
             "These cells are really hard to break. If I could maybe bend them, I could get out of this cell.",
+            false,
         );
         new File(
-            "Stick",
+            "Dirt",
             jail,
             false,
-            "An inconspicuous stick that wishes to be combined with something.",
-        );
-        new File(
-            "Flint",
-            jail,
-            false,
-            "A pointy rock that wishes to be combined with something.",
+            "Seems this pile was made hastily in order to conceal something.",
         );
         new Folder("Hole", jail);
 
@@ -182,9 +171,7 @@ export class Enviroment {
         Output: string: see runCommand for more details, but the jist is that it will return either user input or an error
     */
     public update(command: string): string {
-        this.updateEnviromentState();
-
-        return this.runCommand(command);
+        return this.runCommand(command) + this.updateEnviromentState();
     }
 
     /*
@@ -193,17 +180,11 @@ export class Enviroment {
         Input: N/A
         Output: N/A
     */
-    private updateEnviromentState() {
-        /*if (currentFolder.name === "Jail") {
-            if (
-                (currentFolder.getChild("BrokenCells.txt") !== -1 ||
-                    this.Inventory.getChild("BrokenCells.txt") !== -1) &&
-                currentFolder.parent !== null
-            ) {
-                currentFolder.parent.acessible = true;
-            }
-        } //Unlocks Hallway*/
+    private updateEnviromentState(): string {
+        const currentFolder = this.nav.current;
+
         //^ Former Logic for the first puzzle^
+
         /*if (this.nav.current.getChild("Inventory") !== -1) {
             this.nav.current.removeChild("Inventory");
         }
@@ -211,6 +192,39 @@ export class Enviroment {
         if (this.nav.current.name !== "Inventory") {
             this.nav.current.addChild(this.Inventory);
         }*/
+
+        // LEVEL 1 LOGIC
+        if (currentFolder.name === "Jail") {
+            const Hole = currentFolder.getChildAsFile("Hole");
+
+            if (Hole instanceof File) {
+                return "\nERROR";
+            } //will always be true
+
+            if (Hole?.getChild("Dirt.txt") !== -1) {
+                new File(
+                    "Crow",
+                    currentFolder,
+                    false,
+                    "A member of the corvidae family that is nevermore- oh its just half of a crowbar. You should combine it with its sibling.",
+                );
+
+                new File(
+                    "Bar",
+                    currentFolder,
+                    false,
+                    "A nutrient dense blend of soybeans, lint, and leafy greens- oh its just half of a crowbar. You should combine it with its sibling.",
+                );
+
+                return "\nIt seems like there was something underneath the dirt...";
+            } //Did you push the dirt in the hole?
+
+            if (Hole.getChild("Crowbar.exe") !== -1) {
+                return "\n...you put it in the hole didnt you?";
+            }
+        }
+
+        return "";
     }
 
     /*
