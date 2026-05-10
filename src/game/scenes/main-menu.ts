@@ -312,6 +312,19 @@ export class MainMenu extends Scene implements ChangeableScene {
                     return `[color=#0088ff]${token}[/color]`;
                 }
 
+                // Hi. I'm leif. I know I can do something better than this. I'm lazy. Let me have this.
+                if (
+                    token === "Jail," ||
+                    token === "Hole," ||
+                    token === "Hallway," ||
+                    token === "TortureChamber," ||
+                    token === "AlchemyRoom," ||
+                    token === "OldRoom," ||
+                    token === "ThroneRoom,"
+                ) {
+                    return `[color=#0088ff]${token}[/color]`;
+                }
+
                 // relative paths
                 if (
                     token === "../" ||

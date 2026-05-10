@@ -31,6 +31,9 @@ export class Enviroment {
     public nav: Navigator;
     //public Inventory: Folder;
 
+    private moveDirt = false;
+    private getCrowbar = false;
+
     constructor() {
         //Root
         const folderRoot = new Folder("Root", null, false);
@@ -201,7 +204,7 @@ export class Enviroment {
                 return "\nERROR";
             } //will always be true
 
-            if (Hole?.getChild("Dirt.txt") !== -1) {
+            if (Hole?.getChild("Dirt.txt") !== -1 && !this.moveDirt) {
                 new File(
                     "Crow",
                     currentFolder,
@@ -215,11 +218,12 @@ export class Enviroment {
                     false,
                     "A nutrient dense blend of soybeans, lint, and leafy greens- oh its just half of a crowbar. You should combine it with its sibling.",
                 );
-
+                this.moveDirt = true;
                 return "\nIt seems like there was something underneath the dirt...";
             } //Did you push the dirt in the hole?
 
-            if (Hole.getChild("Crowbar.exe") !== -1) {
+            if (Hole?.getChild("Crowbar.exe") !== -1 && !this.getCrowbar) {
+                this.getCrowbar = true;
                 return "\n...you put it in the hole didnt you?";
             }
         }
