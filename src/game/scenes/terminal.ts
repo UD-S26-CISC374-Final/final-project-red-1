@@ -101,7 +101,7 @@ export class Terminal extends Scene implements ChangeableScene {
             fontSize: "12px",
             fontFamily: "Courier New",
             color: "#ffffff",
-            lineSpacing: 4,
+            lineSpacing: 6,
 
             wrap: {
                 mode: "word",
@@ -129,10 +129,10 @@ export class Terminal extends Scene implements ChangeableScene {
             text: terminalText,
 
             space: {
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10,
+                left: 15,
+                right: 15,
+                top: 20,
+                bottom: 20,
             },
         });
 
@@ -159,6 +159,7 @@ export class Terminal extends Scene implements ChangeableScene {
             color: "transparent",
             border: "none",
             outline: "none",
+            padding: "15px",
         });
 
         const inputElement = input.node as HTMLInputElement;
