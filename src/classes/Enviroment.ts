@@ -279,12 +279,12 @@ export class Enviroment {
                     return "ERROR: Too few arguments. Please use the following format: cd [filepath]";
 
                 case 2: //case: both the command and the file path were inputted
-                    if (brokenUpCommand[1] === "Inventory") {
+                    /*if (brokenUpCommand[1] === "Inventory") {
                         //error handling for moving into inventory
                         return "ERROR: Cannot move into inventory.";
-                    } else {
-                        return this.nav.travelTo(brokenUpCommand[1]);
-                    }
+                    } else {*/
+                    return this.nav.travelTo(brokenUpCommand[1]);
+                //}
 
                 default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: cd [filepath]";
