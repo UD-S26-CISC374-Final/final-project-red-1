@@ -19,6 +19,7 @@ function mergeFiles(fileA: File, fileB: File, index: number) {
             moveToFolder,
             true,
             "Oh, a crowbar! Really hope this things half-life hasnt passed. If only I could use it on something...",
+            true,
         ),
     ];
 

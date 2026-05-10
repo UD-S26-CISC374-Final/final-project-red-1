@@ -8,7 +8,7 @@ export class File {
 
     isExe?: boolean;
     description?: string;
-    canBeMoved?: boolean = true;
+    canBeMoved: boolean = true;
 
     constructor(n: string, pF: Folder, e?: boolean, d?: string, c?: boolean) {
         this.isExe = e;
@@ -22,7 +22,11 @@ export class File {
         this.parent.addChild(this);
         this.path = this.setPath();
         this.description = d;
-        this.canBeMoved = c;
+        if (c) {
+            this.canBeMoved = c;
+        } else {
+            this.canBeMoved = true;
+        }
 
         this.height = this.parent.height + 1;
     }
