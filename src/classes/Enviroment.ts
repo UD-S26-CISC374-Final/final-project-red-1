@@ -251,7 +251,7 @@ export class Enviroment {
         if (brokenUpCommand[0] === "help") {
             switch (brokenUpCommand.length) {
                 case 1: //case: just "help". Prints all commands
-                    return "Available commands:\n cd: changes directory to the specified folder indicated in blue.\nls: lists all of the contents of the current directory you are in\nhelp: displays either general descriptions of commands\nmv: moves a file to a given directory\ncat: will either display the contents of a text file, or combine two text files together.\n\nIf you want a more detailed description of a given command, please type help [command you want the description of].";
+                    return "Available commands:\n cd: changes directory to the specified folder indicated in blue.\nls: lists all of the contents of the current directory you are in\nhelp: displays either general descriptions of commands\nmv: moves a file to a given directory\ncat: will either display the contents of a text file, or combine two text files together.\n[file].exe: executes a given executable file\nclear: clears the terminal screen\npwd: prints your current location\n\nIf you want a more detailed description of a given command, please type help [command you want the description of].";
                 case 2: //case: "help" + a command. Prints that command's function
                     switch (brokenUpCommand[1]) {
                         case "cd":
@@ -266,6 +266,10 @@ export class Enviroment {
                             return "Executes an executable file.";
                         case "cat":
                             return "cat, or 'concatenate', is a command that is used exclusively for text files, or files labeled with .txt.\n\nWhen used in the format: cat [file], the description of the text file will be presented.\nWhen used in the format: cat [file1] [file2], both of the text files will be combined into a new item, only if they are able to, however. NOTE: This is permenant.";
+                        case "clear":
+                            return "Clears the entire terminal screen.";
+                        case "pwd":
+                            return "Stands for 'print working directory.' Prints your current room location as a file path.";
                         default:
                             return "Command not found.";
                     }
@@ -380,6 +384,13 @@ export class Enviroment {
                 //is an error message/string
                 return tempFile;
             }
+        } else if (brokenUpCommand[0] === "pwd") {
+            if (brokenUpCommand.length !== 1) {
+                //obligatory "too many arguments"
+                return "ERROR: Too many arguments! You only need to type in the file path.";
+            }
+
+            return "Your current location is:" + this.nav.current.path;
         }
 
         return "ERROR: Command not found"; //default case
