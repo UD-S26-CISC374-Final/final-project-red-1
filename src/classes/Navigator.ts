@@ -150,6 +150,14 @@ export class Navigator {
             oldParent.removeChild(childFile.name);
             parentFile.addChild(childFile);
 
+            if (!childFile.canBeMoved) {
+                return (
+                    "ERROR: The File " +
+                    childFile.name +
+                    " is unable to be moved."
+                );
+            }
+
             return (
                 "Sucessfully moved the file " +
                 childFile.name +
