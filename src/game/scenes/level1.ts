@@ -8,7 +8,8 @@ export class Level1 extends Scene {
     background: Phaser.GameObjects.Image;
     fpsText: FpsText;
     private dirt: Phaser.Physics.Arcade.StaticGroup;
-    private shovel: Phaser.Physics.Arcade.Image;
+    private stick: Phaser.Physics.Arcade.Image;
+    private rock: Phaser.Physics.Arcade.Image;
     private wall: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
     private crowbarhalf1: Phaser.Physics.Arcade.Image;
@@ -20,8 +21,10 @@ export class Level1 extends Scene {
     private hashalf1: boolean;
     private hashalf2: boolean;
     private createdbar: boolean;
-    private hasShovel: boolean;
+    private createdshovel: boolean;
     private digging: boolean;
+    private acquirerock: boolean;
+    private acquirestick: boolean;
 
     constructor() {
         super("Level1");
@@ -121,10 +124,15 @@ export class Level1 extends Scene {
             720,
             "CrowbarHalf2.exe",
         ) as Phaser.Physics.Arcade.Image;
-        this.shovel = this.add.image(
+        this.stick = this.add.image(
             100,
             600,
-            "shovel",
+            "stick",
+        ) as Phaser.Physics.Arcade.Image;
+        this.rock = this.add.image(
+            150,
+            600,
+            "rock",
         ) as Phaser.Physics.Arcade.Image;
         this.player = this.physics.add.sprite(200, 619, "player");
 
@@ -147,19 +155,36 @@ export class Level1 extends Scene {
             this,
         );
         this.physics.add.collider(this.player, this.prisoncells);
-        this.physics.add.collider(this.player, this.shovel);
+        this.physics.add.collider(this.player, this.rock);
         this.physics.add.overlap(
             this.player,
-            this.shovel,
-            this.acquireShovel.bind(this),
+            this.rock,
+            this.getRock.bind(this),
             undefined,
             this,
         );
-        this.physics.add.collider(this.shovel, this.dirt);
+        this.physics.add.collider(this.player, this.stick);
         this.physics.add.overlap(
-            this.shovel,
+            this.player,
+            this.stick,
+            this.getStick.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.collider(this.player, this.dirt);
+        this.physics.add.overlap(
+            this.player,
             this.dirt,
             this.digDirt.bind(this),
+            undefined,
+            this,
+        );
+
+        this.physics.add.collider(this.stick, this.rock);
+        this.physics.add.overlap(
+            this.stick,
+            this.rock,
+            this.createShovel.bind(this),
             undefined,
             this,
         );
@@ -200,14 +225,28 @@ export class Level1 extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
-    private acquireShovel() {
-        if (!this.hasShovel) {
-            this.hasShovel = true;
+    private getRock() {
+        if (!this.acquirerock) {
+            this.acquirerock = true;
+        }
+    }
+
+    private getStick() {
+        if (!this.acquirestick) {
+            this.acquirestick = true;
+        }
+    }
+
+    private createShovel() {
+        if (!this.acquirerock || !this.acquirestick) {
+            this.createdshovel = false;
+        } else {
+            this.createdshovel = true;
         }
     }
 
     private digDirt() {
-        if (!this.hasShovel) {
+        if (!this.createdshovel) {
             this.digging = false;
         } else {
             this.digging = true;

@@ -43,7 +43,7 @@ export class Enviroment {
         //Jail/Level1
         const jail = new Folder("Jail", hallway);
         const crowbar = new Folder("Crowbar", jail);
-        const dig = new Folder("dig", jail);
+        const dig = new Folder("Dig", jail);
         new File(
             "Stick",
             dig,
