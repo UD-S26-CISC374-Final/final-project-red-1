@@ -194,22 +194,23 @@ export class Enviroment {
         const throneroom = new Folder("ThroneRoom", hallway);
         new File("Throne", throneroom, false, "Your rightful throne as king");
         new File(
-            "Clock",
+            "Picture",
             throneroom,
             false,
-            "It's a clock, mocking you. Tick tick, you're done!",
+            "Just looks like something that isn't necessary.",
         );
         new File(
-            "Torches",
+            "Motion Sensor",
             throneroom,
             false,
-            "Torch the throne room. It's yours, but, whatever.",
+            "What a shame. It doesn't recognize you in your withered state. Who knows what it will recognize.",
         );
         new File("Hammer", throneroom, false, "Escape with the hammer");
+        new File("Elevator", throneroom, false, "The elevator to liberty!!!");
 
         //Secret//
 
-        const secret = new Folder("BossBattle", hallway);
+        const secret = new Folder("Secret", hallway);
         const bart = new Folder("Bart", secret);
         new File("Shoes", bart, false, "New shoes...that you will take back");
         new File("Wand", bart, false, "A wand...like magic!!!");
