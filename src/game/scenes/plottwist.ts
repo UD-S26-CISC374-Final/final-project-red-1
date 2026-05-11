@@ -1,4 +1,4 @@
-/*import { EventBus } from "../event-bus";
+import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 
 export class PlotTwist extends Scene {
@@ -84,4 +84,4 @@ export class PlotTwist extends Scene {
             this.scene.start("Secret");
         }
     }
-} */
+}

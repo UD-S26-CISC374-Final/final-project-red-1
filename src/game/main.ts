@@ -6,11 +6,11 @@ import { Level2 as Level2Game } from "./scenes/level2";
 import { Level3 as Level3Game } from "./scenes/level3";
 import { Level4 as Level4Game } from "./scenes/level4";
 import { Level5 as Level5Game } from "./scenes/level5";
-/* import { PlotTwist } from "./scenes/plottwist";
-import { Secret } from "./scenes/secret"; */
+import { PlotTwist } from "./scenes/plottwist";
+import { Secret } from "./scenes/secret";
 import { Win } from "./scenes/win";
 
-import { MainMenu } from "./scenes/main-menu";
+import { MainMenu } from "./scenes/terminal";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/preloader";
 import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
@@ -40,8 +40,8 @@ const config: Phaser.Types.Core.GameConfig = {
         Level3Game,
         Level4Game,
         Level5Game,
-        /*PlotTwist,
-        Secret, */
+        PlotTwist,
+        Secret,
         Win,
         GameOver,
     ],

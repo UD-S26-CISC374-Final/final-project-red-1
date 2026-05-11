@@ -43,7 +43,7 @@ export class Enviroment {
         //Jail/Level1
         const jail = new Folder("Jail", hallway);
         new File(
-            "Crowbar",
+            "CrowbarHalf1.exe",
             jail,
             true,
             "Oh, a crowbar! Really hope this things half-life hasnt passed. If only I could use it on something...",
@@ -93,7 +93,7 @@ export class Enviroment {
         //OldRoom/Level4
 
         const oldroom = new Folder("OldRoom", hallway);
-        new File("Water", oldroom, false, "It's water. Wet like Steph");
+        new File("Water", oldroom, false, "It's water. Wet");
         new File(
             "Bucket",
             oldroom,
