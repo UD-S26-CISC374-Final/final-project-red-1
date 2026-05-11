@@ -18,6 +18,7 @@ export class Level4 extends Scene {
     private vent: Phaser.GameObjects.Image;
     private stick: Phaser.GameObjects.Image;
     private rock: Phaser.GameObjects.Image;
+    private door: Phaser.GameObjects.Image;
     private garage: Phaser.GameObjects.Image;
 
     private hasRake: boolean;
@@ -30,6 +31,8 @@ export class Level4 extends Scene {
     private hasStick: boolean;
     private hasRock: boolean;
     private createdHammer: boolean;
+    private knockDoor: boolean;
+    private accessgarage: boolean;
     private throneroom: boolean;
 
     constructor() {
@@ -58,6 +61,12 @@ export class Level4 extends Scene {
         this.physics.add.collider(this.player, this.boxes);
         this.physics.add.collider(this.player, this.bucket);
         this.physics.add.collider(this.player, this.wrench);
+        this.physics.add.collider(this.player, this.vent);
+        this.physics.add.collider(this.player, this.stick);
+        this.physics.add.collider(this.player, this.rock);
+        this.physics.add.collider(this.rock, this.stick);
+        this.physics.add.collider(this.player, this.door);
+        this.physics.add.collider(this.player, this.garage);
         this.physics.add.overlap(
             this.player,
             this.cobwebs,
@@ -90,6 +99,48 @@ export class Level4 extends Scene {
             this.player,
             this.wrench,
             this.acquireWrench.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.vent,
+            this.openVent.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.rock,
+            this.collectRock.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.stick,
+            this.collectStick.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.rock,
+            this.stick,
+            this.constructHammer.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.door,
+            this.breakDoor.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.garage,
+            this.accessGarage.bind(this),
             undefined,
             this,
         );
@@ -187,7 +238,27 @@ export class Level4 extends Scene {
         }
     }
 
-    private accessGarage() {}
+    private breakDoor() {
+        if (!this.createdHammer) {
+            this.knockDoor = false;
+        }
+        if (this.createdHammer && !this.knockDoor) {
+            this.knockDoor = true;
+        }
+    }
+    private accessGarage() {
+        if (!this.knockDoor) {
+            this.accessgarage = false;
+        }
+        if (this.knockDoor && !this.accessgarage) {
+            this.accessgarage = true;
+        } else {
+            this.accessgarage = false;
+        }
+        if (this.accessgarage) {
+            this.throneroom = true;
+        }
+    }
 
     update() {
         this.fpsText.update();

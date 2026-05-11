@@ -32,6 +32,7 @@ export class Level2 extends Scene {
     private transitioning = false;
     private metalchopped: boolean;
     private openCabinet: boolean;
+    private hasMetal: boolean;
     private brokeBoxes: boolean;
     private pressedButton: boolean;
     private accessSlide: boolean;
@@ -88,6 +89,11 @@ export class Level2 extends Scene {
         this.guillotine = this.physics.add.group({ allowGravity: false });
         this.guillotine.create(800, 600, "guillotine");
 
+        this.boxes = this.physics.add.staticGroup();
+        this.boxes.create(500, 700, "boxes");
+        this.boxes.create(500, 650, "boxes");
+        this.boxes.create(500, 600, "boxes");
+
         // COLLIDERS
         this.physics.add.collider(this.player, this.chain);
         this.physics.add.collider(this.player, this.lever);
@@ -95,6 +101,10 @@ export class Level2 extends Scene {
         this.physics.add.collider(this.guillotine, this.ground);
         this.physics.add.collider(this.player, this.button);
         this.physics.add.collider(this.guillotine, this.metal);
+        this.physics.add.collider(this.player, this.cabinet);
+        this.physics.add.collider(this.player, this.metal);
+        this.physics.add.collider(this.player, this.boxes);
+        this.physics.add.collider(this.player, this.slide);
 
         // OVERLAPS
         this.physics.add.overlap(
@@ -125,7 +135,48 @@ export class Level2 extends Scene {
             undefined,
             this,
         );
-
+        this.physics.add.overlap(
+            this.metal,
+            this.guillotine,
+            this.metalChopped.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.cabinet,
+            this.cabinetOpened.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.metal,
+            this.collectMetal.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.boxes,
+            this.destroyBoxes.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.button,
+            this.pressButton.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.slide,
+            this.Slide.bind(this),
+            undefined,
+            this,
+        );
         this.fpsText = new FpsText(this);
         EventBus.emit("current-scene-ready", this);
     }
@@ -155,9 +206,11 @@ export class Level2 extends Scene {
     };
 
     private guillotineWorking = () => {
-        if (this.guillotineActive) {
-            console.log("Avoided guillotine!");
-            return;
+        if (
+            this.guillotineActive &&
+            this.physics.overlap(this.player, this.guillotine)
+        ) {
+            this.scene.start("Level2");
         }
 
         if (
@@ -174,14 +227,60 @@ export class Level2 extends Scene {
         }
     };
 
+    private cabinetOpened() {
+        if (!this.openCabinet) {
+            this.openCabinet = true;
+        }
+    }
+
+    private collectMetal() {
+        if (!this.openCabinet) {
+            this.hasMetal = false;
+        }
+        if (this.openCabinet && !this.hasMetal) {
+            this.hasMetal = true;
+        }
+    }
+
     private metalChopped() {
-        if (!this.guillotineActive) {
+        if (!this.guillotineActive || !this.hasMetal) {
             this.metalchopped = false;
         } else {
             this.metalchopped = true;
         }
     }
 
+    private destroyBoxes() {
+        if (!this.metalchopped) {
+            this.brokeBoxes = false;
+        }
+        if (this.metalchopped && !this.brokeBoxes) {
+            this.brokeBoxes = true;
+        }
+    }
+
+    private pressButton() {
+        if (!this.brokeBoxes) {
+            this.pressedButton = false;
+        }
+        if (this.brokeBoxes && !this.pressedButton) {
+            this.pressedButton = true;
+        }
+    }
+
+    private Slide() {
+        if (!this.pressedButton) {
+            this.accessSlide = false;
+        }
+        if (this.pressedButton && !this.accessSlide) {
+            this.accessSlide = true;
+        } else {
+            this.accessSlide = false;
+        }
+        if (this.accessSlide) {
+            this.alchemyLab = true;
+        }
+    }
     update() {
         this.fpsText.update();
     }

@@ -16,7 +16,7 @@ export class Level3 extends Scene {
     private player: Phaser.Physics.Arcade.Sprite;
     private flasks: Phaser.Physics.Arcade.StaticGroup;
     private chemicals: Phaser.Physics.Arcade.StaticGroup;
-    private wall: Phaser.Physics.Arcade.Image;
+    private wall: Phaser.Physics.Arcade.StaticGroup;
     private hasFlasks: boolean;
     private hasChemicals: boolean;
     private chemicalsneutral: boolean;
@@ -84,6 +84,12 @@ export class Level3 extends Scene {
         this.chemicals.create(200, 600, "chemicals");
         this.chemicals.create(200, 550, "chemicals");
         this.chemicals.create(250, 550, "chemicals");
+        this.wall = this.physics.add.staticGroup();
+        this.wall.create(400, 550, "wall");
+        this.wall.create(400, 600, "wall");
+        this.wall.create(400, 650, "wall");
+        this.wall.create(400, 625, "wall");
+        this.wall.create(400, 575, "wall");
         this.physics.add.collider(this.player, this.flasks);
         this.physics.add.collider(this.player, this.chemicals);
         this.physics.add.collider(this.flasks, this.chemicals);
@@ -121,6 +127,20 @@ export class Level3 extends Scene {
             this.player,
             this.door,
             this.handleDoor.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.overlap(
+            this.player,
+            this.wall,
+            this.breakWall.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.overlap(
+            this.player,
+            this.chemicals,
+            this.neutralTimer.bind(this),
             undefined,
             this,
         );
@@ -181,6 +201,9 @@ export class Level3 extends Scene {
         }
     }
     private chemicalKey() {
+        if (!this.brokeWall) {
+            this.seeKey = false;
+        }
         if (!this.acidpoured || !this.chemicalspoured || !this.basepoured) {
             this.seeKey = false;
         }
