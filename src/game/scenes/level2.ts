@@ -6,6 +6,7 @@ export class Level2 extends Scene {
     camera!: Phaser.Cameras.Scene2D.Camera;
     background!: Phaser.GameObjects.Image;
     fpsText!: FpsText;
+    minimap: Phaser.Cameras.Scene2D.Camera;
 
     private ground!: Phaser.Physics.Arcade.StaticGroup;
     private player!: Phaser.Physics.Arcade.Sprite;
@@ -29,6 +30,11 @@ export class Level2 extends Scene {
     private guillotineActive = false;
     private alchemyLab = false;
     private transitioning = false;
+    private metalchopped: boolean;
+    private openCabinet: boolean;
+    private brokeBoxes: boolean;
+    private pressedButton: boolean;
+    private accessSlide: boolean;
 
     constructor() {
         super("Level2");
@@ -38,6 +44,13 @@ export class Level2 extends Scene {
         // CAMERA
         this.cameras.main.setViewport(0, 0, 514, 768);
         this.cameras.main.setBackgroundColor("#808080");
+
+        // MINIMAP
+        this.minimap = this.cameras
+            .add(0, 0, 150, 150)
+            .setZoom(0.2)
+            .setName("minimap");
+        this.minimap.setBackgroundColor("#999900");
 
         // BACKGROUND
         this.add.image(400, 400, "torture");
@@ -80,6 +93,8 @@ export class Level2 extends Scene {
         this.physics.add.collider(this.player, this.lever);
         this.physics.add.collider(this.player, this.gloves);
         this.physics.add.collider(this.guillotine, this.ground);
+        this.physics.add.collider(this.player, this.button);
+        this.physics.add.collider(this.guillotine, this.metal);
 
         // OVERLAPS
         this.physics.add.overlap(
@@ -158,6 +173,14 @@ export class Level2 extends Scene {
             });
         }
     };
+
+    private metalChopped() {
+        if (!this.guillotineActive) {
+            this.metalchopped = false;
+        } else {
+            this.metalchopped = true;
+        }
+    }
 
     update() {
         this.fpsText.update();

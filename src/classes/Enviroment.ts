@@ -104,6 +104,12 @@ export class Enviroment {
         );
         new File("Boxes", boxes, false, "These are just boxes.");
         new File("Button", boxes, false, "Where could these buttons be?");
+        new File(
+            "Slide",
+            torture,
+            false,
+            "What is this, preschool? A slide to get out...imposible!",
+        );
 
         //AlchemyRoom/Level3
         const alchemy = new Folder("AlchemyRoom", hallway);
