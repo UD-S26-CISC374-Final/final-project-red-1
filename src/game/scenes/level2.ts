@@ -6,6 +6,7 @@ export class Level2 extends Scene {
     camera!: Phaser.Cameras.Scene2D.Camera;
     background!: Phaser.GameObjects.Image;
     fpsText!: FpsText;
+    minimap: Phaser.Cameras.Scene2D.Camera;
 
     private ground!: Phaser.Physics.Arcade.StaticGroup;
     private player!: Phaser.Physics.Arcade.Sprite;
@@ -16,12 +17,25 @@ export class Level2 extends Scene {
     private gloves!: Phaser.Physics.Arcade.StaticGroup;
     private guillotine!: Phaser.Physics.Arcade.Group;
 
+    private metal!: Phaser.Physics.Arcade.Group;
+    private boxes!: Phaser.Physics.Arcade.StaticGroup;
+
+    private cabinet!: Phaser.Physics.Arcade.Image;
+    private button!: Phaser.Physics.Arcade.Image;
+    private slide!: Phaser.Physics.Arcade.Image;
+
     private hasChain = false;
     private hasGloves = false;
     private leverPulled = false;
     private guillotineActive = false;
     private alchemyLab = false;
     private transitioning = false;
+    private metalchopped: boolean;
+    private openCabinet: boolean;
+    private hasMetal: boolean;
+    private brokeBoxes: boolean;
+    private pressedButton: boolean;
+    private accessSlide: boolean;
 
     constructor() {
         super("Level2");
@@ -31,6 +45,13 @@ export class Level2 extends Scene {
         // CAMERA
         this.cameras.main.setViewport(0, 0, 514, 768);
         this.cameras.main.setBackgroundColor("#808080");
+
+        // MINIMAP
+        this.minimap = this.cameras
+            .add(0, 0, 150, 150)
+            .setZoom(0.2)
+            .setName("minimap");
+        this.minimap.setBackgroundColor("#999900");
 
         // BACKGROUND
         this.add.image(400, 400, "torture");
@@ -68,10 +89,22 @@ export class Level2 extends Scene {
         this.guillotine = this.physics.add.group({ allowGravity: false });
         this.guillotine.create(800, 600, "guillotine");
 
+        this.boxes = this.physics.add.staticGroup();
+        this.boxes.create(500, 700, "boxes");
+        this.boxes.create(500, 650, "boxes");
+        this.boxes.create(500, 600, "boxes");
+
         // COLLIDERS
         this.physics.add.collider(this.player, this.chain);
         this.physics.add.collider(this.player, this.lever);
         this.physics.add.collider(this.player, this.gloves);
+        this.physics.add.collider(this.guillotine, this.ground);
+        this.physics.add.collider(this.player, this.button);
+        this.physics.add.collider(this.guillotine, this.metal);
+        this.physics.add.collider(this.player, this.cabinet);
+        this.physics.add.collider(this.player, this.metal);
+        this.physics.add.collider(this.player, this.boxes);
+        this.physics.add.collider(this.player, this.slide);
 
         // OVERLAPS
         this.physics.add.overlap(
@@ -102,7 +135,48 @@ export class Level2 extends Scene {
             undefined,
             this,
         );
-
+        this.physics.add.overlap(
+            this.metal,
+            this.guillotine,
+            this.metalChopped.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.cabinet,
+            this.cabinetOpened.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.metal,
+            this.collectMetal.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.boxes,
+            this.destroyBoxes.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.button,
+            this.pressButton.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.slide,
+            this.Slide.bind(this),
+            undefined,
+            this,
+        );
         this.fpsText = new FpsText(this);
         EventBus.emit("current-scene-ready", this);
     }
@@ -132,9 +206,11 @@ export class Level2 extends Scene {
     };
 
     private guillotineWorking = () => {
-        if (this.guillotineActive) {
-            console.log("Avoided guillotine!");
-            return;
+        if (
+            this.guillotineActive &&
+            this.physics.overlap(this.player, this.guillotine)
+        ) {
+            this.scene.start("Level2");
         }
 
         if (
@@ -151,6 +227,60 @@ export class Level2 extends Scene {
         }
     };
 
+    private cabinetOpened() {
+        if (!this.openCabinet) {
+            this.openCabinet = true;
+        }
+    }
+
+    private collectMetal() {
+        if (!this.openCabinet) {
+            this.hasMetal = false;
+        }
+        if (this.openCabinet && !this.hasMetal) {
+            this.hasMetal = true;
+        }
+    }
+
+    private metalChopped() {
+        if (!this.guillotineActive || !this.hasMetal) {
+            this.metalchopped = false;
+        } else {
+            this.metalchopped = true;
+        }
+    }
+
+    private destroyBoxes() {
+        if (!this.metalchopped) {
+            this.brokeBoxes = false;
+        }
+        if (this.metalchopped && !this.brokeBoxes) {
+            this.brokeBoxes = true;
+        }
+    }
+
+    private pressButton() {
+        if (!this.brokeBoxes) {
+            this.pressedButton = false;
+        }
+        if (this.brokeBoxes && !this.pressedButton) {
+            this.pressedButton = true;
+        }
+    }
+
+    private Slide() {
+        if (!this.pressedButton) {
+            this.accessSlide = false;
+        }
+        if (this.pressedButton && !this.accessSlide) {
+            this.accessSlide = true;
+        } else {
+            this.accessSlide = false;
+        }
+        if (this.accessSlide) {
+            this.alchemyLab = true;
+        }
+    }
     update() {
         this.fpsText.update();
     }

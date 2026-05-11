@@ -1,4 +1,4 @@
-/*import { EventBus } from "../event-bus";
+import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 
 export class Secret extends Scene {
@@ -66,11 +66,23 @@ export class Secret extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
-    private handleWand() {}
+    private handleWand() {
+        if (!this.hasWand) {
+            this.hasWand = true;
+        }
+    }
 
-    private handleShoes() {}
+    private handleShoes() {
+        if (!this.hasShoes) {
+            this.hasShoes = true;
+        }
+    }
 
-    private handleCrown() {}
+    private handleCrown() {
+        if (!this.hasCrown) {
+            this.hasCrown = true;
+        }
+    }
 
     private openElevator() {
         if (this.hasShoes && this.hasWand && this.hasCrown) {
@@ -80,11 +92,13 @@ export class Secret extends Scene {
         }
     }
 
-    update() {}
+    update() {
+        this.fpsText.update();
+    }
 
     changeScene() {
         if (this.elevatorOpen) {
             this.scene.start("Win");
         }
     }
-} */
+}

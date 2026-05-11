@@ -10,20 +10,29 @@ export class Level4 extends Scene {
     phaserLogo: PhaserLogo;
     fpsText: FpsText;
     private player: Phaser.Physics.Arcade.Sprite;
-    private water: Phaser.Physics.Arcade.Group;
     private bucket: Phaser.GameObjects.Image;
     private cobwebs: Phaser.Physics.Arcade.Group;
     private rake: Phaser.GameObjects.Image;
     private boxes: Phaser.GameObjects.Image;
-    private buttons: Phaser.GameObjects.Image;
+    private wrench: Phaser.GameObjects.Image;
+    private vent: Phaser.GameObjects.Image;
+    private stick: Phaser.GameObjects.Image;
+    private rock: Phaser.GameObjects.Image;
+    private door: Phaser.GameObjects.Image;
+    private garage: Phaser.GameObjects.Image;
 
     private hasRake: boolean;
-    private hasWater: boolean;
     private hasBucket: boolean;
     private waterbucket: boolean;
     private cobwebsRemoved: boolean;
     private boxeslifted: boolean;
-    private buttonpressed: boolean;
+    private wrenchCollected: boolean;
+    private openedVent: boolean;
+    private hasStick: boolean;
+    private hasRock: boolean;
+    private createdHammer: boolean;
+    private knockDoor: boolean;
+    private accessgarage: boolean;
     private throneroom: boolean;
 
     constructor() {
@@ -42,8 +51,6 @@ export class Level4 extends Scene {
 
         this.player = this.physics.add.sprite(100, 700, "player");
         this.player.setCollideWorldBounds(true);
-        this.water = this.physics.add.group();
-        this.water.create(300, 700, "water");
         this.bucket = this.add.image(500, 700, "bucket");
         this.cobwebs = this.physics.add.group();
         this.cobwebs.create(700, 700, "cobwebs");
@@ -51,18 +58,15 @@ export class Level4 extends Scene {
         this.cobwebs.create(670, 700, "cobwebs");
         this.rake = this.add.image(450, 700, "rake");
         this.boxes = this.add.image(600, 700, "boxes");
-        this.buttons = this.add.image(800, 700, "buttons");
         this.physics.add.collider(this.player, this.boxes);
         this.physics.add.collider(this.player, this.bucket);
-        this.physics.add.collider(this.player, this.buttons);
-        this.physics.add.collider(this.water, this.bucket);
-        this.physics.add.overlap(
-            this.bucket,
-            this.water,
-            this.bucketandwatercombination.bind(this),
-            undefined,
-            this,
-        );
+        this.physics.add.collider(this.player, this.wrench);
+        this.physics.add.collider(this.player, this.vent);
+        this.physics.add.collider(this.player, this.stick);
+        this.physics.add.collider(this.player, this.rock);
+        this.physics.add.collider(this.rock, this.stick);
+        this.physics.add.collider(this.player, this.door);
+        this.physics.add.collider(this.player, this.garage);
         this.physics.add.overlap(
             this.player,
             this.cobwebs,
@@ -79,6 +83,13 @@ export class Level4 extends Scene {
         );
         this.physics.add.overlap(
             this.player,
+            this.bucket,
+            this.acquireBucket.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
             this.boxes,
             this.pushingBoxes.bind(this),
             undefined,
@@ -86,16 +97,58 @@ export class Level4 extends Scene {
         );
         this.physics.add.overlap(
             this.player,
-            this.buttons,
-            this.pressButton.bind(this),
+            this.wrench,
+            this.acquireWrench.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.vent,
+            this.openVent.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.rock,
+            this.collectRock.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.stick,
+            this.collectStick.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.rock,
+            this.stick,
+            this.constructHammer.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.door,
+            this.breakDoor.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.garage,
+            this.accessGarage.bind(this),
             undefined,
             this,
         );
         EventBus.emit("current-scene-ready", this);
     }
 
-    private bucketandwatercombination() {
-        if (!this.hasWater || !this.hasBucket) {
+    private acquireBucket() {
+        if (!this.hasBucket) {
             this.waterbucket = false;
         } else {
             this.waterbucket = true;
@@ -141,17 +194,68 @@ export class Level4 extends Scene {
         }
     }
 
-    private pressButton() {
+    private acquireWrench() {
         if (!this.boxeslifted) {
-            this.buttonpressed = false;
+            this.wrenchCollected = false;
         }
-        if (
-            this.boxeslifted &&
-            this.physics.overlap(this.player, this.buttons)
-        ) {
-            this.buttonpressed = true;
+        if (!this.wrenchCollected && this.boxeslifted) {
+            this.wrenchCollected = true;
         }
-        if (this.buttonpressed) {
+    }
+
+    private openVent() {
+        if (!this.wrenchCollected) {
+            this.openedVent = false;
+        }
+        if (!this.openedVent && this.wrenchCollected) {
+            this.openedVent = true;
+        }
+    }
+
+    private collectStick() {
+        if (!this.openedVent) {
+            this.hasStick = false;
+        }
+        if (this.openedVent && !this.hasStick) {
+            this.hasStick = true;
+        }
+    }
+
+    private collectRock() {
+        if (!this.openedVent) {
+            this.hasRock = false;
+        }
+        if (this.openedVent && !this.hasRock) {
+            this.hasRock = true;
+        }
+    }
+
+    private constructHammer() {
+        if (!this.hasStick || !this.hasRock) {
+            this.createdHammer = false;
+        } else {
+            this.createdHammer = true;
+        }
+    }
+
+    private breakDoor() {
+        if (!this.createdHammer) {
+            this.knockDoor = false;
+        }
+        if (this.createdHammer && !this.knockDoor) {
+            this.knockDoor = true;
+        }
+    }
+    private accessGarage() {
+        if (!this.knockDoor) {
+            this.accessgarage = false;
+        }
+        if (this.knockDoor && !this.accessgarage) {
+            this.accessgarage = true;
+        } else {
+            this.accessgarage = false;
+        }
+        if (this.accessgarage) {
             this.throneroom = true;
         }
     }
