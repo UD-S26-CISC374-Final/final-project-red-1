@@ -42,12 +42,34 @@ export class Enviroment {
 
         //Jail/Level1
         const jail = new Folder("Jail", hallway);
+        const crowbar = new Folder("Crowbar", jail);
+        const dig = new Folder("dig", jail);
+        new File(
+            "Stick",
+            dig,
+            true,
+            "It's just a stick. What could possibly be useful about a stick?",
+        );
+        new File(
+            "Rock",
+            dig,
+            true,
+            "A rock...that you shouldn't throw at people. That's just common sense, man.",
+        );
+        new File("Dirt", dig, true, "Mmmmm...dirt");
         new File(
             "CrowbarHalf1.exe",
-            jail,
+            crowbar,
             true,
-            "Oh, a crowbar! Really hope this things half-life hasnt passed. If only I could use it on something...",
+            "One-half of a crowbar. I wonder what the other half looks like?",
         );
+        new File(
+            "CrowbarHalf2.exe",
+            crowbar,
+            true,
+            "The other half of the crowbar. Put them together to get the full crowbar!",
+        );
+
         new File(
             "Cells",
             jail,
@@ -57,20 +79,38 @@ export class Enviroment {
 
         //Torture Chamber/Level2
         const torture = new Folder("TortureChamber", hallway);
+        const cabinet = new Folder("Cabinet", torture);
+        const boxes = new Folder("Boxes", torture);
         new File("Chain", torture, false, "Feel how hard the links are!");
         new File("Guillotine", torture, false, "This is so French!");
         new File(
             "Gloves",
-            torture,
+            cabinet,
             false,
             "Gloves...like the materials you use to protect your hands",
         );
         new File("Lever", torture, false, "Pull that lever");
+        new File(
+            "Metal",
+            cabinet,
+            false,
+            "It's metal...Shiny, like nicely polished shoes. Maybe you could create something out of this.",
+        );
+        new File(
+            "Cabinet",
+            cabinet,
+            false,
+            "What could this contain? Maybe a dead body...but probably not",
+        );
+        new File("Boxes", boxes, false, "These are just boxes.");
+        new File("Button", boxes, false, "Where could these buttons be?");
 
         //AlchemyRoom/Level3
         const alchemy = new Folder("AlchemyRoom", hallway);
-        new File("Flasks", alchemy, false, "These feel super hard");
-        new File("Chemicals", alchemy, false, "Oh...chemicals. Be careful now");
+        const potion = new Folder("Potion", alchemy);
+        new File("Flasks", potion, false, "These feel super hard");
+        new File("Chemicals", potion, false, "Oh...chemicals. Be careful now");
+        new File("Wall", alchemy, false, "Good luck getting past this...");
         new File(
             "Switch",
             alchemy,
@@ -93,12 +133,12 @@ export class Enviroment {
         //OldRoom/Level4
 
         const oldroom = new Folder("OldRoom", hallway);
-        new File("Water", oldroom, false, "It's water. Wet");
+        const nut = new Folder("Nut", oldroom);
         new File(
-            "Bucket",
+            "Water Bucket",
             oldroom,
             false,
-            "It's a bucket. Can be filled with anything, like water, lava, fire, acid.",
+            "It's a bucket...filled with water",
         );
         new File(
             "Cobwebs",
@@ -113,10 +153,34 @@ export class Enviroment {
             "Boxes. Like, the ones you store parts in.",
         );
         new File(
-            "Button",
+            "Wrench",
+            nut,
+            false,
+            "Just a regular wrench. Now, maybe if you looked around, you could do something...",
+        );
+        new File(
+            "Vent",
+            nut,
+            false,
+            "Vents...like FNAF2, this time, there are no quick time events..for now. Anyways, this looks kinda important, eh?",
+        );
+        new File(
+            "Stick",
+            nut,
+            false,
+            "Just a stick...maybe you could combine this with something",
+        );
+        new File(
+            "Rock",
+            nut,
+            false,
+            "This could be combined with something, you know?",
+        );
+        new File(
+            "Garage",
             oldroom,
             false,
-            "Just a button. It's very insignificant. Won't help you escape",
+            "This is a garage opening. Go before the evil monster sees you!!!",
         );
 
         //ThroneRoom/Level5
@@ -136,6 +200,15 @@ export class Enviroment {
             "Torch the throne room. It's yours, but, whatever.",
         );
         new File("Hammer", throneroom, false, "Escape with the hammer");
+
+        //Secret//
+
+        const secret = new Folder("BossBattle", hallway);
+        const bart = new Folder("Bart", secret);
+        new File("Shoes", bart, false, "New shoes...that you will take back");
+        new File("Wand", bart, false, "A wand...like magic!!!");
+        new File("Crown", bart, false, "This is your property!!!");
+        new File("Elevator", secret, false, "The way out!!!");
 
         //Records (Add Back Later)
         const records = new Folder("Records", hallway);

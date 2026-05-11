@@ -16,6 +16,13 @@ export class Level2 extends Scene {
     private gloves!: Phaser.Physics.Arcade.StaticGroup;
     private guillotine!: Phaser.Physics.Arcade.Group;
 
+    private metal!: Phaser.Physics.Arcade.Group;
+    private boxes!: Phaser.Physics.Arcade.StaticGroup;
+
+    private cabinet!: Phaser.Physics.Arcade.Image;
+    private button!: Phaser.Physics.Arcade.Image;
+    private slide!: Phaser.Physics.Arcade.Image;
+
     private hasChain = false;
     private hasGloves = false;
     private leverPulled = false;
@@ -72,6 +79,7 @@ export class Level2 extends Scene {
         this.physics.add.collider(this.player, this.chain);
         this.physics.add.collider(this.player, this.lever);
         this.physics.add.collider(this.player, this.gloves);
+        this.physics.add.collider(this.guillotine, this.ground);
 
         // OVERLAPS
         this.physics.add.overlap(
