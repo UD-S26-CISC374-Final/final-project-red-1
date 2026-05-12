@@ -16,12 +16,12 @@ export class Level5 extends Scene {
     private picture: Phaser.Physics.Arcade.Image;
     private elevator: Phaser.Physics.Arcade.Image;
 
-    private hasHammer: boolean;
-    private thronebroken: boolean;
-    private grabPainting: boolean;
-    private msActivated: boolean;
-    private elevatorActivated: boolean;
-    private fakeWin: boolean;
+    private hasHammer: boolean = false;
+    private thronebroken: boolean = false;
+    private grabPainting: boolean = false;
+    private msActivated: boolean = false;
+    private elevatorActivated: boolean = false;
+    private fakeWin: boolean = false;
 
     constructor() {
         super("Level5");

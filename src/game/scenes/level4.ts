@@ -10,7 +10,7 @@ export class Level4 extends Scene {
     phaserLogo: PhaserLogo;
     fpsText: FpsText;
     private player: Phaser.Physics.Arcade.Sprite;
-    private bucket: Phaser.GameObjects.Image;
+    private bucket: Phaser.Physics.Arcade.Image;
     private cobwebs: Phaser.Physics.Arcade.Group;
     private rake: Phaser.GameObjects.Image;
     private boxes: Phaser.GameObjects.Image;
@@ -21,19 +21,19 @@ export class Level4 extends Scene {
     private door: Phaser.GameObjects.Image;
     private garage: Phaser.GameObjects.Image;
 
-    private hasRake: boolean;
-    private hasBucket: boolean;
-    private waterbucket: boolean;
-    private cobwebsRemoved: boolean;
-    private boxeslifted: boolean;
-    private wrenchCollected: boolean;
-    private openedVent: boolean;
-    private hasStick: boolean;
-    private hasRock: boolean;
-    private createdHammer: boolean;
-    private knockDoor: boolean;
-    private accessgarage: boolean;
-    private throneroom: boolean;
+    private hasRake: boolean = false;
+    private hasBucket: boolean = false;
+    private waterbucket: boolean = false;
+    private cobwebsRemoved: boolean = false;
+    private boxeslifted: boolean = false;
+    private wrenchCollected: boolean = false;
+    private openedVent: boolean = false;
+    private hasStick: boolean = false;
+    private hasRock: boolean = false;
+    private createdHammer: boolean = false;
+    private knockDoor: boolean = false;
+    private accessgarage: boolean = false;
+    private throneroom: boolean = false;
 
     constructor() {
         super("Level4");
@@ -43,6 +43,13 @@ export class Level4 extends Scene {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("");
 
+        this.wrench = this.add.image(300, 600, "hammer");
+        this.vent = this.add.image(400, 500, "wall");
+        this.stick = this.add.image(500, 500, "rake");
+        this.rock = this.add.image(550, 500, "chain");
+        this.door = this.add.image(700, 600, "door");
+        this.garage = this.add.image(850, 600, "door");
+
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha();
 
@@ -51,7 +58,7 @@ export class Level4 extends Scene {
 
         this.player = this.physics.add.sprite(100, 700, "player");
         this.player.setCollideWorldBounds(true);
-        this.bucket = this.add.image(500, 700, "bucket");
+        this.bucket = this.physics.add.image(500, 700, "bucket");
         this.cobwebs = this.physics.add.group();
         this.cobwebs.create(700, 700, "cobwebs");
         this.cobwebs.create(700, 670, "cobwebs");

@@ -142,6 +142,8 @@ export class Preloader extends Scene {
             "win",
             "assets/sounds/symphony.mp3",
         ); /* Credit goes to https://opengameart.org/content/calm-relax-1-synthwave-421k by cynicmusic */
+        this.load.image("picture", "assets/picture.png");
+        this.load.image("elevator", "assets/elevator.png");
 
         // Sound effects
         this.load.audio(

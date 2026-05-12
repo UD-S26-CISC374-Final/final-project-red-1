@@ -44,6 +44,15 @@ export class Level3 extends Scene {
     }
 
     create() {
+        this.player = this.physics.add.sprite(100, 700, "player");
+        this.player.setCollideWorldBounds(true);
+
+        this.key = this.physics.add.image(700, 600, "key");
+        this.key.setImmovable(true);
+
+        this.door = this.physics.add.image(900, 600, "door");
+        this.door.setImmovable(true);
+
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#404040");
 
@@ -95,49 +104,49 @@ export class Level3 extends Scene {
         this.physics.add.collider(this.flasks, this.chemicals);
         this.physics.add.collider(this.player, this.key);
         this.physics.add.collider(this.player, this.door);
-        this.physics.overlap(
+        this.physics.add.overlap(
             this.player,
             this.flasks,
             this.pourchemicals.bind(this),
             undefined,
             this,
         );
-        this.physics.overlap(
+        this.physics.add.overlap(
             this.player,
             this.chemicals,
             this.pourchemicals.bind(this),
             undefined,
             this,
         );
-        this.physics.overlap(
+        this.physics.add.overlap(
             this.player,
             this.chemicals,
             this.chemicalKey.bind(this),
             undefined,
             this,
         );
-        this.physics.overlap(
+        this.physics.add.overlap(
             this.player,
             this.key,
             this.vision.bind(this),
             undefined,
             this,
         );
-        this.physics.overlap(
+        this.physics.add.overlap(
             this.player,
             this.door,
             this.handleDoor.bind(this),
             undefined,
             this,
         );
-        this.physics.overlap(
+        this.physics.add.overlap(
             this.player,
             this.wall,
             this.breakWall.bind(this),
             undefined,
             this,
         );
-        this.physics.overlap(
+        this.physics.add.overlap(
             this.player,
             this.chemicals,
             this.neutralTimer.bind(this),
