@@ -85,6 +85,20 @@ export class Folder {
         return index;
     }
 
+    /*
+        Name: getChildAsFile
+        Description: given a name of a filder/file, will return the file/folder. null if not exist
+        Input: name (string): the name of the element needed
+        Output: Folder | File | null: the file if exists
+    */
+    public getChildAsFile(name: string): Folder | File | null {
+        if (this.getChild(name) === -1) {
+            return null;
+        } else {
+            return this.children[this.getChild(name)];
+        }
+    }
+
     public removeChild(name: string): Folder | File | null {
         const index = this.getChild(name);
 

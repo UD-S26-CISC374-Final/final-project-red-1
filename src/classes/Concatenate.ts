@@ -1,6 +1,8 @@
 import { File } from "./File";
 import { Folder } from "./Folder";
 
+const combinedFileNames = ["Crowbar"];
+
 /*
     Name: mergeFiles
     Description: When given 2 files and an index, both files are deleted and replaced with a new, combined file.
@@ -13,10 +15,11 @@ function mergeFiles(fileA: File, fileB: File, index: number) {
 
     const combinedItems: File[] = [
         new File(
-            "BrokenCells",
+            "Crowbar",
             moveToFolder,
-            false,
-            "These look like you can fit through them easily",
+            true,
+            "Oh, a crowbar! Really hope this things half-life hasnt passed. If only I could use it on something...",
+            true,
         ),
     ];
 
@@ -37,8 +40,8 @@ function mergeFiles(fileA: File, fileB: File, index: number) {
     Output: string: either an error or a notificaiton letting the user know that both files were combined
  */
 export function combineFiles(fileA: File, fileB: File): string {
-    const fileACombine: string[] = ["Crowbar.txt"];
-    const fileBCombine: string[] = ["Cells.txt"];
+    const fileACombine: string[] = ["Crow.txt"];
+    const fileBCombine: string[] = ["Bar.txt"];
 
     let fileAinCombines: number;
     let checkforA: string[];
@@ -67,7 +70,14 @@ export function combineFiles(fileA: File, fileB: File): string {
 
         if (checkforB[tracker] === fileB.name) {
             mergeFiles(fileA, fileB, tracker);
-            return fileA.name + " was combined with " + fileB.name;
+            return (
+                fileA.name +
+                " was combined with " +
+                fileB.name +
+                " to make a " +
+                combinedFileNames[i] +
+                "."
+            );
             break;
         }
     }

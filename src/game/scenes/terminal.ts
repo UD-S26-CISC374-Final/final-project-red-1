@@ -5,7 +5,7 @@ import { EventBus } from "../event-bus";
 import type { ChangeableScene } from "../reactable-scene";
 import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
-export class MainMenu extends Scene implements ChangeableScene {
+export class Terminal extends Scene implements ChangeableScene {
     rexUI!: RexUIPlugin;
     title: GameObjects.Text;
     textBox: GameObjects.GameObject;
@@ -29,7 +29,7 @@ export class MainMenu extends Scene implements ChangeableScene {
     currentLevel: string = "Level1";
 
     constructor() {
-        super("MainMenu");
+        super("Terminal");
     }
 
     getSceneFromFolder(folderName: string): string | null {
@@ -101,7 +101,7 @@ export class MainMenu extends Scene implements ChangeableScene {
             fontSize: "12px",
             fontFamily: "Courier New",
             color: "#ffffff",
-            lineSpacing: 4,
+            lineSpacing: 6,
 
             wrap: {
                 mode: "word",
@@ -159,6 +159,7 @@ export class MainMenu extends Scene implements ChangeableScene {
             color: "transparent",
             border: "none",
             outline: "none",
+            padding: "15px",
         });
 
         const inputElement = input.node as HTMLInputElement;
@@ -231,6 +232,17 @@ export class MainMenu extends Scene implements ChangeableScene {
 
                 const value = this.currentInput.trim();
 
+                //clear command inputted
+                if (value === "clear") {
+                    this.outputLines = ["All Cleared!"];
+                    this.currentInput = "";
+                    inputElement.value = "";
+
+                    this.renderTerminal();
+
+                    return;
+                }
+
                 this.appendLine(this.prompt + value);
 
                 const output = this.env.update(value);
@@ -279,51 +291,56 @@ export class MainMenu extends Scene implements ChangeableScene {
     }
 
     formatLine(line: string): string {
-        const tokens = line.split(/\s+/);
+        return line
+            .split("\n")
+            .map((singleLine) => {
+                const tokens = singleLine.split(/\s+/);
 
-        return tokens
-            .map((token) => {
-                // exe files
-                if (/\.exe\b/i.test(token)) {
-                    return `[color=#00ff00]${token}[/color]`;
-                }
+                return tokens
+                    .map((token) => {
+                        // exe files
+                        if (/\.exe\b/i.test(token)) {
+                            return `[color=#00ff00]${token}[/color]`;
+                        }
 
-                // directories
-                if (
-                    token === "Inventory" ||
-                    token === "Jail" ||
-                    token === "Hallway" ||
-                    token === "TortureChamber" ||
-                    token === "AlchemyRoom" ||
-                    token === "OldRoom" ||
-                    token === "ThroneRoom"
-                ) {
-                    return `[color=#0088ff]${token}[/color]`;
-                }
+                        // directories
+                        if (
+                            token === "Jail" ||
+                            token === "Hole" ||
+                            token === "Hallway" ||
+                            token === "TortureChamber" ||
+                            token === "AlchemyRoom" ||
+                            token === "OldRoom" ||
+                            token === "ThroneRoom"
+                        ) {
+                            return `[color=#0088ff]${token}[/color]`;
+                        }
 
-                // relative paths
-                if (
-                    token === "../" ||
-                    token === "./" ||
-                    token.startsWith("../") ||
-                    token.startsWith("./")
-                ) {
-                    return `[color=#0088ff]${token}[/color]`;
-                }
+                        // relative paths
+                        if (
+                            token === "../" ||
+                            token === "./" ||
+                            token.startsWith("../") ||
+                            token.startsWith("./")
+                        ) {
+                            return `[color=#0088ff]${token}[/color]`;
+                        }
 
-                // generic files
-                if (/\.[a-zA-Z0-9]+$/i.test(token)) {
-                    return `[color=#ffffff]${token}[/color]`;
-                }
+                        // generic files
+                        if (/\.[a-zA-Z0-9]+$/i.test(token)) {
+                            return `[color=#ffffff]${token}[/color]`;
+                        }
 
-                // paths
-                if (token.includes("/") && /^[\w./-]+$/.test(token)) {
-                    return `[color=#0088ff]${token}[/color]`;
-                }
+                        // paths
+                        if (token.includes("/") && /^[\w./-]+$/.test(token)) {
+                            return `[color=#0088ff]${token}[/color]`;
+                        }
 
-                return `[color=#ffffff]${token}[/color]`;
+                        return `[color=#ffffff]${token}[/color]`;
+                    })
+                    .join(" ");
             })
-            .join(" ");
+            .join("\n");
     }
 
     update() {}

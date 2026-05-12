@@ -29,7 +29,10 @@ export function splitCommandPrompt(command: string): string[] {
 
 export class Enviroment {
     public nav: Navigator;
-    public Inventory: Folder;
+    //public Inventory: Folder;
+
+    private moveDirt = false;
+    private getCrowbar = false;
 
     constructor() {
         //Root
@@ -45,37 +48,20 @@ export class Enviroment {
         const crowbar = new Folder("Crowbar", jail);
         const dig = new Folder("Dig", jail);
         new File(
-            "Stick",
-            dig,
-            true,
-            "It's just a stick. What could possibly be useful about a stick?",
-        );
-        new File(
-            "Rock",
-            dig,
-            true,
-            "A rock...that you shouldn't throw at people. That's just common sense, man.",
-        );
-        new File("Dirt", dig, true, "Mmmmm...dirt");
-        new File(
-            "CrowbarHalf1.exe",
-            crowbar,
-            true,
-            "One-half of a crowbar. I wonder what the other half looks like?",
-        );
-        new File(
-            "CrowbarHalf2.exe",
-            crowbar,
-            true,
-            "The other half of the crowbar. Put them together to get the full crowbar!",
-        );
-
-        new File(
             "Cells",
             jail,
             false,
             "These cells are really hard to break. If I could maybe bend them, I could get out of this cell.",
+            false,
         );
+
+        new File(
+            "Dirt",
+            jail,
+            false,
+            "Seems this pile was made hastily in order to conceal something.",
+        );
+        new Folder("Hole", jail);
 
         //Torture Chamber/Level2
         const torture = new Folder("TortureChamber", hallway);
@@ -239,7 +225,7 @@ export class Enviroment {
         this.nav = new Navigator(throneroom);*/
 
         //Blank Inventory
-        this.Inventory = new Folder("Inventory", this.nav.current);
+        //this.Inventory = new Folder("Inventory", this.nav.current);
     }
 
     /*
@@ -249,9 +235,7 @@ export class Enviroment {
         Output: string: see runCommand for more details, but the jist is that it will return either user input or an error
     */
     public update(command: string): string {
-        this.updateEnviromentState();
-
-        return this.runCommand(command);
+        return this.runCommand(command) + this.updateEnviromentState();
     }
 
     /*
@@ -260,25 +244,52 @@ export class Enviroment {
         Input: N/A
         Output: N/A
     */
-    private updateEnviromentState() {
-        /*if (currentFolder.name === "Jail") {
-            if (
-                (currentFolder.getChild("BrokenCells.txt") !== -1 ||
-                    this.Inventory.getChild("BrokenCells.txt") !== -1) &&
-                currentFolder.parent !== null
-            ) {
-                currentFolder.parent.acessible = true;
-            }
-        } //Unlocks Hallway*/
+    private updateEnviromentState(): string {
+        const currentFolder = this.nav.current;
+
         //^ Former Logic for the first puzzle^
 
-        if (this.nav.current.getChild("Inventory") !== -1) {
+        /*if (this.nav.current.getChild("Inventory") !== -1) {
             this.nav.current.removeChild("Inventory");
         }
 
         if (this.nav.current.name !== "Inventory") {
             this.nav.current.addChild(this.Inventory);
+        }*/
+
+        // LEVEL 1 LOGIC
+        if (currentFolder.name === "Jail") {
+            const Hole = currentFolder.getChildAsFile("Hole");
+
+            if (Hole instanceof File) {
+                return "\nERROR";
+            } //will always be true
+
+            if (Hole?.getChild("Dirt.txt") !== -1 && !this.moveDirt) {
+                new File(
+                    "Crow",
+                    currentFolder,
+                    false,
+                    "A member of the corvidae family that is nevermore- oh its just half of a crowbar. You should combine it with its sibling.",
+                );
+
+                new File(
+                    "Bar",
+                    currentFolder,
+                    false,
+                    "A nutrient dense blend of soybeans, lint, and leafy greens- oh its just half of a crowbar. You should combine it with its sibling.",
+                );
+                this.moveDirt = true;
+                return "\nIt seems like there was something underneath the dirt...";
+            } //Did you push the dirt in the hole?
+
+            if (Hole?.getChild("Crowbar.exe") !== -1 && !this.getCrowbar) {
+                this.getCrowbar = true;
+                return "\n...you put it in the hole didnt you?";
+            }
         }
+
+        return "";
     }
 
     /*
@@ -332,21 +343,25 @@ export class Enviroment {
         if (brokenUpCommand[0] === "help") {
             switch (brokenUpCommand.length) {
                 case 1: //case: just "help". Prints all commands
-                    return "Available commands:\n cd: changes directory to the specified folder indicated in blue.\nls: lists all of the contents of the current directory you are in\nhelp: displays either general descriptions of commands\nmv: moves a file to a given directory\ncat: will either display the contents of a text file, or combine two text files together.\n\nIf you want a more detailed description of a given command, please type help [command you want the description of].";
+                    return "Available commands:\n cd: changes directory to the specified folder indicated in blue.\nls: lists all of the contents of the current directory you are in\nhelp: displays either general descriptions of commands\nmv: moves a file to a given directory\ncat: will either display the contents of a text file, or combine two text files together.\n[file].exe: executes a given executable file\nclear: clears the terminal screen\npwd: prints your current location\n\nIf you want a more detailed description of a given command, please type help [command you want the description of].";
                 case 2: //case: "help" + a command. Prints that command's function
                     switch (brokenUpCommand[1]) {
                         case "cd":
-                            return "cd, or 'change directory', allows you to move between folders, or 'rooms'.\nIt should be noted, that if you move something to the Folder 'Inventory', the file will always be accessible, no matter where you are.\nYou can access a file in 'Inventory' by using the filepath 'Inventory/[file]'";
+                            return "cd, or 'change directory', allows you to move between folders, or 'rooms'.\n";
                         case "ls":
-                            return "ls, or  'list' allows you to see every single item in a folder.\nIf you just type 'ls', you will only be able to see the items in your current directory.\nIf you want to see the items in a different folder, you can use the format 'ls [path]'. For example, to see your inventory, type 'ls Inventory'.";
+                            return "ls, or  'list' allows you to see every single item in a folder.\nIf you just type 'ls', you will only be able to see the items in your current directory.\nIf you want to see the items in a different folder, you can use the format 'ls [path]'..";
                         case "help":
                             return "Displays available commands or detailed information about a specific command.";
                         case "mv":
-                            return "mv, or 'move', is a command that allows you to move files between folders via the format mv [file] [folder].\nIt should be noted, that if you move something to the Folder 'Inventory', the file will always be accessible, no matter where you are.\nYou can access a file in 'Inventory' by using the filepath 'Inventory/[file]'";
+                            return "mv, or 'move', is a command that allows you to move files between folders via the format mv [file] [folder].";
                         case "/.exe":
                             return "Executes an executable file.";
                         case "cat":
                             return "cat, or 'concatenate', is a command that is used exclusively for text files, or files labeled with .txt.\n\nWhen used in the format: cat [file], the description of the text file will be presented.\nWhen used in the format: cat [file1] [file2], both of the text files will be combined into a new item, only if they are able to, however. NOTE: This is permenant.";
+                        case "clear":
+                            return "Clears the entire terminal screen.";
+                        case "pwd":
+                            return "Stands for 'print working directory.' Prints your current room location as a file path.";
                         default:
                             return "Command not found.";
                     }
@@ -360,12 +375,12 @@ export class Enviroment {
                     return "ERROR: Too few arguments. Please use the following format: cd [filepath]";
 
                 case 2: //case: both the command and the file path were inputted
-                    if (brokenUpCommand[1] === "Inventory") {
+                    /*if (brokenUpCommand[1] === "Inventory") {
                         //error handling for moving into inventory
                         return "ERROR: Cannot move into inventory.";
-                    } else {
-                        return this.nav.travelTo(brokenUpCommand[1]);
-                    }
+                    } else {*/
+                    return this.nav.travelTo(brokenUpCommand[1]);
+                //}
 
                 default: //case: too many arguments
                     return "ERROR: Too many arguments. Please use the following format: cd [filepath]";
@@ -401,6 +416,16 @@ export class Enviroment {
                     return "ERROR: Too few arguments. Please use the format 'mv [file/folder path] [folder path]'";
 
                 case 3: //case mv + 2 file paths
+                    if (
+                        this.nav.stringToFile(brokenUpCommand[1]) ===
+                            this.nav.stringToFile(brokenUpCommand[2]) &&
+                        typeof this.nav.stringToFile(brokenUpCommand[1]) !==
+                            "string"
+                    ) {
+                        //check if players trying to move a file into itself
+                        return "ERROR: Cannot move a Folder into itself";
+                    }
+
                     return this.nav.moveFile(
                         brokenUpCommand[1],
                         brokenUpCommand[2],
@@ -425,6 +450,13 @@ export class Enviroment {
                 default:
                     return "ERROR: Too many arguments. Please use the format 'cat [file1] [file2(optional)]";
             }
+        } else if (brokenUpCommand[0] === "clear") {
+            //clear command
+            if (brokenUpCommand.length !== 1) {
+                return "ERROR: Too many arguments! You only need to type in the file path.";
+            }
+
+            return "Cleared entire screen!";
         } else if (brokenUpCommand[0].includes(".exe")) {
             //NOTE: Does not check whether or not ".exe" is at the end of the string
             //executables
@@ -454,6 +486,14 @@ export class Enviroment {
                 //is an error message/string
                 return tempFile;
             }
+        } else if (brokenUpCommand[0] === "pwd") {
+            //print working directory command
+            if (brokenUpCommand.length !== 1) {
+                //obligatory "too many arguments"
+                return "ERROR: Too many arguments! You only need to type in the file path.";
+            }
+
+            return "Your current location is:" + this.nav.current.path;
         }
 
         return "ERROR: Command not found"; //default case

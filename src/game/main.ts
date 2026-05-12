@@ -10,7 +10,7 @@ import { PlotTwist } from "./scenes/plottwist";
 import { Secret } from "./scenes/secret";
 import { Win } from "./scenes/win";
 
-import { MainMenu } from "./scenes/terminal";
+import { Terminal } from "./scenes/terminal";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/preloader";
 import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
@@ -33,7 +33,7 @@ const config: Phaser.Types.Core.GameConfig = {
     scene: [
         Boot,
         Preloader,
-        MainMenu,
+        Terminal,
         Tutorial,
         Level1Game,
         Level2Game,

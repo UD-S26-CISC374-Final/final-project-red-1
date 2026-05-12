@@ -146,6 +146,14 @@ export class Navigator {
         }
 
         if (childFile instanceof File) {
+            if (!childFile.canBeMoved) {
+                return (
+                    "ERROR: The File " +
+                    childFile.name +
+                    " is unable to be moved."
+                );
+            }
+
             const oldParent = childFile.parent;
             oldParent.removeChild(childFile.name);
             parentFile.addChild(childFile);
