@@ -44,6 +44,9 @@ export class Level3 extends Scene {
     }
 
     create() {
+        this.cameras.main.setViewport(0, 0, 512, 768);
+        this.cameras.main.setBounds(0, 0, 512, 768);
+
         this.player = this.physics.add.sprite(100, 700, "player");
         this.player.setCollideWorldBounds(true);
 
@@ -256,10 +259,6 @@ export class Level3 extends Scene {
 
         this.timer--;
         this.timertext.setText("Time: " + this.timer);
-    }
-
-    update() {
-        this.fpsText.update();
     }
 
     changeScene() {
