@@ -12,14 +12,14 @@ export class Level4 extends Scene {
     private player: Phaser.Physics.Arcade.Sprite;
     private bucket: Phaser.Physics.Arcade.Image;
     private cobwebs: Phaser.Physics.Arcade.Group;
-    private rake: Phaser.GameObjects.Image;
-    private boxes: Phaser.GameObjects.Image;
-    private wrench: Phaser.GameObjects.Image;
-    private vent: Phaser.GameObjects.Image;
-    private stick: Phaser.GameObjects.Image;
-    private rock: Phaser.GameObjects.Image;
-    private door: Phaser.GameObjects.Image;
-    private garage: Phaser.GameObjects.Image;
+    private rake: Phaser.Physics.Arcade.Image;
+    private boxes: Phaser.Physics.Arcade.Image;
+    private wrench: Phaser.Physics.Arcade.Image;
+    private vent: Phaser.Physics.Arcade.Image;
+    private stick: Phaser.Physics.Arcade.Image;
+    private rock: Phaser.Physics.Arcade.Image;
+    private door: Phaser.Physics.Arcade.Image;
+    private garage: Phaser.Physics.Arcade.Image;
 
     private hasRake: boolean = false;
     private hasBucket: boolean = false;
@@ -41,17 +41,28 @@ export class Level4 extends Scene {
 
     create() {
         this.camera = this.cameras.main;
-        this.camera.setBackgroundColor("");
+        this.camera.setBackgroundColor("#000000");
 
-        this.wrench = this.add.image(300, 600, "hammer");
-        this.vent = this.add.image(400, 500, "wall");
-        this.stick = this.add.image(500, 500, "rake");
-        this.rock = this.add.image(550, 500, "chain");
-        this.door = this.add.image(700, 600, "door");
-        this.garage = this.add.image(850, 600, "door");
+        this.cameras.main.setViewport(0, 0, 512, 768);
+        this.cameras.main.setBounds(0, 0, 512, 768);
+        this.physics.world.setBounds(0, 0, 512, 768);
+
+        this.wrench = this.physics.add.image(300, 600, "hammer");
+        this.vent = this.physics.add.image(400, 500, "wall");
+        this.stick = this.physics.add.image(500, 500, "rake");
+        this.rock = this.physics.add.image(550, 500, "chain");
+        this.door = this.physics.add.image(700, 600, "door");
+        this.garage = this.physics.add.image(850, 600, "door");
+
+        this.wrench.setImmovable(true);
+        this.vent.setImmovable(true);
+        this.stick.setImmovable(true);
+        this.rock.setImmovable(true);
+        this.door.setImmovable(true);
+        this.garage.setImmovable(true);
 
         this.background = this.add.image(512, 384, "background");
-        this.background.setAlpha();
+        this.background.setAlpha(1);
 
         const sound = this.sound.add("old", { loop: true });
         sound.play();
@@ -63,8 +74,10 @@ export class Level4 extends Scene {
         this.cobwebs.create(700, 700, "cobwebs");
         this.cobwebs.create(700, 670, "cobwebs");
         this.cobwebs.create(670, 700, "cobwebs");
-        this.rake = this.add.image(450, 700, "rake");
-        this.boxes = this.add.image(600, 700, "boxes");
+        this.rake = this.physics.add.image(450, 700, "rake");
+        this.boxes = this.physics.add.image(600, 700, "boxes");
+        this.rake.setImmovable(true);
+        this.boxes.setImmovable(true);
         this.physics.add.collider(this.player, this.boxes);
         this.physics.add.collider(this.player, this.bucket);
         this.physics.add.collider(this.player, this.wrench);
@@ -265,10 +278,6 @@ export class Level4 extends Scene {
         if (this.accessgarage) {
             this.throneroom = true;
         }
-    }
-
-    update() {
-        this.fpsText.update();
     }
 
     changeScene() {

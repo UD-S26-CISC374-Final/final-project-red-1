@@ -31,6 +31,9 @@ export class Level5 extends Scene {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#202020");
 
+        this.cameras.main.setViewport(0, 0, 512, 768);
+        this.cameras.main.setBounds(0, 0, 512, 768);
+
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
@@ -148,10 +151,6 @@ export class Level5 extends Scene {
         if (this.elevatorActivated) {
             this.fakeWin = true;
         }
-    }
-
-    update() {
-        this.fpsText.update();
     }
 
     changeScene() {
