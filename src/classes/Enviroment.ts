@@ -201,7 +201,7 @@ export class Enviroment {
         new File("Crown", bart, false, "This is your property!!!");
         new File("Elevator", secret, false, "The way out!!!");
 
-        this.nav = new Navigator(hallway); //start of the game
+        this.nav = new Navigator(jail); //start of the game
         /*this.nav = new Navigator(torture);
         this.nav = new Navigator(alchemy);
         this.nav = new Navigator(oldroom);
