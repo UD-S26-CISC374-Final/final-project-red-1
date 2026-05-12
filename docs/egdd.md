@@ -172,6 +172,10 @@ All actions are done via an in game terminal. This includes:
     - Exits out of a puzzle/.exe file
     - Only works is a .exe file is running
     - If nothing is running, the terminal will print out a message stating that no executable is running
+- `clear`
+    - Clears the text
+    - Works if there is text
+    - If nothing is present, the terminal will print out a message stating that there is no text
 
 # Objects/Entities
 
