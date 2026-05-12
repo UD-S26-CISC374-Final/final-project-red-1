@@ -13,12 +13,14 @@ export class Level5 extends Scene {
     private throne: Phaser.Physics.Arcade.Image;
     private hammer: Phaser.Physics.Arcade.Image;
     private motionsensor: Phaser.Physics.Arcade.Image;
-    private door: Phaser.Physics.Arcade.Image;
+    private picture: Phaser.Physics.Arcade.Image;
+    private elevator: Phaser.Physics.Arcade.Image;
 
     private hasHammer: boolean;
     private thronebroken: boolean;
+    private grabPainting: boolean;
     private msActivated: boolean;
-    private doorOpened: boolean;
+    private elevatorActivated: boolean;
     private fakeWin: boolean;
 
     constructor() {
@@ -37,11 +39,13 @@ export class Level5 extends Scene {
         this.throne = this.physics.add.image(400, 600, "throne");
         this.hammer = this.physics.add.image(200, 700, "hammer");
         this.motionsensor = this.physics.add.image(400, 700, "motionsensor");
-        this.door = this.physics.add.image(600, 700, "door");
+        this.picture = this.physics.add.image(50, 600, "picture");
+        this.elevator = this.physics.add.image(600, 700, "elevator");
         this.physics.add.collider(this.player, this.throne);
         this.physics.add.collider(this.player, this.hammer);
         this.physics.add.collider(this.player, this.motionsensor);
-        this.physics.add.collider(this.player, this.door);
+        this.physics.add.collider(this.player, this.elevator);
+        this.physics.add.collider(this.player, this.picture);
         this.physics.add.overlap(
             this.player,
             this.hammer,
@@ -65,8 +69,15 @@ export class Level5 extends Scene {
         );
         this.physics.add.overlap(
             this.player,
-            this.door,
-            this.openDoor.bind(this),
+            this.picture,
+            this.ripPainting.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.elevator,
+            this.openElevator.bind(this),
             undefined,
             this,
         );
@@ -103,13 +114,18 @@ export class Level5 extends Scene {
         }
     }
 
+    private ripPainting() {
+        if (!this.grabPainting) {
+            this.grabPainting = true;
+        }
+    }
     private activateMS() {
         if (!this.thronebroken) {
             this.msActivated = false;
         }
         if (
             this.thronebroken &&
-            this.physics.overlap(this.player, this.motionsensor)
+            this.physics.overlap(this.picture, this.motionsensor)
         ) {
             this.msActivated = true;
         } else {
@@ -117,16 +133,19 @@ export class Level5 extends Scene {
         }
     }
 
-    private openDoor() {
+    private openElevator() {
         if (!this.msActivated) {
-            this.doorOpened = false;
+            this.elevatorActivated = false;
         }
-        if (this.msActivated && this.physics.overlap(this.player, this.door)) {
-            this.doorOpened = true;
+        if (
+            this.msActivated &&
+            this.physics.overlap(this.player, this.elevator)
+        ) {
+            this.elevatorActivated = true;
         } else {
-            this.doorOpened = false;
+            this.elevatorActivated = false;
         }
-        if (this.doorOpened) {
+        if (this.elevatorActivated) {
             this.fakeWin = true;
         }
     }

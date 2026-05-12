@@ -8,11 +8,15 @@ export class Level3 extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     phaserLogo: PhaserLogo;
+    timer: number;
     fpsText: FpsText;
+    timertext: Phaser.GameObjects.Text;
+    timerEvent: Phaser.Time.TimerEvent;
     private ground: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
     private flasks: Phaser.Physics.Arcade.StaticGroup;
     private chemicals: Phaser.Physics.Arcade.StaticGroup;
+    private wall: Phaser.Physics.Arcade.StaticGroup;
     private hasFlasks: boolean;
     private hasChemicals: boolean;
     private chemicalsneutral: boolean;
@@ -30,8 +34,10 @@ export class Level3 extends Scene {
     private neutraldrank = false;
     private aciddrank = false;
     private basedrank = false;
+    private brokeWall = false;
     private doorunlocked = false;
     private storeroom = false;
+    private timePaused = false;
 
     constructor() {
         super("Level3");
@@ -47,6 +53,20 @@ export class Level3 extends Scene {
         const sound = this.sound.add("alchemyspace", { loop: true });
         sound.play();
 
+        this.timer = 100;
+        this.timePaused = false;
+
+        this.timertext = this.add.text(50, 500, "Timer: 100", {
+            fontSize: "16px",
+            color: "#326a42",
+        });
+
+        this.timerEvent = this.time.addEvent({
+            delay: 1000,
+            callback: this.handleTimer.bind(this),
+            callbackScope: this,
+            loop: true,
+        });
         this.ground = this.physics.add.staticGroup();
         const g = this.ground.create(
             512,
@@ -64,6 +84,12 @@ export class Level3 extends Scene {
         this.chemicals.create(200, 600, "chemicals");
         this.chemicals.create(200, 550, "chemicals");
         this.chemicals.create(250, 550, "chemicals");
+        this.wall = this.physics.add.staticGroup();
+        this.wall.create(400, 550, "wall");
+        this.wall.create(400, 600, "wall");
+        this.wall.create(400, 650, "wall");
+        this.wall.create(400, 625, "wall");
+        this.wall.create(400, 575, "wall");
         this.physics.add.collider(this.player, this.flasks);
         this.physics.add.collider(this.player, this.chemicals);
         this.physics.add.collider(this.flasks, this.chemicals);
@@ -104,6 +130,20 @@ export class Level3 extends Scene {
             undefined,
             this,
         );
+        this.physics.overlap(
+            this.player,
+            this.wall,
+            this.breakWall.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.overlap(
+            this.player,
+            this.chemicals,
+            this.neutralTimer.bind(this),
+            undefined,
+            this,
+        );
         EventBus.emit("current-scene-ready", this);
     }
 
@@ -127,7 +167,43 @@ export class Level3 extends Scene {
         }
     }
 
+    private breakWall() {
+        if (!this.acidpoured || !this.chemicalspoured || !this.basepoured) {
+            this.brokeWall = false;
+        }
+        if (this.acidpoured && this.chemicalspoured && this.basepoured) {
+            if (!this.aciddrank && !this.neutraldrank && !this.basedrank) {
+                this.brokeWall = false;
+            }
+            if (this.aciddrank) {
+                this.brokeWall = true;
+            } else {
+                this.brokeWall = false;
+            }
+        }
+    }
+
+    private neutralTimer() {
+        if (this.timePaused) return;
+
+        if (!this.acidpoured || !this.chemicalspoured || !this.basepoured) {
+            this.timerEvent.paused = false;
+        }
+        if (this.acidpoured && this.chemicalspoured && this.basepoured) {
+            if (!this.aciddrank && !this.neutraldrank && this.basedrank) {
+                this.timerEvent.paused = false;
+            }
+            if (this.neutraldrank) {
+                this.timerEvent.paused = true;
+            } else {
+                this.timerEvent.paused = false;
+            }
+        }
+    }
     private chemicalKey() {
+        if (!this.brokeWall) {
+            this.seeKey = false;
+        }
         if (!this.acidpoured || !this.chemicalspoured || !this.basepoured) {
             this.seeKey = false;
         }
@@ -135,13 +211,9 @@ export class Level3 extends Scene {
             if (!this.aciddrank && !this.neutraldrank && !this.basedrank) {
                 this.seeKey = false;
             }
-            if (this.aciddrank && this.basedrank) {
+            if (this.basedrank) {
                 this.seeKey = true;
-            } else if (this.neutraldrank && this.basedrank) {
-                this.seeKey = false;
-            } else if (this.aciddrank && this.neutraldrank) {
-                this.seeKey = false;
-            }
+            } else this.seeKey = false;
         }
     }
 
@@ -155,6 +227,7 @@ export class Level3 extends Scene {
             this.hasKey = true;
         }
     }
+
     private handleDoor() {
         if (!this.hasKey) {
             this.doorunlocked = false;
@@ -167,6 +240,13 @@ export class Level3 extends Scene {
         if (this.doorunlocked) {
             this.storeroom = true;
         }
+    }
+
+    private handleTimer() {
+        if (this.timePaused) return;
+
+        this.timer--;
+        this.timertext.setText("Time: " + this.timer);
     }
 
     update() {

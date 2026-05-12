@@ -1,15 +1,5 @@
 import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
-export type Collidable =
-    | Phaser.GameObjects.Image
-    | Phaser.GameObjects.Sprite
-    | Phaser.Physics.Arcade.Sprite
-    | Phaser.Physics.Arcade.StaticGroup
-    | Phaser.GameObjects.Group;
-/*import { File } from "../../classes/File";
-import { Folder } from "../../classes/Folder";
-import { Navigator } from "../../classes/Navigator";
-import { splitCommandPrompt } from "../../classes/Enviroment";*/
 import FpsText from "../objects/fps-text";
 
 export class Level1 extends Scene {
@@ -17,36 +7,30 @@ export class Level1 extends Scene {
     minimap: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     fpsText: FpsText;
-    command: string;
-    private ground: Phaser.Physics.Arcade.StaticGroup;
-    private pregametext: Phaser.GameObjects.Text;
+    private dirt: Phaser.Physics.Arcade.StaticGroup;
+    private stick: Phaser.Physics.Arcade.Image;
+    private rock: Phaser.Physics.Arcade.Image;
     private wall: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
-    private crowbar: Phaser.Physics.Arcade.Image;
+    private crowbarhalf1: Phaser.Physics.Arcade.Image;
+    private crowbarhalf2: Phaser.Physics.Arcade.Image;
     private prisoncells: Phaser.Physics.Arcade.StaticGroup;
-    //private nav: Navigator;
-    //private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
-    private inventory: Set<string> = new Set();
     private crowstrength = 1;
     private prisoncellHealth = 1;
     private torturechamber = false;
+    private hashalf1: boolean;
+    private hashalf2: boolean;
+    private createdbar: boolean;
+    private createdshovel: boolean;
+    private digging: boolean;
+    private acquirerock: boolean;
+    private acquirestick: boolean;
 
     constructor() {
         super("Level1");
     }
 
     create() {
-        this.pregametext = this.add
-            .text(
-                300,
-                150,
-                "Welcome to the game.\nYour mission is to save the king from the dungeon.\nCd - change directories.\nHelp - Call for help.\nLs - list out files. \nMv - move files. \nCat - combine or see the contents of files. \nControl + c - Quit the puzzles.\n ./filename.exe - Execute the files.\nGood luck, and god save the king!",
-                {
-                    fontSize: "16px",
-                    color: "#ffffff",
-                },
-            )
-            .setOrigin(0.5);
         this.camera = this.cameras.main;
         this.cameras.main.setViewport(0, 0, 514, 768);
 
@@ -65,46 +49,39 @@ export class Level1 extends Scene {
 
         const sound = this.sound.add("battlemusic", { loop: true });
         sound.play();
-        /*const jail = new Folder("Jail", null);
-        const player = new Folder("Player", null);
-        new File("king", player, false, "He is weakening");
-        new File("ground", jail, false, "This is ground");
-        new File("wall", jail, false, "This is a wall");
-        new File("Crowbar.txt", jail, false, "This is a crowbar");
-        new File("prisoncells", jail, false, "These are prisoncells");*/
-        this.ground = this.physics.add.staticGroup();
-        const g = this.ground.create(
+        this.dirt = this.physics.add.staticGroup();
+        const g = this.dirt.create(
             100,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         g.setScale(2).refreshBody();
-        const g1 = this.ground.create(
+        const g1 = this.dirt.create(
             200,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         g1.setScale(2).refreshBody();
-        const g2 = this.ground.create(
+        const g2 = this.dirt.create(
             300,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         g2.setScale(2).refreshBody();
-        this.physics.add.collider(this.ground, this.player);
-        const pg = this.ground.create(
+        this.physics.add.collider(this.dirt, this.player);
+        const pg = this.dirt.create(
             400,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         pg.setScale(2).refreshBody();
-        const wpg = this.ground.create(
+        const wpg = this.dirt.create(
             500,
             724,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
         wpg.setScale(2).refreshBody();
-        const dirt = this.ground.create(
+        const dirt = this.dirt.create(
             50,
             724,
             "ground",
@@ -137,20 +114,35 @@ export class Level1 extends Scene {
         this.prisoncells.create(500, 625, "prisoncells");
         this.prisoncells.create(500, 650, "prisoncells");
         this.prisoncells.create(500, 660, "prisoncells");
-        this.crowbar = this.add.image(
+        this.crowbarhalf1 = this.add.image(
             300,
             580,
-            "Crowbar.txt",
+            "CrowbarHalf1.exe",
+        ) as Phaser.Physics.Arcade.Image;
+        this.crowbarhalf2 = this.add.image(
+            300,
+            720,
+            "CrowbarHalf2.exe",
+        ) as Phaser.Physics.Arcade.Image;
+        this.stick = this.add.image(
+            100,
+            600,
+            "stick",
+        ) as Phaser.Physics.Arcade.Image;
+        this.rock = this.add.image(
+            150,
+            600,
+            "rock",
         ) as Phaser.Physics.Arcade.Image;
         this.player = this.physics.add.sprite(200, 619, "player");
 
         this.player.setCollideWorldBounds(true);
-        this.physics.add.collider(this.player, this.ground);
-        this.physics.add.collider(this.ground, this.prisoncells);
+        this.physics.add.collider(this.player, this.dirt);
+        this.physics.add.collider(this.dirt, this.prisoncells);
         this.physics.add.collider(this.player, this.wall);
         this.physics.add.overlap(
             this.player,
-            this.ground,
+            this.dirt,
             this.groundandwallCollisions.bind(this),
             undefined,
             this,
@@ -163,73 +155,114 @@ export class Level1 extends Scene {
             this,
         );
         this.physics.add.collider(this.player, this.prisoncells);
-        this.physics.add.collider(this.crowbar, this.prisoncells);
+        this.physics.add.collider(this.player, this.rock);
         this.physics.add.overlap(
             this.player,
-            this.crowbar,
-            this.collectCrowbar.bind(this),
+            this.rock,
+            this.getRock.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.collider(this.player, this.stick);
+        this.physics.add.overlap(
+            this.player,
+            this.stick,
+            this.getStick.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.collider(this.player, this.dirt);
+        this.physics.add.overlap(
+            this.player,
+            this.dirt,
+            this.digDirt.bind(this),
+            undefined,
+            this,
+        );
+
+        this.physics.add.collider(this.stick, this.rock);
+        this.physics.add.overlap(
+            this.stick,
+            this.rock,
+            this.createShovel.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.collider(this.player, this.crowbarhalf1);
+        this.physics.add.overlap(
+            this.player,
+            this.crowbarhalf1,
+            this.collectCrowbar1.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.collider(this.player, this.crowbarhalf2);
+        this.physics.add.overlap(
+            this.player,
+            this.crowbarhalf2,
+            this.collectCrowbar2.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.collider(this.crowbarhalf2, this.prisoncells);
+        this.physics.add.overlap(
+            this.crowbarhalf1,
+            this.crowbarhalf2,
+            this.createCrowbar.bind(this),
             undefined,
             this,
         );
         this.physics.add.overlap(
-            this.crowbar,
+            this.crowbarhalf2,
             this.prisoncells,
             this.handlecrowbarHit.bind(this),
             undefined,
             this,
         );
-        this.physics.add.collider(this.player, this.crowbar);
-        this.physics.overlap(
-            this.player,
-            this.crowbar,
-            this.overlapCommands.bind(this),
-            undefined,
-            this,
-        );
 
-        this.anims.create({
-            key: "left",
-            frames: this.anims.generateFrameNumbers("player", {
-                start: 0,
-                end: 3,
-            }),
-            frameRate: 10,
-            repeat: -1,
-        });
-
-        this.anims.create({
-            key: "turn",
-            frames: [{ key: "player", frame: 4 }],
-            frameRate: 10,
-        });
-
-        this.anims.create({
-            key: "right",
-            frames: this.anims.generateFrameNumbers("player", {
-                start: 5,
-                end: 8,
-            }),
-            frameRate: 10,
-            repeat: -1,
-        });
-
-        //this.cursors = this.input.keyboard?.createCursorKeys();
         this.fpsText = new FpsText(this);
 
         EventBus.emit("current-scene-ready", this);
     }
 
+    private getRock() {
+        if (!this.acquirerock) {
+            this.acquirerock = true;
+        }
+    }
+
+    private getStick() {
+        if (!this.acquirestick) {
+            this.acquirestick = true;
+        }
+    }
+
+    private createShovel() {
+        if (!this.acquirerock || !this.acquirestick) {
+            this.createdshovel = false;
+        } else {
+            this.createdshovel = true;
+        }
+    }
+
+    private digDirt() {
+        if (!this.createdshovel) {
+            this.digging = false;
+        } else {
+            this.digging = true;
+        }
+    }
     private hitPrisonCell() {
         if (
             this.physics.overlap(this.player, this.prisoncells) &&
-            !this.inventory.has("Crowbar.txt")
+            !this.createdbar
         ) {
             console.log("You need a crowbar to break the prison cell!");
             this.prisoncellHealth = this.prisoncellHealth - 0;
         }
         if (
             this.physics.overlap(this.player, this.prisoncells) &&
-            this.inventory.has("Crowbar.txt")
+            this.createdbar
         ) {
             this.prisoncellHealth -= this.crowstrength;
             if (this.prisoncellHealth == 0) {
@@ -244,100 +277,40 @@ export class Level1 extends Scene {
         }
     }
 
-    private overlapCommands() {
-        // WIP Code For Movement in game, which is the biggest weakness right now //
-        /*const items: Record<string, Collidable> = {};
-        items["player"] = this.player;
-        items["crowbar"] = this.crowbar;
-        items["prisoncells"] = this.prisoncells;
-
-        function managemovement(objects: Collidable): { x: number; y: number } {
-            if (objects instanceof Phaser.Physics.Arcade.StaticGroup) {
-                const obj = objects.children
-                    .entries[0] as Phaser.GameObjects.Sprite;
-                return { x: obj.x, y: obj.y };
-            }
-
-            if (objects instanceof Phaser.GameObjects.Group) {
-                const o = objects.getFirstAlive() as Phaser.GameObjects.Sprite;
-                return { x: o.x, y: o.y };
-            }
-
-            return { x: objects.x, y: objects.y };
+    private collectCrowbar1() {
+        if (!this.digging) {
+            this.hashalf1 = false;
+        } else {
+            this.hashalf1 = true;
         }
-
-        function move(move: string[]) {
-            if (move.length != 3) {
-                return {
-                    type: "error",
-                    message: "Usage: my player <objectName>",
-                } as const;
-            }
-
-            const target = move[1];
-            const objectName = move[2];
-
-            if (target !== "player") {
-                return {
-                    type: "error",
-                    message: `mv: unknown target '${target}'`,
-                } as const;
-            }
-
-            const ject = items[objectName];
-            if (!ject) {
-                return {
-                    type: "error",
-                    message: `mv: unknown object '${objectName}'`,
-                } as const;
-            }
-
-            return {
-                type: "moveToObject",
-                objectName,
-            } as const;
-        }
-
-        interface GoToScene {
-            type: "goto";
-            x: number;
-            y: number;
-        }
-
-        type movementScene = GoToScene;
-
-        const mqueue: movementScene[] = [];
-        let isMoving = false;
-
-        function queueMoveToObject(itemname: string) {
-            const it = items[itemname];
-            const pos = managemovement(it);
-
-            mqueue.push({
-                type: "goto",
-                x: pos.x,
-                y: pos.y,
-            });
-        }*/
     }
 
-    private collectCrowbar() {
-        if (this.physics.overlap(this.player, this.crowbar)) {
-            this.inventory.has("Crowbar.txt");
+    private collectCrowbar2() {
+        if (!this.digging) {
+            this.hashalf2 = false;
+        } else {
+            this.hashalf2 = true;
+        }
+    }
+    private createCrowbar() {
+        if (!this.hashalf1 || !this.hashalf2) {
+            this.createdbar = false;
+        } else {
+            this.createdbar = true;
         }
     }
 
     private handlecrowbarHit() {
         if (
             this.physics.overlap(this.prisoncells, this.player) &&
-            this.inventory.has("Crowbar.txt")
+            this.createdbar
         ) {
             this.hitPrisonCell();
         }
     }
 
     private groundandwallCollisions() {
-        if (this.physics.overlap(this.player, this.ground)) {
+        if (this.physics.overlap(this.player, this.dirt)) {
             this.player.setVelocityY(0);
         }
         if (this.physics.overlap(this.player, this.wall)) {
@@ -346,20 +319,7 @@ export class Level1 extends Scene {
     }
 
     update() {
-        /*if (!isMoving && mqueue.length) {
-            const step = mqueue.shift();
-            isMoving = true;
-
-            this.tweens.add({
-                targets: gameObjects["player"] as Phaser.GameObjects.Sprite,
-                x: step.x,
-                y: step.y,
-                duration: 100,
-                onComplete: () => (isMoving = false),
-            });
-        }*/
         this.fpsText.update();
-        this.pregametext.update();
     }
 
     changeScene() {
