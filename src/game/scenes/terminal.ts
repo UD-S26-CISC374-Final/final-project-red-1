@@ -310,14 +310,12 @@ export class Terminal extends Scene implements ChangeableScene {
                         }
 
                         // directories
+                        const cleanedToken = token.replace(/[.,!?;:]+$/, "");
+
                         if (
-                            token === "Jail" ||
-                            token === "Hole" ||
-                            token === "Hallway" ||
-                            token === "TortureChamber" ||
-                            token === "AlchemyRoom" ||
-                            token === "OldRoom" ||
-                            token === "ThroneRoom"
+                            this.env.nav.current.getChild(cleanedToken) !==
+                                -1 &&
+                            !token.includes(".txt")
                         ) {
                             return `[color=#0088ff]${token}[/color]`;
                         }
