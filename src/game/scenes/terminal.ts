@@ -38,6 +38,12 @@ export class Terminal extends Scene implements ChangeableScene {
                 return "Level1";
             case "TortureChamber":
                 return "Level2";
+            case "AlchemyRoom":
+                return "Level3";
+            case "OldRoom":
+                return "Level4";
+            case "ThroneRoom":
+                return "Level5";
             case "Hallway":
                 return "Hallway";
             default:

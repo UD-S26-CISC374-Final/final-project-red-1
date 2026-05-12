@@ -45,8 +45,6 @@ export class Enviroment {
 
         //Jail/Level1
         const jail = new Folder("Jail", hallway);
-        const crowbar = new Folder("Crowbar", jail);
-        const dig = new Folder("Dig", jail);
         new File(
             "Cells",
             jail,
@@ -203,22 +201,7 @@ export class Enviroment {
         new File("Crown", bart, false, "This is your property!!!");
         new File("Elevator", secret, false, "The way out!!!");
 
-        //Records (Add Back Later)
-        const records = new Folder("Records", hallway);
-        const shelf1 = new Folder("Shelf1", records);
-        new File("Book1", shelf1, true);
-        new File("Book2", shelf1, true);
-        new File("Book3", shelf1, true);
-        const shelf2 = new Folder("Shelf2", records);
-        new File("Book1", shelf2, true);
-        new File("Book2", shelf2, true);
-        new File("Book3", shelf2, true);
-
-        //Lab
-        const lab = new Folder("Lab", hallway);
-        new File("Potion", lab, false, "3 days blinding stew.");
-
-        this.nav = new Navigator(jail); //start of the game
+        this.nav = new Navigator(hallway); //start of the game
         /*this.nav = new Navigator(torture);
         this.nav = new Navigator(alchemy);
         this.nav = new Navigator(oldroom);

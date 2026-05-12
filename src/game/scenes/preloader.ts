@@ -80,7 +80,7 @@ export class Preloader extends Scene {
             "door",
             "assets/door.png",
         ); /* Credit goes to https://opengameart.org/content/wood-door by wobba89 */
-        /* this.load.image("water", "assets/water.png");
+        this.load.image("water", "assets/water.png");
         this.load.image("bucket", "assets/bucket.png");
         this.load.image("cobwebs", "assets/cobwebs.png");
         this.load.image("rake", "assets/rake.png");
@@ -88,7 +88,7 @@ export class Preloader extends Scene {
         this.load.image("buttons", "assets/buttons.png");
         this.load.image("throne", "assets/throne.png");
         this.load.image("motionsensor", "assets/motionsensor.png");
-        this.load.image("hammer", "assets/hammer.png"); */
+        this.load.image("hammer", "assets/hammer.png");
         this.load.image(
             "fountain",
             "assets/fountain.png",
