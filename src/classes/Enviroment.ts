@@ -33,6 +33,8 @@ export class Enviroment {
 
     private moveDirt = false;
     private getCrowbar = false;
+    private boxCut = false;
+    private level3Opened = false;
 
     constructor() {
         //Root
@@ -75,7 +77,7 @@ export class Enviroment {
             true,
             "An old mechanical lever that seems to be attached to the chain. I wonder what will happen if I press it.",
         ); //Lever
-        const tortureTable = new Folder("Table", torture, true, false);
+        const tortureTable = new Folder("Table", torture, true, true);
         new File(
             "Guillotine",
             tortureTable,
@@ -225,16 +227,6 @@ export class Enviroment {
     private updateEnviromentState(): string {
         const currentFolder = this.nav.current;
 
-        //^ Former Logic for the first puzzle^
-
-        /*if (this.nav.current.getChild("Inventory") !== -1) {
-            this.nav.current.removeChild("Inventory");
-        }
-
-        if (this.nav.current.name !== "Inventory") {
-            this.nav.current.addChild(this.Inventory);
-        }*/
-
         // LEVEL 1 LOGIC
         if (currentFolder.name === "Jail") {
             const Hole = currentFolder.getChildAsFile("Hole");
@@ -265,6 +257,24 @@ export class Enviroment {
                 this.getCrowbar = true;
                 return "\n...you put it in the hole didnt you?";
             }
+        }
+
+        //LEVEL 2 LOGIC
+        if (this.boxCut) {
+            this.boxCut = false;
+            const tempGrab = this.nav.findFileByBaseName("Box");
+            if (tempGrab instanceof Folder) {
+                tempGrab.acessible = true;
+            }
+        }
+
+        if (this.level3Opened) {
+            this.level3Opened = false;
+            const tempGrab = this.nav.findFileByBaseName("AlchemyRoom");
+            if (tempGrab instanceof Folder) {
+                tempGrab.acessible = true;
+            }
+            return "\nA strange rumbling of a door opening up can be heard...\n\n(AlchemyRoomUnlocked)";
         }
 
         return "";
@@ -304,9 +314,32 @@ export class Enviroment {
                 return "You look around to see if theres any pryable surfaces and it seems like there are none.";
             }
         } else if (name === "Lever.exe") {
-            return "placeholder";
+            let returnMessage = "You hear a click of the lever...";
+
+            const tempFile = this.nav.findFileByBaseName("PoweredGuillotine");
+
+            if (tempFile instanceof File) {
+                returnMessage += "\nThe guillotine blade falls...";
+
+                const box = this.nav.findFileByBaseName("Box");
+
+                if (box instanceof Folder && box.parent?.name === "Table") {
+                    returnMessage +=
+                        "\nAnd the box has been opened! I wonder what's inside...";
+                    this.boxCut = true;
+                } else {
+                    returnMessage +=
+                        "\nAnd nothing happened. If only you could move an item onto the table.";
+                }
+            } else {
+                returnMessage +=
+                    "\n...and nothing happens. Maybe try using cat on two items";
+            }
+
+            return returnMessage;
         } else if (name === "Button.exe") {
-            return "placeholder";
+            this.level3Opened = true;
+            return "";
         }
 
         return "Hi, this is just the default text"; //Default case incase the .exe file doesnt exist... somehow.

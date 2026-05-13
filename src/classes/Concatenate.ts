@@ -1,7 +1,7 @@
 import { File } from "./File";
 import { Folder } from "./Folder";
 
-const combinedFileNames = ["Crowbar"];
+const combinedFileNames = ["Crowbar", "PoweredGuillotine"];
 
 /*
     Name: mergeFiles
@@ -13,23 +13,26 @@ const combinedFileNames = ["Crowbar"];
 function mergeFiles(fileA: File, fileB: File, index: number) {
     const moveToFolder: Folder = fileA.parent;
 
-    const combinedItems: File[] = [
+    fileA.parent.removeChild(fileA.name);
+    fileB.parent.removeChild(fileB.name);
+
+    if (index === 0) {
         new File(
             "Crowbar",
             moveToFolder,
             true,
-            "Oh, a crowbar! Really hope this things half-life hasnt passed. If only I could use it on something...",
+            "Oh, a crowbar! Really hope this thing's half-life hasn't passed. If only I could use it on something...",
             true,
-        ),
-    ];
+        );
+    }
 
-    fileA.parent.removeChild(fileA.name);
-    fileB.parent.removeChild(fileB.name);
-
-    for (let i = 0; i < combinedItems.length; i++) {
-        if (i !== index) {
-            combinedItems[i].parent.removeChild(combinedItems[i].name);
-        }
+    if (index === 1) {
+        new File(
+            "PoweredGuillotine",
+            moveToFolder,
+            false,
+            "A guillotine attached to a chain that looms over a table, ready to slice something.",
+        );
     }
 }
 
@@ -40,8 +43,8 @@ function mergeFiles(fileA: File, fileB: File, index: number) {
     Output: string: either an error or a notificaiton letting the user know that both files were combined
  */
 export function combineFiles(fileA: File, fileB: File): string {
-    const fileACombine: string[] = ["Crow.txt"];
-    const fileBCombine: string[] = ["Bar.txt"];
+    const fileACombine: string[] = ["Crow.txt", "Chain.txt"];
+    const fileBCombine: string[] = ["Bar.txt", "Guillotine.txt"];
 
     let fileAinCombines: number;
     let checkforA: string[];

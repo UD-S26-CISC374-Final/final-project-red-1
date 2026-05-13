@@ -335,4 +335,34 @@ export class Navigator {
             return "ERROR: File A does not exist";
         }
     }
+
+    /*
+    Name: findFileByBaseName
+    Description: Searches the entire file tree starting from root and returns
+                 the first File or Folder whose name matches the given input.
+                 Ignores accessibility and path rules.
+    Input: name (string): name of the file or folder to find
+    Output: File | Folder | null
+*/
+    public findFileByBaseName(name: string): File | Folder | null {
+        const stack: Folder[] = [this.root];
+
+        while (stack.length > 0) {
+            const current = stack.pop()!;
+
+            for (const child of current.children) {
+                const base = child.name.replace(/\.(txt|exe)$/, "");
+
+                if (base === name) {
+                    return child;
+                }
+
+                if (child instanceof Folder) {
+                    stack.push(child);
+                }
+            }
+        }
+
+        return null;
+    }
 }
