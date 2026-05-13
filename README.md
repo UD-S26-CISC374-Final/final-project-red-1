@@ -32,9 +32,6 @@ Link to our [gameplay video](https://drive.google.com/file/d/1zdXNSOvF-X3N35mUYh
 Link to our [egdd](https://github.com/GeorgeZapp/egdd/blob/main/index.md)
 
 # Credits
-
-- OpenGameArt:
-
 - OpenGameArt Assets:
 
 -
