@@ -25,7 +25,7 @@ TEXT GOES HERE
 
 # Gameplay Video
 
-TEXT GOES HERE
+Link to our [gameplay video](https://drive.google.com/file/d/1zdXNSOvF-X3N35mUYhlVePNpngAbmzAP/view?usp=sharing)
 
 # Educational Game Design Document
 
