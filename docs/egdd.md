@@ -32,6 +32,9 @@ You wake up in some weird, dimly-lit room, not knowing where you are or how you 
 - For certain objects, you can also use the `mv` command to physically move them in the world
 - To interact with puzzles, players will run executable files in the file system
 - If at any time the player needs help with commands, they can run `help` for a menu of all the commands, or `[command] -h` for more info on a specific command
+- If at any time the player needs to clear their terminal, they can run `clear`
+- If a player needs to see their working directory, they can run `pwd`
+- 
 
 # Learning Aspects
 
@@ -176,6 +179,10 @@ All actions are done via an in game terminal. This includes:
     - Clears the text
     - Works if there is text
     - If nothing is present, the terminal will print out a message stating that there is no text
+- `pwd`
+    - Prints the working directory
+    - Works if there is a directory
+
 
 # Objects/Entities
 
