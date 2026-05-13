@@ -44,7 +44,7 @@ export class Enviroment {
         new File("Candle", hallway, false, "This is a candle.");
 
         //Jail/Level1
-        const jail = new Folder("Jail", hallway);
+        const jail = new Folder("Jail", hallway, true, false);
         new File(
             "Cells",
             jail,
@@ -62,41 +62,36 @@ export class Enviroment {
         new Folder("Hole", jail);
 
         //Torture Chamber/Level2
-        const torture = new Folder("TortureChamber", hallway);
-        const cabinet = new Folder("Cabinet", torture);
-        const boxes = new Folder("Boxes", torture);
-        new File("Chain", torture, false, "Feel how hard the links are!");
-        new File("Guillotine", torture, false, "This is so French!");
+        const torture = new Folder("TortureChamber", hallway, true, false);
         new File(
-            "Gloves",
-            cabinet,
-            false,
-            "Gloves...like the materials you use to protect your hands",
-        );
-        new File("Lever", torture, false, "Pull that lever");
-        new File(
-            "Metal",
-            cabinet,
-            false,
-            "It's metal...Shiny, like nicely polished shoes. Maybe you could create something out of this.",
-        );
-        new File(
-            "Cabinet",
-            cabinet,
-            false,
-            "What could this contain? Maybe a dead body...but probably not",
-        );
-        new File("Boxes", boxes, false, "These are just boxes.");
-        new File("Button", boxes, false, "Where could these buttons be?");
-        new File(
-            "Slide",
+            "Chain",
             torture,
             false,
-            "What is this, preschool? A slide to get out...imposible!",
+            "An old, rusty chain that flakes off metal when you touch it. Its connected to the lever, but nothing else.\nI wonder if I could connect it to anything.",
+        );
+        new File(
+            "Lever",
+            torture,
+            true,
+            "An old mechanical lever that seems to be attached to the chain. I wonder what will happen if I press it.",
+        ); //Lever
+        const tortureTable = new Folder("Table", torture, true, false);
+        new File(
+            "Guillotine",
+            tortureTable,
+            false,
+            "A guillotine. It seems like it needs to be attached to something in order to work.",
+        );
+        const tortureBox = new Folder("Box", torture, false, true);
+        new File(
+            "Button",
+            tortureBox,
+            true,
+            "Oooo, a button! I wonder what will happen if I press it.",
         );
 
         //AlchemyRoom/Level3
-        const alchemy = new Folder("AlchemyRoom", hallway);
+        const alchemy = new Folder("AlchemyRoom", hallway, false);
         const potion = new Folder("Potion", alchemy);
         new File("Flasks", potion, false, "These feel super hard");
         new File("Chemicals", potion, false, "Oh...chemicals. Be careful now");
@@ -122,7 +117,7 @@ export class Enviroment {
 
         //OldRoom/Level4
 
-        const oldroom = new Folder("OldRoom", hallway);
+        const oldroom = new Folder("OldRoom", hallway, false);
         const nut = new Folder("Nut", oldroom);
         new File(
             "Water Bucket",
@@ -175,7 +170,7 @@ export class Enviroment {
 
         //ThroneRoom/Level5
 
-        const throneroom = new Folder("ThroneRoom", hallway);
+        const throneroom = new Folder("ThroneRoom", hallway, false);
         new File("Throne", throneroom, false, "Your rightful throne as king");
         new File(
             "Picture",
@@ -308,6 +303,10 @@ export class Enviroment {
                 //for some reason you used this in any other place but the jail
                 return "You look around to see if theres any pryable surfaces and it seems like there are none.";
             }
+        } else if (name === "Lever.exe") {
+            return "placeholder";
+        } else if (name === "Button.exe") {
+            return "placeholder";
         }
 
         return "Hi, this is just the default text"; //Default case incase the .exe file doesnt exist... somehow.
@@ -340,7 +339,7 @@ export class Enviroment {
                         case "/.exe":
                             return "Executes an executable file.";
                         case "cat":
-                            return "cat, or 'concatenate', is a command that is used exclusively for text files, or files labeled with .txt.\n\nWhen used in the format: cat [file], the description of the text file will be presented.\nWhen used in the format: cat [file1] [file2], both of the text files will be combined into a new item, only if they are able to, however. NOTE: This is permenant.";
+                            return "cat, or 'concatenate', is a command that is used exclusively for text files, or files labeled with .txt.\n\nWhen used in the format: cat [file], the description of the text file will be presented. This also works on executibles.\nWhen used in the format: cat [file1] [file2], both of the text files will be combined into a new item, only if they are able to, however. NOTE: This is permenant, and does not work on executables.";
                         case "clear":
                             return "Clears the entire terminal screen.";
                         case "pwd":

@@ -141,7 +141,7 @@ export class Navigator {
             return "ERROR: File cannot be moved to another File";
         }
 
-        if (!parentFile.acessible) {
+        if (!parentFile.moveable) {
             return "ERROR: File cannot be moved to an unaccesible folder.";
         }
 
@@ -167,6 +167,14 @@ export class Navigator {
         } else {
             //child is a folder
             const oldParent = childFile.parent;
+
+            if (!childFile.moveable) {
+                return (
+                    "ERROR: The folder " +
+                    childFile.name +
+                    "is unable to be moved."
+                );
+            }
 
             if (oldParent) {
                 oldParent.removeChild(childFile.name);

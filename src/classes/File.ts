@@ -48,14 +48,10 @@ export class File {
         Output: string (the description of the file)
     */
     public displayDescription(): string {
-        if (!this.isExe) {
-            if (this.description) {
-                return this.description;
-            } else {
-                return "ERROR: File does not have a description.";
-            }
+        if (this.description) {
+            return this.description;
         } else {
-            return "ERROR! exe's cannot be concatenated!";
+            return "ERROR: File does not have a description.";
         }
     }
 }
