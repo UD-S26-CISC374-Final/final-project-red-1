@@ -21,7 +21,8 @@ In order to move in and out of rooms, the command `cd` is used to do so. To look
 
 # Screenshot
 
-TEXT GOES HERE
+Screenshots:
+- Link to our [small screenshot](
 
 # Gameplay Video
 
