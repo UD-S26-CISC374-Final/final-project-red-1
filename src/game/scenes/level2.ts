@@ -30,18 +30,29 @@ export class Level2 extends Scene {
     private guillotineActive = false;
     private alchemyLab = false;
     private transitioning = false;
-    private metalchopped: boolean;
-    private openCabinet: boolean;
-    private hasMetal: boolean;
-    private brokeBoxes: boolean;
-    private pressedButton: boolean;
-    private accessSlide: boolean;
+    private metalchopped: boolean = false;
+    private openCabinet: boolean = false;
+    private hasMetal: boolean = false;
+    private brokeBoxes: boolean = false;
+    private pressedButton: boolean = false;
+    private accessSlide: boolean = false;
 
     constructor() {
         super("Level2");
     }
 
     create() {
+        this.button = this.physics.add.image(300, 500, "buttons");
+        this.button.setImmovable(true);
+
+        this.cabinet = this.physics.add.image(600, 500, "boxes");
+        this.cabinet.setImmovable(true);
+
+        this.slide = this.physics.add.image(700, 400, "door");
+        this.slide.setImmovable(true);
+
+        this.metal = this.physics.add.group({ allowGravity: false });
+        this.metal.create(350, 500, "chain");
         // CAMERA
         this.cameras.main.setViewport(0, 0, 514, 768);
         this.cameras.main.setBackgroundColor("#808080");

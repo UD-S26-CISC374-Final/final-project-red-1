@@ -16,12 +16,12 @@ export class Level5 extends Scene {
     private picture: Phaser.Physics.Arcade.Image;
     private elevator: Phaser.Physics.Arcade.Image;
 
-    private hasHammer: boolean;
-    private thronebroken: boolean;
-    private grabPainting: boolean;
-    private msActivated: boolean;
-    private elevatorActivated: boolean;
-    private fakeWin: boolean;
+    private hasHammer: boolean = false;
+    private thronebroken: boolean = false;
+    private grabPainting: boolean = false;
+    private msActivated: boolean = false;
+    private elevatorActivated: boolean = false;
+    private fakeWin: boolean = false;
 
     constructor() {
         super("Level5");
@@ -30,6 +30,9 @@ export class Level5 extends Scene {
     create() {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#202020");
+
+        this.cameras.main.setViewport(0, 0, 512, 768);
+        this.cameras.main.setBounds(0, 0, 512, 768);
 
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
@@ -148,10 +151,6 @@ export class Level5 extends Scene {
         if (this.elevatorActivated) {
             this.fakeWin = true;
         }
-    }
-
-    update() {
-        this.fpsText.update();
     }
 
     changeScene() {

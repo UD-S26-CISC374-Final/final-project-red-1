@@ -92,10 +92,6 @@ export class Secret extends Scene {
         }
     }
 
-    update() {
-        this.fpsText.update();
-    }
-
     changeScene() {
         if (this.elevatorOpen) {
             this.scene.start("Win");

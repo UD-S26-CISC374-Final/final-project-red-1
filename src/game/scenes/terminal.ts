@@ -38,6 +38,12 @@ export class Terminal extends Scene implements ChangeableScene {
                 return "Level1";
             case "TortureChamber":
                 return "Level2";
+            case "AlchemyRoom":
+                return "Level3";
+            case "OldRoom":
+                return "Level4";
+            case "ThroneRoom":
+                return "Level5";
             case "Hallway":
                 return "Hallway";
             default:
@@ -304,14 +310,12 @@ export class Terminal extends Scene implements ChangeableScene {
                         }
 
                         // directories
+                        const cleanedToken = token.replace(/[.,!?;:]+$/, "");
+
                         if (
-                            token === "Jail" ||
-                            token === "Hole" ||
-                            token === "Hallway" ||
-                            token === "TortureChamber" ||
-                            token === "AlchemyRoom" ||
-                            token === "OldRoom" ||
-                            token === "ThroneRoom"
+                            this.env.nav.current.getChild(cleanedToken) !==
+                                -1 &&
+                            !token.includes(".txt")
                         ) {
                             return `[color=#0088ff]${token}[/color]`;
                         }

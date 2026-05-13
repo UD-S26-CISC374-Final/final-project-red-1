@@ -9,8 +9,9 @@ export class Folder {
     height: number;
 
     acessible: boolean = true;
+    moveable: boolean = this.acessible;
 
-    constructor(n: string, pF: Folder | null, a?: boolean) {
+    constructor(n: string, pF: Folder | null, a?: boolean, m?: boolean) {
         this.name = n;
         this.parent = pF;
         this.parent?.addChild(this);
@@ -19,6 +20,12 @@ export class Folder {
 
         if (a !== undefined) {
             this.acessible = a;
+        }
+
+        if (m !== undefined) {
+            this.moveable = m;
+        } else {
+            this.moveable = this.acessible;
         }
 
         if (this.parent === null) {
