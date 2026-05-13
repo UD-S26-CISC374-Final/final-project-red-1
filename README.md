@@ -22,6 +22,7 @@ In order to move in and out of rooms, the command `cd` is used to do so. To look
 # Screenshot
 
 Screenshots:
+
 - Link to our [small screenshot](docs/small.png)
 - Link to our [large screenshot](docs/large.png)
 
@@ -34,12 +35,20 @@ Link to our [gameplay video](https://drive.google.com/file/d/1zdXNSOvF-X3N35mUYh
 Link to our [egdd](https://github.com/GeorgeZapp/egdd/blob/main/index.md)
 
 # Credits
+
 - OpenGameArt Assets:
-
--
-
+- https://opengameart.org/content/prison-tiles - Credit goes to devnewton
+- https://opengameart.org/content/crow-bar - Credit goes to Lewis W. Veasey
+- https://opengameart.org/content/chain-whip - Credit goes to Nineball
+- https://opengameart.org/content/pointers-part-5 - Credit goes to yd
+- https://opengameart.org/content/guillotine - Credit goes to Rudy Phelippeau
+- https://opengameart.org/content/bundle-events-assets - Credit goes to amaralzin9309
+- https://opengameart.org/content/isometric-alchemist-flasks-with-and-without-magic-symbols - Credit goes to Varkalandar
+- https://opengameart.org/content/potions-7 - Credit goes to chabull
+- https://opengameart.org/content/rusty-iron-key-povray-scene-file - Credit goes to Varkalandar
+- https://opengameart.org/content/wood-door - Credit goes to wobba89
+- https://opengameart.org/content/gilead-king-in-armor - Credit goes to Razare2015(this is the player)
 - OpenGameArt Soundtrack:
-
 - https://opengameart.org/content/battle-theme-a - Credit goes to cynicmusic
 - https://opengameart.org/content/cyberpunk-moonlight-sonata - Credit goes to Joth
 - https://opengameart.org/content/space-boss-battle-theme - Credit goes to Matthew Pablo
@@ -48,6 +57,5 @@ Link to our [egdd](https://github.com/GeorgeZapp/egdd/blob/main/index.md)
 - https://opengameart.org/content/arabesque - Credit goes to brianiac256
 - https://opengameart.org/content/a-slave-to-no-one-rpg-orchestral-essentials-boss-music - Credit goes to InspectorJ
 - https://opengameart.org/content/calm-relax-1-synthwave-421k - Credit goes to cynicmusic
-
 - Game Icons.net:
 - https://game-icons.net/1x1/lorc/castle.html#download: Credit goes to Lorc for the favicon icon
