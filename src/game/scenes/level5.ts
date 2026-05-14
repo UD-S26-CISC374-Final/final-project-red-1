@@ -32,6 +32,7 @@ export class Level5 extends Scene {
         this.cameras.main.setViewport(0, 0, 512, 768);
         this.cameras.main.setBounds(0, 0, 512, 768);
 
+        this.add.image(400, 400, "throne");
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
