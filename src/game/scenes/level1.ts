@@ -4,7 +4,6 @@ import FpsText from "../objects/fps-text";
 
 export class Level1 extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
-    minimap: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     fpsText: FpsText;
     private dirt: Phaser.Physics.Arcade.StaticGroup;
@@ -33,12 +32,6 @@ export class Level1 extends Scene {
     create() {
         this.camera = this.cameras.main;
         this.cameras.main.setViewport(0, 0, 514, 768);
-
-        this.minimap = this.cameras
-            .add(0, 0, 150, 150)
-            .setZoom(0.2)
-            .setName("minimap");
-        this.minimap.setBackgroundColor("#999900");
 
         this.add.image(400, 400, "dungeon");
         this.camera = this.cameras.main;

@@ -6,7 +6,6 @@ export class Level2 extends Scene {
     camera!: Phaser.Cameras.Scene2D.Camera;
     background!: Phaser.GameObjects.Image;
     fpsText!: FpsText;
-    minimap: Phaser.Cameras.Scene2D.Camera;
 
     private ground!: Phaser.Physics.Arcade.StaticGroup;
     private player!: Phaser.Physics.Arcade.Sprite;
@@ -56,13 +55,6 @@ export class Level2 extends Scene {
         // CAMERA
         this.cameras.main.setViewport(0, 0, 514, 768);
         this.cameras.main.setBackgroundColor("#808080");
-
-        // MINIMAP
-        this.minimap = this.cameras
-            .add(0, 0, 150, 150)
-            .setZoom(0.2)
-            .setName("minimap");
-        this.minimap.setBackgroundColor("#999900");
 
         // BACKGROUND
         this.add.image(400, 400, "torture");
