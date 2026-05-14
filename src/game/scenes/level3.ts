@@ -14,10 +14,10 @@ export class Level3 extends Scene {
     timerEvent: Phaser.Time.TimerEvent;
     private ground: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
-    private flasks: Phaser.Physics.Arcade.StaticGroup;
-    private table: Phaser.Physics.Arcade.Image;
-    private book: Phaser.Physics.Arcade.Image;
-    private wall: Phaser.Physics.Arcade.StaticGroup;
+    private flasks: Phaser.Physics.Arcade.Group;
+    private table: Phaser.Physics.Arcade.Group;
+    private book: Phaser.Physics.Arcade.Group;
+    private wall: Phaser.Physics.Arcade.Group;
     private hasFlasks: boolean;
     private hasneutral: boolean;
     private hasacid: boolean;
@@ -26,8 +26,8 @@ export class Level3 extends Scene {
     private chemicalsacid: Phaser.Physics.Arcade.StaticGroup;
     private chemicalsbase: Phaser.Physics.Arcade.StaticGroup;
     private seeKey: boolean;
-    private key: Phaser.Physics.Arcade.Image;
-    private door: Phaser.Physics.Arcade.Image;
+    private key: Phaser.Physics.Arcade.Group;
+    private door: Phaser.Physics.Arcade.Group;
 
     private readBook = false;
     private knowsRecipe = false;
@@ -57,14 +57,14 @@ export class Level3 extends Scene {
         this.player = this.physics.add.sprite(100, 700, "player");
         this.player.setCollideWorldBounds(true);
 
-        this.key = this.physics.add.image(700, 600, "key");
-        this.key.setImmovable(true);
+        this.key = this.physics.add.group({ allowGravity: false });
+        this.key.create(700, 600, "key");
 
-        this.door = this.physics.add.image(900, 600, "door");
-        this.door.setImmovable(true);
+        this.door = this.physics.add.group({ allowGravity: false });
+        this.door.create(900, 600, "door");
 
-        this.book = this.physics.add.image(300, 550, "book");
-        this.book.setImmovable(true);
+        this.book = this.physics.add.group({ allowGravity: false });
+        this.book.create(300, 500, "book");
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#404040");
 
@@ -98,7 +98,7 @@ export class Level3 extends Scene {
         g.setScale(2).refreshBody();
         this.physics.add.collider(this.ground, this.player);
 
-        this.flasks = this.physics.add.staticGroup();
+        this.flasks = this.physics.add.group({ allowGravity: false });
         this.flasks.create(200, 600, "flasks");
         this.flasks.create(200, 550, "flasks");
         this.flasks.create(200, 500, "flasks");
@@ -108,7 +108,7 @@ export class Level3 extends Scene {
         this.chemicalsacid.create(200, 550, "chemicals");
         this.chemicalsbase = this.physics.add.staticGroup();
         this.chemicalsbase.create(250, 550, "chemicals");
-        this.wall = this.physics.add.staticGroup();
+        this.wall = this.physics.add.group({ allowGravity: false });
         this.wall.create(400, 550, "wall");
         this.wall.create(400, 600, "wall");
         this.wall.create(400, 650, "wall");
