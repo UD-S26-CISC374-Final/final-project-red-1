@@ -25,10 +25,18 @@ export class Level1 extends Scene {
                 },
             )
             .setOrigin(0.5);
+        this.add.image(400, 400, "Hallway");
         this.camera = this.cameras.main;
 
         this.cameras.main.setViewport(0, 0, 514, 768);
 
+        this.background = this.add.image(0, 0, "background");
+        this.background.setAlpha(0.5);
+
         EventBus.emit("current-scene-ready", this);
+    }
+
+    update() {
+        this.fpsText.update();
     }
 }

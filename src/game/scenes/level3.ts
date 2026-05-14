@@ -15,19 +15,26 @@ export class Level3 extends Scene {
     private ground: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
     private flasks: Phaser.Physics.Arcade.StaticGroup;
-    private chemicals: Phaser.Physics.Arcade.StaticGroup;
+    private table: Phaser.Physics.Arcade.Image;
+    private book: Phaser.Physics.Arcade.Image;
     private wall: Phaser.Physics.Arcade.StaticGroup;
     private hasFlasks: boolean;
-    private hasChemicals: boolean;
-    private chemicalsneutral: boolean;
-    private chemicalsacid: boolean;
-    private chemicalsbase: boolean;
+    private hasneutral: boolean;
+    private hasacid: boolean;
+    private hasbase: boolean;
+    private chemicalsneutral: Phaser.Physics.Arcade.StaticGroup;
+    private chemicalsacid: Phaser.Physics.Arcade.StaticGroup;
+    private chemicalsbase: Phaser.Physics.Arcade.StaticGroup;
     private seeKey: boolean;
     private key: Phaser.Physics.Arcade.Image;
     private door: Phaser.Physics.Arcade.Image;
 
+    private readBook = false;
+    private knowsRecipe = false;
     private hasKey = false;
     private madechemicals = false;
+    private madeacids = false;
+    private madebases = false;
     private chemicalspoured = false;
     private acidpoured = false;
     private basepoured = false;
@@ -56,6 +63,8 @@ export class Level3 extends Scene {
         this.door = this.physics.add.image(900, 600, "door");
         this.door.setImmovable(true);
 
+        this.book = this.physics.add.image(300, 550, "book");
+        this.book.setImmovable(true);
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#404040");
 
@@ -92,10 +101,12 @@ export class Level3 extends Scene {
         this.flasks.create(200, 600, "flasks");
         this.flasks.create(200, 550, "flasks");
         this.flasks.create(200, 500, "flasks");
-        this.chemicals = this.physics.add.staticGroup();
-        this.chemicals.create(200, 600, "chemicals");
-        this.chemicals.create(200, 550, "chemicals");
-        this.chemicals.create(250, 550, "chemicals");
+        this.chemicalsneutral = this.physics.add.staticGroup();
+        this.chemicalsneutral.create(200, 600, "chemicals");
+        this.chemicalsacid = this.physics.add.staticGroup();
+        this.chemicalsacid.create(200, 550, "chemicals");
+        this.chemicalsbase = this.physics.add.staticGroup();
+        this.chemicalsbase.create(250, 550, "chemicals");
         this.wall = this.physics.add.staticGroup();
         this.wall.create(400, 550, "wall");
         this.wall.create(400, 600, "wall");
@@ -103,8 +114,14 @@ export class Level3 extends Scene {
         this.wall.create(400, 625, "wall");
         this.wall.create(400, 575, "wall");
         this.physics.add.collider(this.player, this.flasks);
-        this.physics.add.collider(this.player, this.chemicals);
-        this.physics.add.collider(this.flasks, this.chemicals);
+        this.physics.add.collider(this.player, this.book);
+        this.physics.add.collider(this.book, this.table);
+        this.physics.add.collider(this.player, this.chemicalsneutral);
+        this.physics.add.collider(this.player, this.chemicalsacid);
+        this.physics.add.collider(this.player, this.chemicalsbase);
+        this.physics.add.collider(this.flasks, this.chemicalsneutral);
+        this.physics.add.collider(this.flasks, this.chemicalsacid);
+        this.physics.add.collider(this.flasks, this.chemicalsbase);
         this.physics.add.collider(this.player, this.key);
         this.physics.add.collider(this.player, this.door);
         this.physics.add.overlap(
@@ -116,14 +133,43 @@ export class Level3 extends Scene {
         );
         this.physics.add.overlap(
             this.player,
-            this.chemicals,
+            this.book,
+            this.knowsBook.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.flasks,
+            this.book,
+            this.knowRecipe.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.chemicalsneutral,
             this.pourchemicals.bind(this),
             undefined,
             this,
         );
         this.physics.add.overlap(
             this.player,
-            this.chemicals,
+            this.chemicalsacid,
+            this.pourchemicals.bind(this),
+            undefined,
+            this,
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.chemicalsbase,
+            this.pourchemicals.bind(this),
+            undefined,
+            this,
+        );
+
+        this.physics.add.overlap(
+            this.player,
+            this.chemicalsneutral,
             this.chemicalKey.bind(this),
             undefined,
             this,
@@ -151,7 +197,7 @@ export class Level3 extends Scene {
         );
         this.physics.add.overlap(
             this.player,
-            this.chemicals,
+            this.chemicalsneutral,
             this.neutralTimer.bind(this),
             undefined,
             this,
@@ -159,21 +205,47 @@ export class Level3 extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
-    private pourchemicals() {
-        if (!this.hasFlasks || !this.hasChemicals) {
-            this.madechemicals = false;
+    private knowsBook() {
+        if (!this.readBook) {
+            this.readBook = true;
         }
-        if (this.hasFlasks && this.hasChemicals) {
-            this.madechemicals = true;
+    }
+    private knowRecipe() {
+        if (!this.readBook) {
+            this.knowsRecipe = false;
+        } else {
+            this.knowsRecipe = true;
+        }
+    }
+    private pourchemicals() {
+        if (
+            !this.hasFlasks ||
+            (!this.hasneutral && !this.hasacid && !this.hasbase) ||
+            !this.knowsRecipe
+        ) {
+            this.madechemicals = false;
+            this.madeacids = false;
+            this.madebases = false;
+        }
+        if (
+            (this.hasFlasks && this.hasneutral) ||
+            this.hasacid ||
+            (this.hasbase && this.knowsRecipe)
+        ) {
+            if (this.hasneutral) {
+                this.madechemicals = true;
+            } else if (this.hasacid) {
+                this.madeacids = true;
+            } else if (this.hasbase) {
+                this.madebases = true;
+            }
         }
         if (this.madechemicals) {
-            if (this.chemicalsneutral) {
-                this.chemicalspoured = true;
-            } else if (this.chemicalsacid) {
-                this.acidpoured = true;
-            } else if (this.chemicalsbase) {
-                this.basepoured = true;
-            }
+            this.chemicalspoured = true;
+        } else if (this.madeacids) {
+            this.acidpoured = true;
+        } else if (this.madebases) {
+            this.basepoured = true;
         } else {
             this.madechemicals = false;
         }
@@ -189,6 +261,7 @@ export class Level3 extends Scene {
             }
             if (this.aciddrank) {
                 this.brokeWall = true;
+                this.wall.setAlpha(0);
             } else {
                 this.brokeWall = false;
             }
@@ -259,11 +332,19 @@ export class Level3 extends Scene {
 
         this.timer--;
         this.timertext.setText("Time: " + this.timer);
+
+        if (this.timer <= 0) {
+            this.timer = 100;
+            this.player.setTint(0x00000);
+            this.time.delayedCall(500, () => {
+                this.scene.start("Level3");
+            });
+        }
     }
 
     changeScene() {
         if (this.storeroom) {
-            this.scene.start("Win");
+            this.scene.start("Level4");
         }
     }
 }
