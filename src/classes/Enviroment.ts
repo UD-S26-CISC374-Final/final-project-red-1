@@ -199,10 +199,6 @@ export class Enviroment {
         new File("Elevator", secret, false, "The way out!!!");
 
         this.nav = new Navigator(jail); //start of the game
-        /*this.nav = new Navigator(torture);
-        this.nav = new Navigator(alchemy);
-        this.nav = new Navigator(oldroom);
-        this.nav = new Navigator(throneroom);*/
 
         //Blank Inventory
         //this.Inventory = new Folder("Inventory", this.nav.current);
@@ -262,7 +258,7 @@ export class Enviroment {
         //LEVEL 2 LOGIC
         if (this.boxCut) {
             this.boxCut = false;
-            const tempGrab = this.nav.findFileByBaseName("Box");
+            const tempGrab = this.nav.getFileDeep("Box");
             if (tempGrab instanceof Folder) {
                 tempGrab.acessible = true;
             }
@@ -270,7 +266,7 @@ export class Enviroment {
 
         if (this.level3Opened) {
             this.level3Opened = false;
-            const tempGrab = this.nav.findFileByBaseName("AlchemyRoom");
+            const tempGrab = this.nav.getFileDeep("AlchemyRoom");
             if (tempGrab instanceof Folder) {
                 tempGrab.acessible = true;
             }
@@ -316,12 +312,10 @@ export class Enviroment {
         } else if (name === "Lever.exe") {
             let returnMessage = "You hear a click of the lever...";
 
-            const tempFile = this.nav.findFileByBaseName("PoweredGuillotine");
-
-            if (tempFile instanceof File) {
+            if (this.nav.doesFileExistAtAll("PoweredGuillotine.txt")) {
                 returnMessage += "\nThe guillotine blade falls...";
 
-                const box = this.nav.findFileByBaseName("Box");
+                const box = this.nav.getFileDeep("Box");
 
                 if (box instanceof Folder && box.parent?.name === "Table") {
                     returnMessage +=
