@@ -118,22 +118,12 @@ export class Level1 extends Scene {
         this.crowbarhalf1 = this.add.image(
             300,
             580,
-            "CrowbarHalf1.exe",
+            "crow",
         ) as Phaser.Physics.Arcade.Image;
         this.crowbarhalf2 = this.add.image(
             300,
             720,
-            "CrowbarHalf2.exe",
-        ) as Phaser.Physics.Arcade.Image;
-        this.stick = this.add.image(
-            100,
-            600,
-            "stick",
-        ) as Phaser.Physics.Arcade.Image;
-        this.rock = this.add.image(
-            150,
-            600,
-            "rock",
+            "bar",
         ) as Phaser.Physics.Arcade.Image;
         this.player = this.physics.add.sprite(200, 619, "player");
 
