@@ -33,19 +33,25 @@ export class Terminal extends Scene implements ChangeableScene {
         super("Terminal");
     }
 
+    /*
+        Name: getSceneFromFolder
+        Description: when given a folder's name, returns a string that matches the Folder's level
+        Input: folderName (String): the folder's name
+        Output: string/null. Null if it doesnt exist, string if it does
+    */
     getSceneFromFolder(folderName: string): string | null {
         switch (folderName) {
-            case "Jail":
+            case "Jail": //level 1
                 return "Level1";
-            case "TortureChamber":
+            case "TortureChamber": //level 2
                 return "Level2";
-            case "AlchemyRoom":
+            case "AlchemyRoom": //level 3
                 return "Level3";
-            case "OldRoom":
+            case "OldRoom": //Former level 4 that was deleted both due to it being buggy and due to time. Mostly due to the former
                 return "Level4";
-            case "ThroneRoom":
+            case "ThroneRoom": //final room
                 return "Level5";
-            case "Hallway":
+            case "Hallway": // transition area
                 return "Hallway";
             default:
                 return null;
@@ -326,6 +332,15 @@ export class Terminal extends Scene implements ChangeableScene {
         EventBus.emit("current-scene-ready", this);
     }
 
+    /*
+        Name: formatLine
+        Description: when given a line, formats it for color
+        Input: line (String): the line being formatted
+        Output: string: the formatted string. Base formatting is:
+            - BLUE: Folders
+            - GREEN: .exe's
+            - WHITE: anything else
+    */
     formatLine(line: string): string {
         return line
             .split("\n")
@@ -388,7 +403,7 @@ export class Terminal extends Scene implements ChangeableScene {
 }
 
 /*
-TEST CODE USED BY LEIF TO TEST FUNCTIONALITY
+TEST CODE USED BY LEIF TO TEST FUNCTIONALITY WAY BACK IN THE BEGINNING
 
         this.title.text = env.nav.showContent();
         env.nav.travelDown("Hallway");
