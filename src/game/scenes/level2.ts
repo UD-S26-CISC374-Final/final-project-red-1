@@ -1,11 +1,9 @@
 import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
-import FpsText from "../objects/fps-text";
 
 export class Level2 extends Scene {
     camera!: Phaser.Cameras.Scene2D.Camera;
     background!: Phaser.GameObjects.Image;
-    fpsText!: FpsText;
 
     private ground!: Phaser.Physics.Arcade.StaticGroup;
     private player!: Phaser.Physics.Arcade.Sprite;
@@ -190,7 +188,6 @@ export class Level2 extends Scene {
             undefined,
             this,
         );
-        this.fpsText = new FpsText(this);
         EventBus.emit("current-scene-ready", this);
     }
 
@@ -294,9 +291,7 @@ export class Level2 extends Scene {
             this.alchemyLab = true;
         }
     }
-    update() {
-        this.fpsText.update();
-    }
+    update() {}
 
     changeScene() {
         if (this.alchemyLab) {
