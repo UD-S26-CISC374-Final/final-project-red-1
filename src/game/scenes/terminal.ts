@@ -198,7 +198,7 @@ export class Terminal extends Scene implements ChangeableScene {
 
         // initial terminal output
         this.appendLine(
-            "Hello! Welcome to the dungeon! Your goal is to get out of this area by using the commands at your disposal. Do ''help'' In order to see a list of commands.",
+            "Hello! Welcome to the dungeon! Your goal is to get out of this area by using the commands at your disposal. Do ''help'' In order to see a list of commands.\n\nIf you are wondering what each of the colors mean, green is an executible, blue is a folder, and anything else is white",
         );
         this.appendLine(this.env.update("ls"), true);
 
