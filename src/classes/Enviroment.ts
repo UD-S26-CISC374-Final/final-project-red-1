@@ -148,7 +148,7 @@ export class Enviroment {
         );
         new File("Elevator", throneroom, true, "Hope it doesnt get stuck!");
 
-        this.nav = new Navigator(folderRoot, torture); //start of the game
+        this.nav = new Navigator(folderRoot, jail); //start of the game
 
         //Blank Inventory
         //this.Inventory = new Folder("Inventory", this.nav.current);
