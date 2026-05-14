@@ -283,6 +283,10 @@ export class Enviroment {
 
                     if (this.nav.current.parent !== null) {
                         this.nav.current.parent.acessible = true;
+                        const tempFolder = this.nav.getFileDeep("Hallway");
+                        if (tempFolder instanceof Folder) {
+                            tempFolder.acessible = true;
+                        }
                     }
 
                     return "With all of your strength and body mass, you push against the brittle bars, bending then enough to allow for your escape.\n\n You are now able to do 'cd ../' to escape the jail!";
