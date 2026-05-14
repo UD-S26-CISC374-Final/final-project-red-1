@@ -10,18 +10,18 @@ export class Level2 extends Scene {
     private ground!: Phaser.Physics.Arcade.StaticGroup;
     private player!: Phaser.Physics.Arcade.Sprite;
 
-    private chain!: Phaser.Physics.Arcade.Image;
-    private lever!: Phaser.Physics.Arcade.Image;
+    private chain!: Phaser.Physics.Arcade.Group;
+    private lever!: Phaser.Physics.Arcade.Group;
 
     private gloves!: Phaser.Physics.Arcade.StaticGroup;
     private guillotine!: Phaser.Physics.Arcade.Group;
 
     private metal!: Phaser.Physics.Arcade.Group;
-    private boxes!: Phaser.Physics.Arcade.StaticGroup;
+    private boxes!: Phaser.Physics.Arcade.Group;
 
-    private cabinet!: Phaser.Physics.Arcade.Image;
-    private button!: Phaser.Physics.Arcade.Image;
-    private slide!: Phaser.Physics.Arcade.Image;
+    private cabinet!: Phaser.Physics.Arcade.Group;
+    private button!: Phaser.Physics.Arcade.Group;
+    private slide!: Phaser.Physics.Arcade.Group;
 
     private hasChain = false;
     private hasGloves = false;
@@ -41,14 +41,14 @@ export class Level2 extends Scene {
     }
 
     create() {
-        this.button = this.physics.add.image(300, 500, "buttons");
-        this.button.setImmovable(true);
+        this.button = this.physics.add.group({ allowGravity: false });
+        this.button.create(300, 500, "buttons");
 
-        this.cabinet = this.physics.add.image(600, 500, "boxes");
-        this.cabinet.setImmovable(true);
+        this.cabinet = this.physics.add.group({ allowGravity: false });
+        this.cabinet.create(600, 500, "boxes");
 
-        this.slide = this.physics.add.image(700, 400, "door");
-        this.slide.setImmovable(true);
+        this.slide = this.physics.add.group({ allowGravity: false });
+        this.slide.create(700, 400, "door");
 
         this.metal = this.physics.add.group({ allowGravity: false });
         this.metal.create(350, 500, "chain");
@@ -80,11 +80,11 @@ export class Level2 extends Scene {
         this.physics.add.collider(this.player, this.ground);
 
         // OBJECTS (FIXED: immovable for stability)
-        this.chain = this.physics.add.image(100, 700, "chain");
-        this.chain.setImmovable(true);
+        this.chain = this.physics.add.group({ allowGravity: false });
+        this.chain.create(100, 700, "chain");
 
-        this.lever = this.physics.add.image(200, 600, "lever");
-        this.lever.setImmovable(true);
+        this.lever = this.physics.add.group({ allowGravity: false });
+        this.lever.create(200, 600, "lever");
 
         this.gloves = this.physics.add.staticGroup();
         this.gloves.create(400, 600, "gloves");
@@ -92,7 +92,7 @@ export class Level2 extends Scene {
         this.guillotine = this.physics.add.group({ allowGravity: false });
         this.guillotine.create(800, 600, "guillotine");
 
-        this.boxes = this.physics.add.staticGroup();
+        this.boxes = this.physics.add.group({ allowGravity: false });
         this.boxes.create(500, 700, "boxes");
         this.boxes.create(500, 650, "boxes");
         this.boxes.create(500, 600, "boxes");
