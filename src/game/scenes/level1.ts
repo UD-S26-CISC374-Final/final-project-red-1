@@ -148,6 +148,7 @@ export class Level1 extends Scene {
             undefined,
             this,
         );
+
         this.physics.add.collider(this.player, this.crowbarhalf1);
         this.physics.add.overlap(
             this.player,
