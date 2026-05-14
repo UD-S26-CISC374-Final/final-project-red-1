@@ -94,28 +94,6 @@ export class Enviroment {
 
         //AlchemyRoom/Level3
         const alchemy = new Folder("AlchemyRoom", hallway, false);
-        const potion = new Folder("Potion", alchemy);
-        new File("Flasks", potion, false, "These feel super hard");
-        new File("Chemicals", potion, false, "Oh...chemicals. Be careful now");
-        new File("Wall", alchemy, false, "Good luck getting past this...");
-        new File(
-            "Switch",
-            alchemy,
-            false,
-            "A switch, like the one that you use to turn on and off stuff",
-        );
-        new File(
-            "Key",
-            alchemy,
-            false,
-            "The magic key! You aren't out of the woods yet, but you're getting close!",
-        );
-        new File(
-            "Door",
-            alchemy,
-            false,
-            "It's a door. What'd you expect...once you've gotten this far, it's quite simplistic.",
-        );
 
         //ThroneRoom/Level5
 
@@ -136,7 +114,7 @@ export class Enviroment {
         new File("Hammer", throneroom, false, "Escape with the hammer");
         new File("Elevator", throneroom, false, "The elevator to liberty!!!");
 
-        this.nav = new Navigator(folderRoot, jail); //start of the game
+        this.nav = new Navigator(folderRoot, alchemy); //start of the game
 
         //Blank Inventory
         //this.Inventory = new Folder("Inventory", this.nav.current);
