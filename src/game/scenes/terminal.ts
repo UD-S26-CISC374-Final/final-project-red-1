@@ -18,6 +18,7 @@ export class Terminal extends Scene implements ChangeableScene {
     textBoxText!: BBCodeText;
     cursorVisible: boolean = true;
     cursorChar: string = "█";
+    cursorIndex: number = 0;
 
     outputLines: string[] = [];
     currentInput: string = "";
@@ -57,8 +58,12 @@ export class Terminal extends Scene implements ChangeableScene {
         Input: line(string): The line that will be inputted
         Output: N/A
     */
-    appendLine(line: string) {
-        this.outputLines.push(line);
+    appendLine(line: string, shouldFormat: boolean = false) {
+        if (shouldFormat) {
+            this.outputLines.push(this.formatLine(line));
+        } else {
+            this.outputLines.push(`[color=#ffffff]${line}[/color]`);
+        }
 
         this.renderTerminal();
 
@@ -82,15 +87,17 @@ export class Terminal extends Scene implements ChangeableScene {
         Output: N/A
     */
     renderTerminal() {
-        const output = this.outputLines
-            .map((line) => this.formatLine(line))
-            .join("\n");
+        const output = this.outputLines.join("\n");
 
         const cursor = this.cursorVisible ? this.cursorChar : " ";
 
+        const before = this.currentInput.slice(0, this.cursorIndex);
+        const after = this.currentInput.slice(this.cursorIndex);
+
         const inputLine =
-            `[color=#ffffff]${this.prompt}${this.currentInput}[/color]` +
-            cursor;
+            `[color=#ffffff]${this.prompt}${before}[/color]` +
+            cursor +
+            `[color=#ffffff]${after}[/color]`;
 
         const fullText = output + "\n" + inputLine;
 
@@ -187,16 +194,36 @@ export class Terminal extends Scene implements ChangeableScene {
         this.appendLine(
             "Hello! Welcome to the dungeon! Your goal is to get out of this area by using the commands at your disposal. Do ''help'' In order to see a list of commands.",
         );
-        this.appendLine(this.env.update("ls"));
+        this.appendLine(this.env.update("ls"), true);
 
         // LIVE TYPING (moved OUTSIDE keydown)
         inputElement.addEventListener("input", () => {
             this.currentInput = inputElement.value;
+            this.cursorIndex = this.currentInput.length; // keep cursor synced
             this.renderTerminal();
         });
 
         // ENTER handling
         inputElement.addEventListener("keydown", (event: KeyboardEvent) => {
+            if (event.key === "ArrowLeft") {
+                event.preventDefault();
+
+                this.cursorIndex = Math.max(0, this.cursorIndex - 1);
+                this.renderTerminal();
+                return;
+            }
+
+            if (event.key === "ArrowRight") {
+                event.preventDefault();
+
+                this.cursorIndex = Math.min(
+                    this.currentInput.length,
+                    this.cursorIndex + 1,
+                );
+                this.renderTerminal();
+                return;
+            }
+
             if (event.key === "ArrowUp") {
                 event.preventDefault();
 
@@ -209,6 +236,7 @@ export class Terminal extends Scene implements ChangeableScene {
 
                     this.currentInput = this.history[this.historyIndex];
                     inputElement.value = this.currentInput;
+                    this.cursorIndex = this.currentInput.length;
                     this.renderTerminal();
                 }
                 return;
@@ -223,6 +251,7 @@ export class Terminal extends Scene implements ChangeableScene {
                     if (this.historyIndex >= this.history.length) {
                         this.historyIndex = -1;
                         this.currentInput = "";
+                        this.cursorIndex = 0;
                     } else {
                         this.currentInput = this.history[this.historyIndex];
                     }
@@ -254,7 +283,7 @@ export class Terminal extends Scene implements ChangeableScene {
                 const output = this.env.update(value);
 
                 if (output) {
-                    this.appendLine(output);
+                    this.appendLine(output, value.startsWith("ls"));
                 }
 
                 const targetScene = this.getSceneFromFolder(
@@ -275,6 +304,7 @@ export class Terminal extends Scene implements ChangeableScene {
 
                 this.currentInput = "";
                 inputElement.value = "";
+                this.cursorIndex = 0;
 
                 this.renderTerminal();
             }
