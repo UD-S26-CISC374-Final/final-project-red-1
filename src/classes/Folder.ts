@@ -118,4 +118,46 @@ export class Folder {
 
         return removed;
     }
+
+    /*
+        Name: showAllContents
+        Description: Using recursion, gives all of the names of the files as a list
+        Input: N/A
+        Output: string[]: the list of all of the names of the files in this folder and all subdirectories
+    */
+    public showAllContents(): string[] {
+        let allNames: string[] = [];
+
+        for (let i = 0; i < this.children.length; i++) {
+            const tempFile = this.children[i];
+
+            if (tempFile instanceof Folder) {
+                allNames = allNames.concat(tempFile.showAllContents());
+            } else {
+                allNames.push(tempFile.name);
+            }
+        }
+
+        return allNames;
+    }
+
+    public getChildAsFileDeep(name: string): Folder | File | null {
+        let child: Folder | File | null = null;
+
+        if (this.getChildAsFile(name) !== null) {
+            return this.getChildAsFile(name);
+        }
+
+        for (let i = 0; i < this.children.length; i++) {
+            const tempFile = this.children[i];
+
+            if (tempFile instanceof Folder) {
+                if (tempFile.getChildAsFileDeep(name) !== null) {
+                    child = tempFile.getChildAsFileDeep(name);
+                }
+            }
+        }
+
+        return child;
+    }
 }

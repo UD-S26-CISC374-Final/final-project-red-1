@@ -46,43 +46,20 @@ export function combineFiles(fileA: File, fileB: File): string {
     const fileACombine: string[] = ["Crow.txt", "Chain.txt"];
     const fileBCombine: string[] = ["Bar.txt", "Guillotine.txt"];
 
-    let fileAinCombines: number;
-    let checkforA: string[];
-    let checkforB: string[];
+    for (let i = 0; i < fileACombine.length; i++) {
+        const matchA = fileACombine[i];
+        const matchB = fileBCombine[i];
 
-    if (fileACombine.indexOf(fileA.name) !== -1) {
-        fileAinCombines = fileACombine.indexOf(fileA.name);
-        checkforA = fileACombine;
-        checkforB = fileBCombine;
-    } else if (fileBCombine.indexOf(fileA.name) !== -1) {
-        fileAinCombines = fileBCombine.indexOf(fileA.name);
-        checkforA = fileBCombine;
-        checkforB = fileACombine;
-    } else {
-        return fileA.name + " is unable to be combined with anything.";
-    }
+        const valid =
+            (fileA.name === matchA && fileB.name === matchB) ||
+            (fileA.name === matchB && fileB.name === matchA);
 
-    let tracker = -1;
+        if (valid) {
+            mergeFiles(fileA, fileB, i);
 
-    for (let i = fileAinCombines; i < checkforA.length; i++) {
-        tracker = checkforA.indexOf(fileA.name, i);
-
-        if (tracker === -1) {
-            return fileA.name + " is unable to be combined with " + fileB.name;
-        }
-
-        if (checkforB[tracker] === fileB.name) {
-            mergeFiles(fileA, fileB, tracker);
-            return (
-                fileA.name +
-                " was combined with " +
-                fileB.name +
-                " to make a " +
-                combinedFileNames[i] +
-                "."
-            );
-            break;
+            return `${fileA.name} was combined with ${fileB.name} to create a ${combinedFileNames[i]}.`;
         }
     }
+
     return fileA.name + " is unable to be combined with " + fileB.name;
 }

@@ -337,32 +337,31 @@ export class Navigator {
     }
 
     /*
-    Name: findFileByBaseName
-    Description: Searches the entire file tree starting from root and returns
-                 the first File or Folder whose name matches the given input.
-                 Ignores accessibility and path rules.
-    Input: name (string): name of the file or folder to find
-    Output: File | Folder | null
-*/
-    public findFileByBaseName(name: string): File | Folder | null {
-        const stack: Folder[] = [this.root];
+    Name: getFileDeep
+    Description: when given the name of a file, returns said file 
+    Input: name (string): the name of the file
+    Output: File | Folder | null: either the file/folder, or null as an error
+    */
 
-        while (stack.length > 0) {
-            const current = stack.pop()!;
+    public getFileDeep(name: string): File | Folder | null {
+        return this.root.getChildAsFileDeep(name);
+    }
 
-            for (const child of current.children) {
-                const base = child.name.replace(/\.(txt|exe)$/, "");
+    /*
+    Name: doesFileExistAtAll
+    Description: when given the name of a file, returns whether or not it exists
+    Input: name (string): the name of the file
+    Output: boolean: whether or not the file exists
+    */
+    public doesFileExistAtAll(name: string): boolean {
+        const allNames = this.root.showAllContents();
 
-                if (base === name) {
-                    return child;
-                }
-
-                if (child instanceof Folder) {
-                    stack.push(child);
-                }
+        for (let i = 0; i < allNames.length; i++) {
+            if (allNames[i] === name) {
+                return true;
             }
         }
 
-        return null;
+        return false;
     }
 }

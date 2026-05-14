@@ -35,11 +35,7 @@ export class Enviroment {
     private getCrowbar = false;
     private boxCut = false;
     private level3Opened = false;
-    private bookread = false;
     private breakWall = false;
-    private disableTime = false;
-    private unlockedKey = false;
-    private knobTurned = false;
     private throneOpened = false;
     private win = false;
 
@@ -102,71 +98,30 @@ export class Enviroment {
         //AlchemyRoom/Level3
         const alchemy = new Folder("AlchemyRoom", hallway, false);
         new File("Wall", alchemy, false, "Good luck getting past this...");
-        new File(
+        /*new File(
             "Key",
             alchemy,
             false,
             "The magic key! You aren't out of the woods yet, but you're getting close!",
-        );
+        );*/
+        const potionTable = new Folder("PotionTable", alchemy, true, false);
         new File(
-            "Door",
-            alchemy,
+            "RecipeBook",
+            potionTable,
             false,
-            "It's a door. What'd you expect...once you've gotten this far, it's quite simplistic.",
+            "A recipe for a wall-dissolving potion:\nThe one found in your stomach in the 1st\nThe one found in your bath in the 2nd\nThe remaining one in the 3rd",
         );
-        new Folder("Flasks", alchemy);
-
-        //OldRoom/Level4
-
-        const oldroom = new Folder("OldRoom", hallway, false);
-        const nut = new Folder("Nut", oldroom);
+        new Folder("Flask1", potionTable);
+        new Folder("Flask2", potionTable);
+        new Folder("Flask3", potionTable);
+        new File("Acid", potionTable, false, "Smells like the stomach");
+        new File("Neutral", potionTable, false, "Smells like nothing");
+        new File("Base", potionTable, false, "Smells like soap");
         new File(
-            "Water Bucket",
-            oldroom,
-            false,
-            "It's a bucket...filled with water",
-        );
-        new File(
-            "Cobwebs",
-            oldroom,
-            false,
-            "It's a cobweb. Old and annoying, like this room hasn't been touched in years.",
-        );
-        new File(
-            "Boxes",
-            oldroom,
-            false,
-            "Boxes. Like, the ones you store parts in.",
-        );
-        new File(
-            "Wrench",
-            nut,
-            false,
-            "Just a regular wrench. Now, maybe if you looked around, you could do something...",
-        );
-        new File(
-            "Vent",
-            nut,
-            false,
-            "Vents...like FNAF2, this time, there are no quick time events..for now. Anyways, this looks kinda important, eh?",
-        );
-        new File(
-            "Stick",
-            nut,
-            false,
-            "Just a stick...maybe you could combine this with something",
-        );
-        new File(
-            "Rock",
-            nut,
-            false,
-            "This could be combined with something, you know?",
-        );
-        new File(
-            "Garage",
-            oldroom,
-            false,
-            "This is a garage opening. Go before the evil monster sees you!!!",
+            "UsePotion",
+            potionTable,
+            true,
+            "Mixes, then uses the potions on the wall.",
         );
 
         //ThroneRoom/Level5
@@ -180,26 +135,14 @@ export class Enviroment {
             "Just looks like something that isn't necessary.",
         );
         new File(
-            "Motion Sensor",
+            "MotionSensor",
             throneroom,
             false,
             "What a shame. It doesn't recognize you in your withered state. Who knows what it will recognize.",
         );
+        new File("Elevator", throneroom, true, "Hope it doesnt get stuck!");
 
-        //Secret//
-
-        const secret = new Folder("Secret", hallway);
-        const bart = new Folder("Bart", secret);
-        new File("Shoes", bart, false, "New shoes...that you will take back");
-        new File("Wand", bart, false, "A wand...like magic!!!");
-        new File("Crown", bart, false, "This is your property!!!");
-        new File("Elevator", secret, false, "The way out!!!");
-
-        this.nav = new Navigator(jail); //start of the game
-        /*this.nav = new Navigator(torture);
-        this.nav = new Navigator(alchemy);
-        this.nav = new Navigator(oldroom);
-        this.nav = new Navigator(throneroom);*/
+        this.nav = new Navigator(folderRoot, jail); //start of the game
 
         //Blank Inventory
         //this.Inventory = new Folder("Inventory", this.nav.current);
@@ -259,7 +202,7 @@ export class Enviroment {
         //LEVEL 2 LOGIC
         if (this.boxCut) {
             this.boxCut = false;
-            const tempGrab = this.nav.findFileByBaseName("Box");
+            const tempGrab = this.nav.getFileDeep("Box");
             if (tempGrab instanceof Folder) {
                 tempGrab.acessible = true;
             }
@@ -267,7 +210,7 @@ export class Enviroment {
 
         if (this.level3Opened) {
             this.level3Opened = false;
-            const tempGrab = this.nav.findFileByBaseName("AlchemyRoom");
+            const tempGrab = this.nav.getFileDeep("AlchemyRoom");
             if (tempGrab instanceof Folder) {
                 tempGrab.acessible = true;
             }
@@ -275,117 +218,41 @@ export class Enviroment {
         }
 
         // Level3 Logic //
+        if (this.breakWall) {
+            const alchemy = this.nav.getFileDeep("AlchemyRoom");
 
-        if (currentFolder.name == "AlchemyRoom") {
-            const Flasks = currentFolder.getChildAsFile("Flasks");
+            if (alchemy instanceof Folder) {
+                alchemy.removeChild("Wall.txt");
+                new File(
+                    "Key",
+                    alchemy,
+                    true,
+                    "ooo, a key! I should go and move it to an area with a locked door",
+                );
+                this.breakWall = false;
+            }
 
-            if (Flasks instanceof File) {
-                return "\nError";
-            }
+            return "\nThe wall begins to fizzle and slowly melt, revealing something new";
+        }
 
-            if (Flasks?.getChild("Book.txt") == -1 && !this.bookread) {
-                new File(
-                    "Flask1",
-                    currentFolder,
-                    false,
-                    "This is one of three flasks available...choose wisely :)",
-                );
-                new File(
-                    "Flask2",
-                    currentFolder,
-                    false,
-                    "This is the second flask...again, choose wisely",
-                );
-                new File(
-                    "Flask3",
-                    currentFolder,
-                    false,
-                    "This is the final flask...like always, choose wisely",
-                );
-                new File(
-                    "ChemicalNeutral",
-                    currentFolder,
-                    false,
-                    "This is the neutral chemical...doesn't seem to do anything?",
-                );
-                new File(
-                    "ChemicalAcid",
-                    currentFolder,
-                    false,
-                    "This is the acidic chemical...Probably gives you superpowers, if I had to guess",
-                );
-                new File(
-                    "ChemicalBase",
-                    currentFolder,
-                    false,
-                    "These are the bases. It's all about the bases, isn't it?",
-                );
-                this.bookread = true;
-                return "\nIt seems like that these recipes are necessary...tick tock";
-            }
-            if (Flasks?.getChild("Potion1.exe") !== -1 && !this.disableTime) {
-                this.disableTime = true;
-                return "\nYou disabled the time?, didn't you. Less TikTok, and more RedNote, I guess?";
-            }
-            if (Flasks?.getChild("Potion2.exe") !== -1 && !this.breakWall) {
-                this.breakWall = true;
-                return "\nYou broke through the wall, didn't you? Huh, now the evil plan is over, I guess?";
-            }
-            if (Flasks?.getChild("Potion3.exe") !== -1 && !this.unlockedKey) {
-                this.unlockedKey = true;
-                return "\nYou unlocked the key? You really are diligent at escaping this. Here's a bone.";
-            }
-            if (this.unlockedKey) {
-                this.unlockedKey = false;
-                const tempGrab1 = this.nav.findFileByBaseName("Door");
-                if (tempGrab1 instanceof Folder) {
-                    tempGrab1.acessible = true;
-                }
-            }
-            if (this.knobTurned) {
-                this.knobTurned = false;
-                return "\nYou turned the knob, didn't you???";
-            }
-            if (this.throneOpened) {
+        if (this.throneOpened) {
+            const throneRoom = this.nav.getFileDeep("ThroneRoom");
+
+            if (throneRoom instanceof Folder) {
+                throneRoom.acessible = true;
                 this.throneOpened = false;
-                const tempGrab2 = this.nav.findFileByBaseName("ThroneRoom");
-                if (tempGrab2 instanceof Folder) {
-                    tempGrab2.acessible = true;
-                }
-                return "\nSomething's happening to me...\n\n(ThroneRoomUnlocked)...The storage room is too dirty for even the worst of people to be thrown into";
             }
         }
 
         // Level 5 Logic //
         if (currentFolder.name == "ThroneRoom") {
-            const travel = currentFolder.getChildAsFile("Elevator");
-
-            if (travel instanceof File) {
-                return "\nError";
-            }
-
-            if (travel?.getChild("Painting.txt") !== -1) {
-                new File(
-                    "MotionSensor",
-                    currentFolder,
-                    false,
-                    "State of the art motion sensor technology!!!",
-                );
-
-                new File(
-                    "Elevator",
-                    currentFolder,
-                    false,
-                    "More state of the art technology. The better the technology, the closer you are to winning!!!",
-                );
-                return "\nSeems like there is a chance that you could get out of here";
-            } //Did you push the dirt in the hole?
-
-            if (travel.getChild("OpenElevator.exe") !== -1 && !this.win) {
-                this.win = true;
-                return "\nOmg...you actually won??? That's quite an accomplishment :)";
-            }
+            return "\nSeems like there is a chance that you could get out of here";
         }
+
+        if (this.win) {
+            return "\nOmg...you actually won??? That's quite an accomplishment :)";
+        }
+
         return "";
     }
 
@@ -425,12 +292,10 @@ export class Enviroment {
         } else if (name === "Lever.exe") {
             let returnMessage = "You hear a click of the lever...";
 
-            const tempFile = this.nav.findFileByBaseName("PoweredGuillotine");
-
-            if (tempFile instanceof File) {
+            if (this.nav.doesFileExistAtAll("PoweredGuillotine.txt")) {
                 returnMessage += "\nThe guillotine blade falls...";
 
-                const box = this.nav.findFileByBaseName("Box");
+                const box = this.nav.getFileDeep("Box");
 
                 if (box instanceof Folder && box.parent?.name === "Table") {
                     returnMessage +=
@@ -449,58 +314,57 @@ export class Enviroment {
         } else if (name === "Button.exe") {
             this.level3Opened = true;
             return "";
-        }
+        } else if (name === "UsePotion.exe") {
+            const f1 = this.nav.getFileDeep("Flask1");
+            const f2 = this.nav.getFileDeep("Flask2");
+            const f3 = this.nav.getFileDeep("Flask3");
 
-        // LEVEL 3 //
+            let returnPhrase = "You start mixing the potions...";
 
-        if (name === "Potion1.exe") {
-            this.disableTime = true;
-            return "";
-        }
-        if (name === "Potion2.exe") {
-            if (this.nav.current.name === "Alchemy") {
-                if (!this.nav.current.acessible) {
-                    return "Stop...The wall's already dead :(";
-                } else {
-                    this.nav.current.removeChild("Wall.txt");
-                    new File(
-                        "DestroyedWall",
-                        this.nav.current,
-                        false,
-                        "Whoever destroyed this wall has no regard for human life...or the poor shareholders",
-                    );
-
-                    if (this.nav.current.parent !== null) {
-                        this.nav.current.parent.acessible = true;
-                    }
-                    return "With everything you got from the second potion, you had a power level of over 9,000!!!";
-                }
+            if (!(f1 instanceof Folder)) {
+                return "error";
             }
-        }
-        if (name === "Potion3.exe") {
-            let returnMessage = "You see the key...";
 
-            const tempFile1 = this.nav.findFileByBaseName("UnturnedKey");
+            if (!(f2 instanceof Folder)) {
+                return "error";
+            }
 
-            if (tempFile1 instanceof File) {
-                returnMessage += "And the key tries to turn...";
+            if (!(f3 instanceof Folder)) {
+                return "error";
+            }
 
-                const knob = this.nav.findFileByBaseName("Door");
-
-                if (knob instanceof Folder) {
-                    returnMessage += "\nAnd the knob has been turned";
-                    this.knobTurned = true;
-                } else {
-                    returnMessage += "\nOh no...The knob has not been turned";
-                }
+            /*
+                IF...
+                    flask 1 has the acid
+                    flask 2 has the base
+                    flask 3 has the neutral
+            */
+            if (
+                f1.getChild("Acid.txt") !== -1 &&
+                f2.getChild("Base.txt") !== -1 &&
+                f3.getChild("Neutral.txt") !== -1
+            ) {
+                returnPhrase +=
+                    "\nAnd everything starts turning blue. You assume that means it works and you splash it on the wall...";
+                this.breakWall = true;
             } else {
-                returnMessage +=
-                    "\nIf only you could cat two things to make the knob turn";
+                returnPhrase +=
+                    "\n...Nothing happens. You think you put the wrong ingredients in each flask...";
             }
-            return returnMessage;
-        }
-        // LEVEL 5 //
-        if (name === "OpenElevator.exe") {
+
+            return returnPhrase;
+        } else if (name === "Key.exe") {
+            if (this.nav.current.name === "Hallway") {
+                this.throneOpened = true;
+                return "You turn the key and slowly unlock the last door... \nThroneRoom unlocked";
+            } else {
+                return (
+                    "Theres no unlocked door in " +
+                    this.nav.current.name +
+                    "! Maybe try going to the hallway..."
+                );
+            }
+        } else if (name === "Elevator.exe") {
             this.win = true;
             return "";
         }
