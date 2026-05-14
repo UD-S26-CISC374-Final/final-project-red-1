@@ -148,6 +148,8 @@ export class Enviroment {
         //this.Inventory = new Folder("Inventory", this.nav.current);
     }
 
+    //test
+
     /*
         Name: update
         Description: main handler function for updating the overall game state
