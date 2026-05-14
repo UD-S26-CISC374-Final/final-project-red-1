@@ -10,8 +10,15 @@ export class Folder {
 
     acessible: boolean = true;
     moveable: boolean = this.acessible;
+    moveInto: boolean;
 
-    constructor(n: string, pF: Folder | null, a?: boolean, m?: boolean) {
+    constructor(
+        n: string,
+        pF: Folder | null,
+        a?: boolean,
+        m?: boolean,
+        mI?: boolean,
+    ) {
         this.name = n;
         this.parent = pF;
         this.parent?.addChild(this);
@@ -26,6 +33,12 @@ export class Folder {
             this.moveable = m;
         } else {
             this.moveable = this.acessible;
+        }
+
+        if (mI !== undefined) {
+            this.moveInto = mI;
+        } else {
+            this.moveInto = this.moveable;
         }
 
         if (this.parent === null) {
@@ -133,9 +146,9 @@ export class Folder {
 
             if (tempFile instanceof Folder) {
                 allNames = allNames.concat(tempFile.showAllContents());
-            } else {
-                allNames.push(tempFile.name);
             }
+
+            allNames.push(tempFile.name);
         }
 
         return allNames;

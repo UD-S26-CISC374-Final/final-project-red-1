@@ -129,6 +129,10 @@ export class Navigator {
         const childFile = this.stringToFile(childPath);
         const parentFile = this.stringToFile(parentPath);
 
+        if (this.isFolderChildOf(parentFile, childFile)) {
+            return "ERROR: You cannot move a folder into one of its children!";
+        }
+
         if (typeof childFile === "string") {
             return "ERROR: File pathway for the file to be moved does not exist";
         }
@@ -141,7 +145,7 @@ export class Navigator {
             return "ERROR: File cannot be moved to another File";
         }
 
-        if (!parentFile.moveable) {
+        if (!parentFile.moveInto) {
             return "ERROR: File cannot be moved to an unaccesible folder.";
         }
 
@@ -151,6 +155,17 @@ export class Navigator {
                     "ERROR: The File " +
                     childFile.name +
                     " is unable to be moved."
+                );
+            }
+
+            if (
+                !childFile.parent.acessible &&
+                childFile.parent.name !== this.current.name
+            ) {
+                return (
+                    "ERROR: The File " +
+                    childFile.name +
+                    "is currently in an inaccesible area."
                 );
             }
 
@@ -189,6 +204,35 @@ export class Navigator {
                 parentFile.name
             );
         }
+    }
+
+    /*
+        Name: 
+        Description: 
+        Input: 
+        Output: 
+    */
+    private isFolderChildOf(
+        child: Folder | File | string,
+        parent: Folder | File | string,
+    ): boolean {
+        if (!(child instanceof Folder)) {
+            return false;
+        }
+
+        if (!(parent instanceof Folder)) {
+            return false;
+        }
+
+        const listOfChildren = parent.showAllContents();
+
+        for (let i = 0; i < listOfChildren.length; i++) {
+            if (listOfChildren[i] === child.name) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /*

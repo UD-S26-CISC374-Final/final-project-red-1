@@ -67,7 +67,13 @@ export class Enviroment {
         new Folder("Hole", jail);
 
         //Torture Chamber/Level2
-        const torture = new Folder("TortureChamber", hallway, true, false);
+        const torture = new Folder(
+            "TortureChamber",
+            hallway,
+            true,
+            false,
+            true,
+        );
         new File(
             "Chain",
             torture,
@@ -87,7 +93,7 @@ export class Enviroment {
             false,
             "A guillotine. It seems like it needs to be attached to something in order to work.",
         );
-        const tortureBox = new Folder("Box", torture, false, true);
+        const tortureBox = new Folder("Box", torture, false, true, false);
         new File(
             "Button",
             tortureBox,
@@ -142,7 +148,7 @@ export class Enviroment {
         );
         new File("Elevator", throneroom, true, "Hope it doesnt get stuck!");
 
-        this.nav = new Navigator(folderRoot, jail); //start of the game
+        this.nav = new Navigator(folderRoot, torture); //start of the game
 
         //Blank Inventory
         //this.Inventory = new Folder("Inventory", this.nav.current);
