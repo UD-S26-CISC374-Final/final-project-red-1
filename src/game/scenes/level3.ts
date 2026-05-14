@@ -259,6 +259,14 @@ export class Level3 extends Scene {
 
         this.timer--;
         this.timertext.setText("Time: " + this.timer);
+
+        if (this.timer <= 0) {
+            this.timer = 100;
+            this.player.setTint(0x00000);
+            this.time.delayedCall(500, () => {
+                this.scene.start("Level3");
+            });
+        }
     }
 
     changeScene() {
