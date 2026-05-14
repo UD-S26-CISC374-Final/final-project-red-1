@@ -41,6 +41,7 @@ export class Enviroment {
     private unlockedKey = false;
     private knobTurned = false;
     private throneOpened = false;
+    private win = false;
 
     constructor() {
         //Root
@@ -184,8 +185,6 @@ export class Enviroment {
             false,
             "What a shame. It doesn't recognize you in your withered state. Who knows what it will recognize.",
         );
-        new File("Hammer", throneroom, false, "Escape with the hammer");
-        new File("Elevator", throneroom, false, "The elevator to liberty!!!");
 
         //Secret//
 
@@ -356,6 +355,37 @@ export class Enviroment {
                 return "\nSomething's happening to me...\n\n(ThroneRoomUnlocked)...The storage room is too dirty for even the worst of people to be thrown into";
             }
         }
+
+        // Level 5 Logic //
+        if (currentFolder.name == "ThroneRoom") {
+            const travel = currentFolder.getChildAsFile("Elevator");
+
+            if (travel instanceof File) {
+                return "\nError";
+            }
+
+            if (travel?.getChild("Painting.txt") !== -1) {
+                new File(
+                    "MotionSensor",
+                    currentFolder,
+                    false,
+                    "State of the art motion sensor technology!!!",
+                );
+
+                new File(
+                    "Elevator",
+                    currentFolder,
+                    false,
+                    "More state of the art technology. The better the technology, the closer you are to winning!!!",
+                );
+                return "\nSeems like there is a chance that you could get out of here";
+            } //Did you push the dirt in the hole?
+
+            if (travel.getChild("OpenElevator.exe") !== -1 && !this.win) {
+                this.win = true;
+                return "\nOmg...you actually won??? That's quite an accomplishment :)";
+            }
+        }
         return "";
     }
 
@@ -468,6 +498,11 @@ export class Enviroment {
                     "\nIf only you could cat two things to make the knob turn";
             }
             return returnMessage;
+        }
+        // LEVEL 5 //
+        if (name === "OpenElevator.exe") {
+            this.win = true;
+            return "";
         }
 
         return "Hi, this is just the default text"; //Default case incase the .exe file doesnt exist... somehow.
