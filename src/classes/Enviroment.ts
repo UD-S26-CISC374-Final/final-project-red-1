@@ -35,6 +35,13 @@ export class Enviroment {
     private getCrowbar = false;
     private boxCut = false;
     private level3Opened = false;
+    private bookread = false;
+    private breakWall = false;
+    private disableTime = false;
+    private unlockedKey = false;
+    private knobTurned = false;
+    private throneOpened = false;
+    private win = false;
 
     constructor() {
         //Root
@@ -94,16 +101,7 @@ export class Enviroment {
 
         //AlchemyRoom/Level3
         const alchemy = new Folder("AlchemyRoom", hallway, false);
-        const potion = new Folder("Potion", alchemy);
-        new File("Flasks", potion, false, "These feel super hard");
-        new File("Chemicals", potion, false, "Oh...chemicals. Be careful now");
         new File("Wall", alchemy, false, "Good luck getting past this...");
-        new File(
-            "Switch",
-            alchemy,
-            false,
-            "A switch, like the one that you use to turn on and off stuff",
-        );
         new File(
             "Key",
             alchemy,
@@ -116,6 +114,7 @@ export class Enviroment {
             false,
             "It's a door. What'd you expect...once you've gotten this far, it's quite simplistic.",
         );
+        new Folder("Flasks", alchemy);
 
         //OldRoom/Level4
 
@@ -186,8 +185,6 @@ export class Enviroment {
             false,
             "What a shame. It doesn't recognize you in your withered state. Who knows what it will recognize.",
         );
-        new File("Hammer", throneroom, false, "Escape with the hammer");
-        new File("Elevator", throneroom, false, "The elevator to liberty!!!");
 
         //Secret//
 
@@ -277,6 +274,118 @@ export class Enviroment {
             return "\nA strange rumbling of a door opening up can be heard...\n\n(AlchemyRoomUnlocked)";
         }
 
+        // Level3 Logic //
+
+        if (currentFolder.name == "AlchemyRoom") {
+            const Flasks = currentFolder.getChildAsFile("Flasks");
+
+            if (Flasks instanceof File) {
+                return "\nError";
+            }
+
+            if (Flasks?.getChild("Book.txt") == -1 && !this.bookread) {
+                new File(
+                    "Flask1",
+                    currentFolder,
+                    false,
+                    "This is one of three flasks available...choose wisely :)",
+                );
+                new File(
+                    "Flask2",
+                    currentFolder,
+                    false,
+                    "This is the second flask...again, choose wisely",
+                );
+                new File(
+                    "Flask3",
+                    currentFolder,
+                    false,
+                    "This is the final flask...like always, choose wisely",
+                );
+                new File(
+                    "ChemicalNeutral",
+                    currentFolder,
+                    false,
+                    "This is the neutral chemical...doesn't seem to do anything?",
+                );
+                new File(
+                    "ChemicalAcid",
+                    currentFolder,
+                    false,
+                    "This is the acidic chemical...Probably gives you superpowers, if I had to guess",
+                );
+                new File(
+                    "ChemicalBase",
+                    currentFolder,
+                    false,
+                    "These are the bases. It's all about the bases, isn't it?",
+                );
+                this.bookread = true;
+                return "\nIt seems like that these recipes are necessary...tick tock";
+            }
+            if (Flasks?.getChild("Potion1.exe") !== -1 && !this.disableTime) {
+                this.disableTime = true;
+                return "\nYou disabled the time?, didn't you. Less TikTok, and more RedNote, I guess?";
+            }
+            if (Flasks?.getChild("Potion2.exe") !== -1 && !this.breakWall) {
+                this.breakWall = true;
+                return "\nYou broke through the wall, didn't you? Huh, now the evil plan is over, I guess?";
+            }
+            if (Flasks?.getChild("Potion3.exe") !== -1 && !this.unlockedKey) {
+                this.unlockedKey = true;
+                return "\nYou unlocked the key? You really are diligent at escaping this. Here's a bone.";
+            }
+            if (this.unlockedKey) {
+                this.unlockedKey = false;
+                const tempGrab1 = this.nav.findFileByBaseName("Door");
+                if (tempGrab1 instanceof Folder) {
+                    tempGrab1.acessible = true;
+                }
+            }
+            if (this.knobTurned) {
+                this.knobTurned = false;
+                return "\nYou turned the knob, didn't you???";
+            }
+            if (this.throneOpened) {
+                this.throneOpened = false;
+                const tempGrab2 = this.nav.findFileByBaseName("ThroneRoom");
+                if (tempGrab2 instanceof Folder) {
+                    tempGrab2.acessible = true;
+                }
+                return "\nSomething's happening to me...\n\n(ThroneRoomUnlocked)...The storage room is too dirty for even the worst of people to be thrown into";
+            }
+        }
+
+        // Level 5 Logic //
+        if (currentFolder.name == "ThroneRoom") {
+            const travel = currentFolder.getChildAsFile("Elevator");
+
+            if (travel instanceof File) {
+                return "\nError";
+            }
+
+            if (travel?.getChild("Painting.txt") !== -1) {
+                new File(
+                    "MotionSensor",
+                    currentFolder,
+                    false,
+                    "State of the art motion sensor technology!!!",
+                );
+
+                new File(
+                    "Elevator",
+                    currentFolder,
+                    false,
+                    "More state of the art technology. The better the technology, the closer you are to winning!!!",
+                );
+                return "\nSeems like there is a chance that you could get out of here";
+            } //Did you push the dirt in the hole?
+
+            if (travel.getChild("OpenElevator.exe") !== -1 && !this.win) {
+                this.win = true;
+                return "\nOmg...you actually won??? That's quite an accomplishment :)";
+            }
+        }
         return "";
     }
 
@@ -339,6 +448,60 @@ export class Enviroment {
             return returnMessage;
         } else if (name === "Button.exe") {
             this.level3Opened = true;
+            return "";
+        }
+
+        // LEVEL 3 //
+
+        if (name === "Potion1.exe") {
+            this.disableTime = true;
+            return "";
+        }
+        if (name === "Potion2.exe") {
+            if (this.nav.current.name === "Alchemy") {
+                if (!this.nav.current.acessible) {
+                    return "Stop...The wall's already dead :(";
+                } else {
+                    this.nav.current.removeChild("Wall.txt");
+                    new File(
+                        "DestroyedWall",
+                        this.nav.current,
+                        false,
+                        "Whoever destroyed this wall has no regard for human life...or the poor shareholders",
+                    );
+
+                    if (this.nav.current.parent !== null) {
+                        this.nav.current.parent.acessible = true;
+                    }
+                    return "With everything you got from the second potion, you had a power level of over 9,000!!!";
+                }
+            }
+        }
+        if (name === "Potion3.exe") {
+            let returnMessage = "You see the key...";
+
+            const tempFile1 = this.nav.findFileByBaseName("UnturnedKey");
+
+            if (tempFile1 instanceof File) {
+                returnMessage += "And the key tries to turn...";
+
+                const knob = this.nav.findFileByBaseName("Door");
+
+                if (knob instanceof Folder) {
+                    returnMessage += "\nAnd the knob has been turned";
+                    this.knobTurned = true;
+                } else {
+                    returnMessage += "\nOh no...The knob has not been turned";
+                }
+            } else {
+                returnMessage +=
+                    "\nIf only you could cat two things to make the knob turn";
+            }
+            return returnMessage;
+        }
+        // LEVEL 5 //
+        if (name === "OpenElevator.exe") {
+            this.win = true;
             return "";
         }
 
