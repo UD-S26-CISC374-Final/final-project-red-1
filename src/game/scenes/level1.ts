@@ -7,8 +7,6 @@ export class Level1 extends Scene {
     background: Phaser.GameObjects.Image;
     fpsText: FpsText;
     private dirt: Phaser.Physics.Arcade.StaticGroup;
-    private stick: Phaser.Physics.Arcade.Image;
-    private rock: Phaser.Physics.Arcade.Image;
     private wall: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
     private crowbarhalf1: Phaser.Physics.Arcade.Image;
@@ -22,8 +20,6 @@ export class Level1 extends Scene {
     private createdbar: boolean;
     private createdshovel: boolean;
     private digging: boolean;
-    private acquirerock: boolean;
-    private acquirestick: boolean;
 
     //DESCRIPTION OF PUZZLE FOR LEVEL (logic implemented in Enviroment.ts)
     // Move dirt to hole
@@ -146,22 +142,6 @@ export class Level1 extends Scene {
             this,
         );
         this.physics.add.collider(this.player, this.prisoncells);
-        this.physics.add.collider(this.player, this.rock);
-        this.physics.add.overlap(
-            this.player,
-            this.rock,
-            this.getRock.bind(this),
-            undefined,
-            this,
-        );
-        this.physics.add.collider(this.player, this.stick);
-        this.physics.add.overlap(
-            this.player,
-            this.stick,
-            this.getStick.bind(this),
-            undefined,
-            this,
-        );
         this.physics.add.collider(this.player, this.dirt);
         this.physics.add.overlap(
             this.player,
@@ -171,14 +151,6 @@ export class Level1 extends Scene {
             this,
         );
 
-        this.physics.add.collider(this.stick, this.rock);
-        this.physics.add.overlap(
-            this.stick,
-            this.rock,
-            this.createShovel.bind(this),
-            undefined,
-            this,
-        );
         this.physics.add.collider(this.player, this.crowbarhalf1);
         this.physics.add.overlap(
             this.player,
@@ -214,26 +186,6 @@ export class Level1 extends Scene {
         this.fpsText = new FpsText(this);
 
         EventBus.emit("current-scene-ready", this);
-    }
-
-    private getRock() {
-        if (!this.acquirerock) {
-            this.acquirerock = true;
-        }
-    }
-
-    private getStick() {
-        if (!this.acquirestick) {
-            this.acquirestick = true;
-        }
-    }
-
-    private createShovel() {
-        if (!this.acquirerock || !this.acquirestick) {
-            this.createdshovel = false;
-        } else {
-            this.createdshovel = true;
-        }
     }
 
     private digDirt() {

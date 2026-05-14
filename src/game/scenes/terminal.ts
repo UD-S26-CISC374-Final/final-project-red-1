@@ -95,15 +95,13 @@ export class Terminal extends Scene implements ChangeableScene {
     renderTerminal() {
         const output = this.outputLines.join("\n");
 
-        const cursor = this.cursorVisible ? this.cursorChar : " ";
-
         const before = this.currentInput.slice(0, this.cursorIndex);
         const after = this.currentInput.slice(this.cursorIndex);
 
-        const inputLine =
-            `[color=#ffffff]${this.prompt}${before}[/color]` +
-            cursor +
-            `[color=#ffffff]${after}[/color]`;
+        // blinking cursor does NOT become part of text anymore
+        const cursor = this.cursorVisible ? this.cursorChar : "";
+
+        const inputLine = `[color=#ffffff]${this.prompt}${before}${cursor}${after}[/color]`;
 
         const fullText = output + "\n" + inputLine;
 
@@ -205,6 +203,11 @@ export class Terminal extends Scene implements ChangeableScene {
         // LIVE TYPING (moved OUTSIDE keydown)
         inputElement.addEventListener("input", () => {
             this.currentInput = inputElement.value;
+
+            // do NOT override cursor unless user is actively typing at end
+            if (this.cursorIndex > this.currentInput.length) {
+                this.cursorIndex = this.currentInput.length;
+            }
             this.cursorIndex = this.currentInput.length; // keep cursor synced
             this.renderTerminal();
         });
