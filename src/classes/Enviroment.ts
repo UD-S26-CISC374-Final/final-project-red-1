@@ -117,59 +117,6 @@ export class Enviroment {
             "It's a door. What'd you expect...once you've gotten this far, it's quite simplistic.",
         );
 
-        //OldRoom/Level4
-
-        const oldroom = new Folder("OldRoom", hallway, false);
-        const nut = new Folder("Nut", oldroom);
-        new File(
-            "Water Bucket",
-            oldroom,
-            false,
-            "It's a bucket...filled with water",
-        );
-        new File(
-            "Cobwebs",
-            oldroom,
-            false,
-            "It's a cobweb. Old and annoying, like this room hasn't been touched in years.",
-        );
-        new File(
-            "Boxes",
-            oldroom,
-            false,
-            "Boxes. Like, the ones you store parts in.",
-        );
-        new File(
-            "Wrench",
-            nut,
-            false,
-            "Just a regular wrench. Now, maybe if you looked around, you could do something...",
-        );
-        new File(
-            "Vent",
-            nut,
-            false,
-            "Vents...like FNAF2, this time, there are no quick time events..for now. Anyways, this looks kinda important, eh?",
-        );
-        new File(
-            "Stick",
-            nut,
-            false,
-            "Just a stick...maybe you could combine this with something",
-        );
-        new File(
-            "Rock",
-            nut,
-            false,
-            "This could be combined with something, you know?",
-        );
-        new File(
-            "Garage",
-            oldroom,
-            false,
-            "This is a garage opening. Go before the evil monster sees you!!!",
-        );
-
         //ThroneRoom/Level5
 
         const throneroom = new Folder("ThroneRoom", hallway, false);
@@ -189,16 +136,7 @@ export class Enviroment {
         new File("Hammer", throneroom, false, "Escape with the hammer");
         new File("Elevator", throneroom, false, "The elevator to liberty!!!");
 
-        //Secret//
-
-        const secret = new Folder("Secret", hallway);
-        const bart = new Folder("Bart", secret);
-        new File("Shoes", bart, false, "New shoes...that you will take back");
-        new File("Wand", bart, false, "A wand...like magic!!!");
-        new File("Crown", bart, false, "This is your property!!!");
-        new File("Elevator", secret, false, "The way out!!!");
-
-        this.nav = new Navigator(jail); //start of the game
+        this.nav = new Navigator(folderRoot, jail); //start of the game
 
         //Blank Inventory
         //this.Inventory = new Folder("Inventory", this.nav.current);
