@@ -10,10 +10,10 @@ export class Level5 extends Scene {
     phaserLogo: PhaserLogo;
     fpsText: FpsText;
     private player: Phaser.Physics.Arcade.Sprite;
-    private throne: Phaser.Physics.Arcade.Image;
-    private motionsensor: Phaser.Physics.Arcade.Image;
+    private throne: Phaser.Physics.Arcade.Group;
+    private motionsensor: Phaser.Physics.Arcade.Group;
     private picture: Phaser.Physics.Arcade.Image;
-    private elevator: Phaser.Physics.Arcade.Image;
+    private elevator: Phaser.Physics.Arcade.Group;
 
     private thronebroken: boolean = false;
     private grabPainting: boolean = false;
@@ -38,10 +38,13 @@ export class Level5 extends Scene {
 
         this.player = this.physics.add.sprite(100, 700, "player");
         this.player.setCollideWorldBounds(true);
-        this.throne = this.physics.add.image(400, 600, "throne");
-        this.motionsensor = this.physics.add.image(400, 700, "motionsensor");
+        this.throne = this.physics.add.group({ allowGravity: false });
+        this.throne.create(400, 600, "throne");
+        this.motionsensor = this.physics.add.group({ allowGravity: false });
+        this.motionsensor.create(400, 700, "motionsensor");
         this.picture = this.physics.add.image(50, 600, "picture");
-        this.elevator = this.physics.add.image(600, 700, "elevator");
+        this.elevator = this.physics.add.group({ allowGravity: false });
+        this.elevator.create(600, 700, "elevator");
         this.physics.add.collider(this.player, this.throne);
         this.physics.add.collider(this.player, this.motionsensor);
         this.physics.add.collider(this.player, this.elevator);
