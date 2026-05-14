@@ -11,12 +11,10 @@ export class Level5 extends Scene {
     fpsText: FpsText;
     private player: Phaser.Physics.Arcade.Sprite;
     private throne: Phaser.Physics.Arcade.Image;
-    private hammer: Phaser.Physics.Arcade.Image;
     private motionsensor: Phaser.Physics.Arcade.Image;
     private picture: Phaser.Physics.Arcade.Image;
     private elevator: Phaser.Physics.Arcade.Image;
 
-    private hasHammer: boolean = false;
     private thronebroken: boolean = false;
     private grabPainting: boolean = false;
     private msActivated: boolean = false;
@@ -34,28 +32,20 @@ export class Level5 extends Scene {
         this.cameras.main.setViewport(0, 0, 512, 768);
         this.cameras.main.setBounds(0, 0, 512, 768);
 
+        this.add.image(400, 400, "throne");
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
         this.player = this.physics.add.sprite(100, 700, "player");
         this.player.setCollideWorldBounds(true);
         this.throne = this.physics.add.image(400, 600, "throne");
-        this.hammer = this.physics.add.image(200, 700, "hammer");
         this.motionsensor = this.physics.add.image(400, 700, "motionsensor");
         this.picture = this.physics.add.image(50, 600, "picture");
         this.elevator = this.physics.add.image(600, 700, "elevator");
         this.physics.add.collider(this.player, this.throne);
-        this.physics.add.collider(this.player, this.hammer);
         this.physics.add.collider(this.player, this.motionsensor);
         this.physics.add.collider(this.player, this.elevator);
         this.physics.add.collider(this.player, this.picture);
-        this.physics.add.overlap(
-            this.player,
-            this.hammer,
-            this.acquireHammer.bind(this),
-            undefined,
-            this,
-        );
         this.physics.add.overlap(
             this.player,
             this.throne,
@@ -89,25 +79,12 @@ export class Level5 extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
-    private acquireHammer() {
-        if (!this.physics.overlap(this.player, this.hammer)) {
-            this.hasHammer = false;
-        } else if (
-            this.physics.overlap(this.player, this.hammer) &&
-            !this.hasHammer
-        ) {
-            this.hasHammer = true;
-        } else {
-            this.hasHammer = false;
-        }
-    }
-
     private breakThrone() {
-        if (!this.hasHammer) {
+        if (!this.grabPainting) {
             this.thronebroken = false;
         }
         if (
-            this.hasHammer &&
+            this.grabPainting &&
             this.physics.overlap(this.player, this.throne) &&
             !this.thronebroken
         ) {
@@ -123,16 +100,8 @@ export class Level5 extends Scene {
         }
     }
     private activateMS() {
-        if (!this.thronebroken) {
-            this.msActivated = false;
-        }
-        if (
-            this.thronebroken &&
-            this.physics.overlap(this.picture, this.motionsensor)
-        ) {
+        if (!this.msActivated) {
             this.msActivated = true;
-        } else {
-            this.msActivated = false;
         }
     }
 
@@ -140,10 +109,7 @@ export class Level5 extends Scene {
         if (!this.msActivated) {
             this.elevatorActivated = false;
         }
-        if (
-            this.msActivated &&
-            this.physics.overlap(this.player, this.elevator)
-        ) {
+        if (this.msActivated && this.thronebroken) {
             this.elevatorActivated = true;
         } else {
             this.elevatorActivated = false;

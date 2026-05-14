@@ -25,12 +25,24 @@ export class Preloader extends Scene {
     preload() {
         //  Load the assets for the game - Replace with your own assets
         this.load.image(
+            "Hallway",
+            "assets/rooms/roomHallway.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
             "dungeon",
             "assets/rooms/roomJail.png",
         ); /* Credit goes to Leif Kaine */
         this.load.image(
             "torture",
             "assets/rooms/roomChamber.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "alchemy",
+            "assets/rooms/roomAlchemy.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "throne",
+            "assets/rooms/roomThrone.png",
         ); /* Credit goes to Leif Kaine */
         this.load.image(
             "ground",
@@ -42,28 +54,56 @@ export class Preloader extends Scene {
         ); /* Credit goes to https://opengameart.org/content/wall by author djonvincent */
         this.load.image(
             "prisoncells",
-            "assets/prisoncell.png",
-        ); /* Credit goes to https://opengameart.org/content/prison-tiles by author devnewton */
+            "assets/Cells.png",
+        ); /* Credit goes to Leif Kaine */
         this.load.image(
-            "Crowbar.txt",
-            "assets/crowbar.png",
-        ); /* Credit goes to https://opengameart.org/content/crow-bar by author Lewis W. Veasey */
+            "Crowbar.exe",
+            "assets/Crowbar.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "crow",
+            "assets/crow.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "bar",
+            "assets/bar.png",
+        ); /* Credit goes to Leif Kaine */
         this.load.image(
             "chain",
             "assets/chain.png",
-        ); /* Credit goes to https://opengameart.org/content/chain-whip by Nineball */
+        ); /* Credit goes to Leif Kaine */
         this.load.image(
             "gloves",
             "assets/gloves.png",
         ); /* Credit goes to https://opengameart.org/content/pointers-part-5 by yd */
         this.load.image(
+            "dirt",
+            "assets/dirt.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "candle",
+            "assets/candle.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "flask",
+            "assets/flash.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "Hole",
+            "assets/Hole.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "Potions",
+            "assets/potions.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
             "guillotine",
             "assets/guillotine.png",
-        ); /* Credit goes to https://opengameart.org/content/guillotine by author Rudy Phelippeau */
+        ); /* Credit goes to Leif Kaine */
         this.load.image(
             "lever",
             "assets/lever.png",
-        ); /* Credit goes to https://opengameart.org/content/bundle-events-assets by amaralzin9309 */
+        ); /* Credit goes to Leif Kaine */
         this.load.image(
             "flasks",
             "assets/flasks.png",
@@ -75,20 +115,23 @@ export class Preloader extends Scene {
         this.load.image(
             "key",
             "assets/key.png",
-        ); /* Credit goes to https://opengameart.org/content/rusty-iron-key-povray-scene-file by Varkalandar */
+        ); /* Credit goes to Leif Kaine */
         this.load.image(
             "door",
             "assets/door.png",
         ); /* Credit goes to https://opengameart.org/content/wood-door by wobba89 */
-        this.load.image("water", "assets/water.png");
-        this.load.image("bucket", "assets/bucket.png");
-        this.load.image("cobwebs", "assets/cobwebs.png");
-        this.load.image("rake", "assets/rake.png");
-        this.load.image("boxes", "assets/boxes.png");
-        this.load.image("buttons", "assets/buttons.png");
-        this.load.image("throne", "assets/throne.png");
-        this.load.image("motionsensor", "assets/motionsensor.png");
-        this.load.image("hammer", "assets/hammer.png");
+        this.load.image(
+            "boxes",
+            "assets/box.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "throne",
+            "assets/throne.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "motionsensor",
+            "assets/detector.png",
+        ); /* Credit goes to Leif Kaine */
         this.load.image(
             "fountain",
             "assets/fountain.png",
@@ -97,6 +140,14 @@ export class Preloader extends Scene {
             "paintings",
             "assets/paintings.png",
         ); /* Credit goes to https://opengameart.org/content/abstract-art by geoadel */
+        this.load.image(
+            "books",
+            "assets/book.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "table",
+            "assets/table.png",
+        ); /* Credit goes to Leif Kaine */
         this.load.image("logo", "assets/logo.png");
         this.load.image("star", "assets/star.png");
         this.load.image("phaser-logo", "assets/phaser-logo.png");
@@ -144,12 +195,6 @@ export class Preloader extends Scene {
         ); /* Credit goes to https://opengameart.org/content/calm-relax-1-synthwave-421k by cynicmusic */
         this.load.image("picture", "assets/picture.png");
         this.load.image("elevator", "assets/elevator.png");
-
-        // Sound effects
-        this.load.audio(
-            "itempickup",
-            "assets/seffects/itemcombo.flac",
-        ); /* Credit goes to https://opengameart.org/content/life-pickup-yo-frankie by Blender Foundation(submitted by Lamoot) */
     }
 
     create() {
