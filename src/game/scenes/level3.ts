@@ -68,6 +68,7 @@ export class Level3 extends Scene {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#404040");
 
+        this.add.image(400, 400, "alchemy");
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 

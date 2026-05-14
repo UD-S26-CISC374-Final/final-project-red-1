@@ -37,6 +37,14 @@ export class Preloader extends Scene {
             "assets/rooms/roomChamber.png",
         ); /* Credit goes to Leif Kaine */
         this.load.image(
+            "alchemy",
+            "assets/rooms/roomAlchemy.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "throne",
+            "assets/rooms/roomThrone.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
             "ground",
             "assets/ground.png",
         ); /* Credit goes to https://opengameart.org/content/ground-plate by author TyberiusGames */
