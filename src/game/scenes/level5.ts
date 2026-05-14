@@ -1,4 +1,4 @@
-import { EventBus } from "../event-bus";
+/*import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
 
 import PhaserLogo from "../objects/phaser-logo";
@@ -158,4 +158,4 @@ export class Level5 extends Scene {
             this.scene.start("Win");
         }
     }
-}
+} */

@@ -4,8 +4,8 @@ import { Tutorial } from "./scenes/tutorial";
 import { Level1 as Level1Game } from "./scenes/level1";
 import { Level2 as Level2Game } from "./scenes/level2";
 import { Level3 as Level3Game } from "./scenes/level3";
-import { Level4 as Level4Game } from "./scenes/level4";
-import { Level5 as Level5Game } from "./scenes/level5";
+//import { Level4 as Level4Game } from "./scenes/level4";
+//import { Level5 as Level5Game } from "./scenes/level5";
 import { PlotTwist } from "./scenes/plottwist";
 import { Secret } from "./scenes/secret";
 import { Win } from "./scenes/win";
@@ -38,8 +38,8 @@ const config: Phaser.Types.Core.GameConfig = {
         Level1Game,
         Level2Game,
         Level3Game,
-        Level4Game,
-        Level5Game,
+        /*Level4Game,
+        Level5Game,*/
         PlotTwist,
         Secret,
         Win,

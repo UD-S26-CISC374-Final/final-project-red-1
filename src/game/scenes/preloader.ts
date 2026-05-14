@@ -25,6 +25,10 @@ export class Preloader extends Scene {
     preload() {
         //  Load the assets for the game - Replace with your own assets
         this.load.image(
+            "Hallway",
+            "assets/rooms/roomHallway.png",
+        ); /* Credit goes to Leif Kaine */
+        this.load.image(
             "dungeon",
             "assets/rooms/roomJail.png",
         ); /* Credit goes to Leif Kaine */
@@ -97,6 +101,14 @@ export class Preloader extends Scene {
             "paintings",
             "assets/paintings.png",
         ); /* Credit goes to https://opengameart.org/content/abstract-art by geoadel */
+        this.load.image(
+            "books",
+            "assets/book.png",
+        ); /* Credit goes to https://opengameart.org/content/spell-book by AnthonyMyers */
+        this.load.image(
+            "table",
+            "assets/table.png",
+        ); /* Credit goes to https://opengameart.org/content/vendors-table-lpc-table-rework by AntumDeluge */
         this.load.image("logo", "assets/logo.png");
         this.load.image("star", "assets/star.png");
         this.load.image("phaser-logo", "assets/phaser-logo.png");
@@ -144,12 +156,6 @@ export class Preloader extends Scene {
         ); /* Credit goes to https://opengameart.org/content/calm-relax-1-synthwave-421k by cynicmusic */
         this.load.image("picture", "assets/picture.png");
         this.load.image("elevator", "assets/elevator.png");
-
-        // Sound effects
-        this.load.audio(
-            "itempickup",
-            "assets/seffects/itemcombo.flac",
-        ); /* Credit goes to https://opengameart.org/content/life-pickup-yo-frankie by Blender Foundation(submitted by Lamoot) */
     }
 
     create() {
