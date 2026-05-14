@@ -62,6 +62,12 @@ export class Folder {
         }
     }
 
+    /*
+        Name: addChild
+        Description: when given a folder or a fild, adds it to this folder
+        Input: child (Folder/File): the folder or a file being added to this folder
+        Output: N/A
+    */
     public addChild(child: Folder | File): void {
         child.parent = this;
         this.children.push(child);
@@ -154,6 +160,12 @@ export class Folder {
         return allNames;
     }
 
+    /*
+        Name: getChildAsFileDeep
+        Description: when given a name of a file, it goes through all files both in the folder and in the folders children, and then produces the file
+        Input: name (string): the name of the file
+        Output: Folder/File/null: null if file doesnt exist, otherwise produces the child
+    */
     public getChildAsFileDeep(name: string): Folder | File | null {
         let child: Folder | File | null = null;
 

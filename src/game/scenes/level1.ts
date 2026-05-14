@@ -25,6 +25,14 @@ export class Level1 extends Scene {
     private acquirerock: boolean;
     private acquirestick: boolean;
 
+    //DESCRIPTION OF PUZZLE FOR LEVEL (logic implemented in Enviroment.ts)
+    // Move dirt to hole
+    // oh wow! theres a crow and a bar!
+    // concatenate crow and bar
+    // that produces crowbar
+    // crowbar.exe, run file
+    // escape
+
     constructor() {
         super("Level1");
     }

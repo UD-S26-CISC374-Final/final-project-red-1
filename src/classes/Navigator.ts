@@ -27,6 +27,12 @@ export class Navigator {
         else this.current = f2;
     }
 
+    /*
+        Name: showContent
+        Description: shows the contents of the current folder. for the ls command
+        Input: N/A
+        Output: string: the current contents as a string
+    */
     public showContent(): string {
         return "../, ./, " + this.current.showContents();
     }
@@ -130,27 +136,33 @@ export class Navigator {
         const parentFile = this.stringToFile(parentPath);
 
         if (this.isFolderChildOf(parentFile, childFile)) {
+            //is the folder being moved to one of its children
             return "ERROR: You cannot move a folder into one of its children!";
         }
 
         if (typeof childFile === "string") {
+            //does child exist
             return "ERROR: File pathway for the file to be moved does not exist";
         }
 
         if (typeof parentFile === "string") {
+            //does parent exist
             return "ERROR: The file cannot be moved to a pathway that does not exist";
         }
 
         if (parentFile instanceof File) {
+            //is parent a file
             return "ERROR: File cannot be moved to another File";
         }
 
         if (!parentFile.moveInto) {
+            //is parent accesible
             return "ERROR: File cannot be moved to an unaccesible folder.";
         }
 
         if (childFile instanceof File) {
             if (!childFile.canBeMoved) {
+                //can child be moved
                 return (
                     "ERROR: The File " +
                     childFile.name +
@@ -162,6 +174,7 @@ export class Navigator {
                 !childFile.parent.acessible &&
                 childFile.parent.name !== this.current.name
             ) {
+                //is the parent accessible
                 return (
                     "ERROR: The File " +
                     childFile.name +
@@ -207,10 +220,11 @@ export class Navigator {
     }
 
     /*
-        Name: 
-        Description: 
-        Input: 
-        Output: 
+        Name: isFolderChildOf
+        Description: helper function for moveInto. makes sure that users dont attempt ot move a parent into one of its child folders
+        Input: child (Folder/File/string): the child being checked
+            parent (Folder/File/string): the parent being checked
+        Output: boolean: whether or not the folder is a child of the parent
     */
     private isFolderChildOf(
         child: Folder | File | string,

@@ -36,6 +36,16 @@ export class Level2 extends Scene {
     private pressedButton: boolean = false;
     private accessSlide: boolean = false;
 
+    //DESCRIPTION OF PUZZLE FOR LEVEL (logic implemented in Enviroment.ts)
+    // move guillotine to the main room from the table (optional)
+    // combine the guillotine with the chain to power ir, produces "poweredguillotine.txt"
+    // move the box into the table (Well onto)
+    // ^ all can be done in any order ^
+    // do Lever.exe
+    // cuts open the box, reveals button.exe
+    // do Button.exe, opens up level 3
+    // yay go to alchemy room
+
     constructor() {
         super("Level2");
     }

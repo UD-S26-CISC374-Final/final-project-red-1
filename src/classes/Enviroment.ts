@@ -31,6 +31,7 @@ export class Enviroment {
     public nav: Navigator;
     //public Inventory: Folder;
 
+    //v bunch of checks for in game progress v
     private moveDirt = false;
     private getCrowbar = false;
     private boxCut = false;
@@ -39,6 +40,7 @@ export class Enviroment {
     private throneOpened = false;
     private win = false;
 
+    // v constructor is exclusively for creating the actual file system the player will be going through v
     constructor() {
         //Root
         const folderRoot = new Folder("Root", null, false);
@@ -154,8 +156,6 @@ export class Enviroment {
         //this.Inventory = new Folder("Inventory", this.nav.current);
     }
 
-    //test
-
     /*
         Name: update
         Description: main handler function for updating the overall game state
@@ -184,6 +184,7 @@ export class Enviroment {
             } //will always be true
 
             if (Hole?.getChild("Dirt.txt") !== -1 && !this.moveDirt) {
+                //creates Crow and Bar for player
                 new File(
                     "Crow",
                     currentFolder,
@@ -209,6 +210,7 @@ export class Enviroment {
 
         //LEVEL 2 LOGIC
         if (this.boxCut) {
+            //is the box supposted to be opened or not
             this.boxCut = false;
             const tempGrab = this.nav.getFileDeep("Box");
             if (tempGrab instanceof Folder) {
@@ -217,6 +219,7 @@ export class Enviroment {
         }
 
         if (this.level3Opened) {
+            //should level 3 be unlocked
             this.level3Opened = false;
             const tempGrab = this.nav.getFileDeep("AlchemyRoom");
             if (tempGrab instanceof Folder) {
@@ -225,11 +228,13 @@ export class Enviroment {
             return "\nA strange rumbling of a door opening up can be heard...\n\n(AlchemyRoomUnlocked)";
         }
 
-        // Level3 Logic //
+        // Level3 Logic
         if (this.breakWall) {
+            //is the wall broken
             const alchemy = this.nav.getFileDeep("AlchemyRoom");
 
             if (alchemy instanceof Folder) {
+                //will always be true
                 alchemy.removeChild("Wall.txt");
                 new File(
                     "Key",
@@ -244,6 +249,7 @@ export class Enviroment {
         }
 
         if (this.throneOpened) {
+            //is final level unlocked
             const throneRoom = this.nav.getFileDeep("ThroneRoom");
 
             if (throneRoom instanceof Folder) {
@@ -306,6 +312,7 @@ export class Enviroment {
             let returnMessage = "You hear a click of the lever...";
 
             if (this.nav.doesFileExistAtAll("PoweredGuillotine.txt")) {
+                //did player connect chain to guillotine
                 returnMessage += "\nThe guillotine blade falls...";
 
                 const box = this.nav.getFileDeep("Box");
@@ -319,12 +326,14 @@ export class Enviroment {
                         "\nAnd nothing happened. If only you could move an item onto the table.";
                 }
             } else {
+                //...oh they didnt.
                 returnMessage +=
                     "\n...and nothing happens. Maybe try using cat on two items";
             }
 
             return returnMessage;
         } else if (name === "Button.exe") {
+            //simple "opens level 3" thing
             this.level3Opened = true;
             return "";
         } else if (name === "UsePotion.exe") {
@@ -334,6 +343,7 @@ export class Enviroment {
 
             let returnPhrase = "You start mixing the potions...";
 
+            //v these 3 if statements will always be true v
             if (!(f1 instanceof Folder)) {
                 return "error";
             }
@@ -368,9 +378,11 @@ export class Enviroment {
             return returnPhrase;
         } else if (name === "Key.exe") {
             if (this.nav.current.name === "Hallway") {
+                //tells player this is correct
                 this.throneOpened = true;
                 return "You turn the key and slowly unlock the last door... \nThroneRoom unlocked";
             } else {
+                //"hey, move me somewhere else :3"
                 return (
                     "Theres no unlocked door in " +
                     this.nav.current.name +
@@ -383,6 +395,7 @@ export class Enviroment {
         }
 
         return "Hi, this is just the default text"; //Default case incase the .exe file doesnt exist... somehow.
+        //^ was used for testing purposes. Will never show up. If a .exe file doesnt exist, runCommand will catch it before this methods even ran ^
     }
 
     /*
@@ -393,6 +406,14 @@ export class Enviroment {
         Output: string: Will either let the user know of an error, OR will print out the output.
     */
     private runCommand(command: string): string {
+        // Hi, this is Leif here. This seems very daunting, and I know my commenting for this section probably isnt the besttttt, but eh
+        // It really isnt. most of this is just a massive if-else ladder
+        // That and just simple error handling. The general formula is:
+        // - checks if command exists. If not? Laugh at user
+        // - Oh, command exists... ok does it have the right arguments? No? Laugh at user
+        // - Oh, it does... use the designated logic from this.nav (shown in Navigator.ts)
+        // Its just a lot of checking and error handling
+
         const brokenUpCommand = splitCommandPrompt(command);
 
         if (brokenUpCommand[0] === "help") {

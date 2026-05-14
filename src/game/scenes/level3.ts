@@ -46,6 +46,16 @@ export class Level3 extends Scene {
     private storeroom = false;
     private timePaused = false;
 
+    //DESCRIPTION OF PUZZLE FOR LEVEL (logic implemented in Enviroment.ts)
+    // 3 flasks
+    // an acid, a base, and a neutral thingy
+    // move acid to flask 1, base to 2, neutral to 3
+    // puzzle is shown if you do cat on the recipe booklet
+    // run the usepotion executible
+    // OH WOW THERE GOES THE WALL! oh hi key
+    // move key to main room
+    // joys!
+
     constructor() {
         super("Level3");
     }
