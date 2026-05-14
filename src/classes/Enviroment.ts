@@ -292,6 +292,7 @@ export class Enviroment {
                         const tempFolder = this.nav.getFileDeep("Hallway");
                         if (tempFolder instanceof Folder) {
                             tempFolder.acessible = true;
+                            tempFolder.moveInto = true;
                         }
                     }
 
