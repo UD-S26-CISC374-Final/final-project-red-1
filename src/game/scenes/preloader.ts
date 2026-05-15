@@ -157,22 +157,26 @@ export class Preloader extends Scene {
 
         // Soundtrack for the game
         this.load.audio(
+            "combo",
+            "assets/sounds/combo.mp3",
+        ); /* Credit goes to https://opengameart.org/content/battle-theme-a by cynicmusic, https://opengameart.org/content/cyberpunk-moonlight-sonata by Joth, https://opengameart.org/content/space-boss-battle-theme by Matthew Pablo, https://opengameart.org/content/defying-commodus by Matthew Pablo, and https://opengameart.org/content/calm-relax-1-synthwave-421k by cynicmusic */
+        /*this.load.audio(
             "battlemusic",
             "assets/sounds/battle.mp3",
         ); /* Credit goes to https://opengameart.org/content/battle-theme-a by cynicmusic */
-        this.load.audio(
+        /*this.load.audio(
             "cyberpunk",
             "assets/sounds/cyberpunk.mp3",
         ); /* Credit goes to https://opengameart.org/content/cyberpunk-moonlight-sonata by Joth */
-        this.load.audio(
+        /*this.load.audio(
             "alchemyspace",
             "assets/sounds/alchemyspace.mp3",
         ); /* Credit goes to https://opengameart.org/content/space-boss-battle-theme by Matthew Pablo */
-        this.load.audio(
+        /*this.load.audio(
             "throne",
             "assets/sounds/fakelast.mp3",
         ); /*Credit goes to https://opengameart.org/content/defying-commodus by Matthew Pablo */
-        this.load.audio(
+        /*this.load.audio(
             "win",
             "assets/sounds/symphony.mp3",
         ); /* Credit goes to https://opengameart.org/content/calm-relax-1-synthwave-421k by cynicmusic */

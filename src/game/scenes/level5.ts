@@ -73,8 +73,6 @@ export class Level5 extends Scene {
             undefined,
             this,
         );
-        const sound = this.sound.add("throne", { loop: false });
-        sound.play();
         EventBus.emit("current-scene-ready", this);
     }
 

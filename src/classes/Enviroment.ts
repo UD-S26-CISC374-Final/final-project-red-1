@@ -149,6 +149,9 @@ export class Enviroment {
         );
         new File("Elevator", throneroom, true, "Hope it doesnt get stuck!");
 
+        //Win
+        const win = new Folder("Win", hallway, false, true);
+        new File("Congratulations", win, false, "You did it!!!");
         this.nav = new Navigator(folderRoot, jail); //start of the game
 
         //Blank Inventory
