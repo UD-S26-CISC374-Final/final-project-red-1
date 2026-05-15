@@ -79,9 +79,6 @@ export class Level3 extends Scene {
 
         this.add.image(400, 400, "alchemy");
 
-        const sound = this.sound.add("alchemyspace", { loop: false });
-        sound.play();
-
         this.timer = 100;
         this.timePaused = false;
 
