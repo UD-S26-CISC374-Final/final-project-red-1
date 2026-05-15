@@ -11,6 +11,7 @@ import { Terminal } from "./scenes/terminal";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/preloader";
 import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
+import { MainMenu } from "./scenes/MainMenu";
 
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
@@ -35,6 +36,7 @@ const config: Phaser.Types.Core.GameConfig = {
         Level1Game,
         Level2Game,
         Level3Game,
+        MainMenu,
         //Level4Game,
         Level5Game,
         Win,
