@@ -18,6 +18,9 @@ export class Preloader extends Scene {
         this.load.on("progress", (progress: number) => {
             //  Update the progress bar (our bar is 464px wide, so 100% = 464px)
             bar.width = 4 + 460 * progress;
+            if (progress == 1) {
+                bar.setAlpha(0);
+            }
         });
     }
 
