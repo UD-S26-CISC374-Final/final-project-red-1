@@ -4,7 +4,6 @@ import { Scene } from "phaser";
 export class Win extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
-    fpsText: Phaser.GameObjects.Text;
 
     private player: Phaser.Physics.Arcade.Sprite;
     private ground: Phaser.Physics.Arcade.StaticGroup;
@@ -16,16 +15,37 @@ export class Win extends Scene {
     }
 
     create() {
+        // -----------------------------
+        // VIEWPORT + CAMERA SETUP
+        // -----------------------------
         this.camera = this.cameras.main;
-        this.camera.setBackgroundColor();
 
+        const W = 514;
+        const H = 768;
+
+        this.camera.setViewport(0, 0, W, H);
+
+        // Original layout assumed 1024 width
+        const SCALE = W / 1024;
+
+        // Zoom so world fits inside new viewport
+        this.camera.setZoom(SCALE);
+
+        this.camera.setBackgroundColor("#000000");
+
+        // -----------------------------
+        // BACKGROUND
+        // -----------------------------
         this.background = this.add.image(512, 384, "Hallway");
-        this.background.setAlpha();
+        this.background.setAlpha(1);
 
+        // -----------------------------
+        // TEXT UI
+        // -----------------------------
         this.add
             .text(
-                512,
-                140,
+                512 * SCALE,
+                140 * SCALE,
                 "Congratulations! You are free! The king has returned to his former glory. Something is now not rotten in Denmark!!!",
                 {
                     fontFamily: "Courier New",
@@ -38,7 +58,7 @@ export class Win extends Scene {
             .setOrigin(0.5);
 
         const playagain = this.add
-            .text(512, 320, "Play again?", {
+            .text(512 * SCALE, 320 * SCALE, "Play again?", {
                 fontFamily: "Courier New",
                 fontSize: "32px",
                 backgroundColor: "#222222",
@@ -65,26 +85,45 @@ export class Win extends Scene {
             this.scene.start("MainMenu");
         });
 
-        this.player = this.physics.add.sprite(100, 700, "player");
+        // -----------------------------
+        // WORLD OBJECTS (SCALED)
+        // -----------------------------
+
+        this.player = this.physics.add.sprite(
+            100 * SCALE,
+            700 * SCALE,
+            "player",
+        );
         this.player.setCollideWorldBounds(true);
+
         this.ground = this.physics.add.staticGroup();
+
         const g = this.ground.create(
-            512,
-            768,
+            512 * SCALE,
+            768 * SCALE,
             "ground",
         ) as Phaser.Physics.Arcade.Sprite;
-        g.setScale(2).refreshBody();
+
+        g.setScale(2 * SCALE).refreshBody();
+
         this.physics.add.collider(this.ground, this.player);
-        this.fountain = this.physics.add.image(400, 700, "fountain");
+
+        this.fountain = this.physics.add.image(
+            400 * SCALE,
+            700 * SCALE,
+            "fountain",
+        );
+
         this.paintings = this.physics.add.group();
-        this.paintings.create(600, 700, "paintings");
+        this.paintings.create(600 * SCALE, 700 * SCALE, "paintings");
+
         this.physics.add.collider(this.player, this.fountain);
         this.physics.add.collider(this.player, this.paintings);
-        EventBus.emit("current-scene-ready", this);
-    }
 
-    update() {
-        this.fpsText.update();
+        // -----------------------------
+        // EVENT BUS
+        // -----------------------------
+        EventBus.emit("current-scene-ready", this);
     }
 
     changeScene() {

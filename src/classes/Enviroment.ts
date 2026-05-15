@@ -39,6 +39,7 @@ export class Enviroment {
     private breakWall = false;
     private throneOpened = false;
     private win = false;
+    public winwin = false;
     // v constructor is exclusively for creating the actual file system the player will be going through v
     constructor() {
         //Root
@@ -149,9 +150,6 @@ export class Enviroment {
         );
         new File("Elevator", throneroom, true, "Hope it doesnt get stuck!");
 
-        //Win
-        const win = new Folder("Win", hallway, false);
-        new File("Congratulations", win, false, "You did it!!!");
         this.nav = new Navigator(folderRoot, jail); //start of the game
 
         //Blank Inventory
@@ -256,26 +254,14 @@ export class Enviroment {
             if (throneRoom instanceof Folder) {
                 throneRoom.acessible = true;
                 this.throneOpened = false;
+                return "\nSeems like there is a chance that you could get out of here";
             }
-        }
-
-        // Level 5 Logic //
-        if (currentFolder.name == "ThroneRoom") {
-            return "\nSeems like there is a chance that you could get out of here";
         }
 
         if (this.win) {
-            const win = this.nav.getFileDeep("Win");
-
-            if (win instanceof Folder) {
-                win.acessible = true;
-                this.win = false;
-            }
-        }
-
-        // Win Logic //
-        if (currentFolder.name == "Win") {
-            return "You have escaped!!!";
+            this.win = false;
+            this.winwin = true;
+            return "\nYou have escaped!";
         }
 
         return "";

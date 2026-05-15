@@ -40,6 +40,10 @@ export class Terminal extends Scene implements ChangeableScene {
         Output: string/null. Null if it doesnt exist, string if it does
     */
     getSceneFromFolder(folderName: string): string | null {
+        if (this.env.winwin) {
+            return "Win";
+        }
+
         switch (folderName) {
             case "Jail": //level 1
                 return "Level1";
