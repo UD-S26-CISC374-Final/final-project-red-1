@@ -39,7 +39,6 @@ export class Enviroment {
     private breakWall = false;
     private throneOpened = false;
     private win = false;
-
     // v constructor is exclusively for creating the actual file system the player will be going through v
     constructor() {
         //Root
@@ -174,7 +173,6 @@ export class Enviroment {
     */
     private updateEnviromentState(): string {
         const currentFolder = this.nav.current;
-
         // LEVEL 1 LOGIC
         if (currentFolder.name === "Jail") {
             const Hole = currentFolder.getChildAsFile("Hole");

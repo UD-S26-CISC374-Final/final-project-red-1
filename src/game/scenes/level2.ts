@@ -74,7 +74,7 @@ export class Level2 extends Scene {
         this.player.setCollideWorldBounds(true);
 
         // AUDIO
-        this.sound.add("cyberpunk", { loop: true }).play();
+        this.sound.add("cyberpunk", { loop: false }).play();
 
         // GROUND
         this.ground = this.physics.add.staticGroup();

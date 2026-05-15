@@ -80,13 +80,13 @@ export class Level3 extends Scene {
         this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
-        const sound = this.sound.add("alchemyspace", { loop: true });
+        const sound = this.sound.add("alchemyspace", { loop: false });
         sound.play();
 
         this.timer = 100;
         this.timePaused = false;
 
-        this.timertext = this.add.text(50, 500, "Timer: 100", {
+        this.timertext = this.add.text(100, 500, "Timer: 100", {
             fontSize: "16px",
             color: "#326a42",
         });

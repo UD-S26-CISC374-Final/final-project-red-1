@@ -1,11 +1,9 @@
 import { EventBus } from "../event-bus";
 import { Scene } from "phaser";
-import FpsText from "../objects/fps-text";
 
 export class Level1 extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
-    fpsText: FpsText;
     command: string;
     pregametext: Phaser.GameObjects.Text;
 
@@ -30,13 +28,11 @@ export class Level1 extends Scene {
 
         this.cameras.main.setViewport(0, 0, 514, 768);
 
-        this.background = this.add.image(0, 0, "background");
+        this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
         EventBus.emit("current-scene-ready", this);
     }
 
-    update() {
-        this.fpsText.update();
-    }
+    update() {}
 }

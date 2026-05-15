@@ -7,10 +7,9 @@ export class Preloader extends Scene {
 
     init() {
         //  We loaded this image in our Boot Scene, so we can display it here
-        this.add.image(512, 384, "background");
+        this.add.image(512, 384, "Hallway");
 
         //  A simple progress bar. This is the outline of the bar.
-        this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
 
         //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
         const bar = this.add.rectangle(512 - 230, 384, 4, 28, 0xffffff);
@@ -148,6 +147,10 @@ export class Preloader extends Scene {
             "table",
             "assets/table.png",
         ); /* Credit goes to Leif Kaine */
+        this.load.image(
+            "elevator",
+            "assets/elevator.png",
+        ); /* Credit goes to Leif Kaine */
         this.load.image("logo", "assets/logo.png");
         this.load.image("star", "assets/star.png");
         this.load.image("phaser-logo", "assets/phaser-logo.png");
@@ -157,10 +160,6 @@ export class Preloader extends Scene {
         }); /* Credit goes to https://opengameart.org/content/gilead-king-in-armor by author Razare2015 */
 
         // Soundtrack for the game
-        this.load.audio(
-            "tutorial",
-            "assets/sounds/carpediem.mp3",
-        ); /* Credit goes to https://opengameart.org/content/deus-ex-tempus by author Trevor Lentz */
         this.load.audio(
             "battlemusic",
             "assets/sounds/battle.mp3",
@@ -174,27 +173,13 @@ export class Preloader extends Scene {
             "assets/sounds/alchemyspace.mp3",
         ); /* Credit goes to https://opengameart.org/content/space-boss-battle-theme by Matthew Pablo */
         this.load.audio(
-            "old",
-            "assets/sounds/old.mp3",
-        ); /* Credit goes to https://opengameart.org/content/mythica by congusbongus */
-        this.load.audio(
             "throne",
             "assets/sounds/fakelast.mp3",
         ); /*Credit goes to https://opengameart.org/content/defying-commodus by Matthew Pablo */
         this.load.audio(
-            "plottwist",
-            "assets/sounds/plottwist.mp3",
-        ); /* Credit goes to https://opengameart.org/content/arabesque by brianiac256 */
-        this.load.audio(
-            "secret",
-            "assets/sounds/secret.mp3",
-        ); /* Credit goes to https://opengameart.org/content/a-slave-to-no-one-rpg-orchestral-essentials-boss-music by author InspectorJ(composed by Jonathan Shaw) */
-        this.load.audio(
             "win",
             "assets/sounds/symphony.mp3",
         ); /* Credit goes to https://opengameart.org/content/calm-relax-1-synthwave-421k by cynicmusic */
-        this.load.image("picture", "assets/picture.png");
-        this.load.image("elevator", "assets/elevator.png");
     }
 
     create() {
