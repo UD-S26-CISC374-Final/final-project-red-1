@@ -150,7 +150,7 @@ export class Enviroment {
         new File("Elevator", throneroom, true, "Hope it doesnt get stuck!");
 
         //Win
-        const win = new Folder("Win", hallway, false, true);
+        const win = new Folder("Win", hallway, false);
         new File("Congratulations", win, false, "You did it!!!");
         this.nav = new Navigator(folderRoot, jail); //start of the game
 
@@ -265,7 +265,17 @@ export class Enviroment {
         }
 
         if (this.win) {
-            return "\nOmg...you actually won??? That's quite an accomplishment :)";
+            const win = this.nav.getFileDeep("Win");
+
+            if (win instanceof Folder) {
+                win.acessible = true;
+                this.win = false;
+            }
+        }
+
+        // Win Logic //
+        if (currentFolder.name == "Win") {
+            return "You have escaped!!!";
         }
 
         return "";
