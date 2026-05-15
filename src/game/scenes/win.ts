@@ -19,8 +19,51 @@ export class Win extends Scene {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor();
 
-        this.background = this.add.image(512, 384, "background");
+        this.background = this.add.image(512, 384, "Hallway");
         this.background.setAlpha();
+
+        this.add
+            .text(
+                512,
+                140,
+                "Congratulations! You are free! The king has returned to his former glory. Something is now not rotten in Denmark!!!",
+                {
+                    fontFamily: "Courier New",
+                    fontSize: "48px",
+                    color: "#ffffff",
+                    stroke: "#000000",
+                    strokeThickness: 6,
+                },
+            )
+            .setOrigin(0.5);
+
+        const playagain = this.add
+            .text(512, 320, "Play again?", {
+                fontFamily: "Courier New",
+                fontSize: "32px",
+                backgroundColor: "#222222",
+                color: "#00ff00",
+                padding: {
+                    left: 20,
+                    right: 20,
+                    top: 10,
+                    bottom: 10,
+                },
+            })
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true });
+
+        playagain.on("pointerover", () => {
+            playagain.setScale(1.05);
+        });
+
+        playagain.on("pointerout", () => {
+            playagain.setScale(1.0);
+        });
+
+        playagain.on("pointerdown", () => {
+            this.scene.start("MainMenu");
+        });
 
         this.player = this.physics.add.sprite(100, 700, "player");
         this.player.setCollideWorldBounds(true);
