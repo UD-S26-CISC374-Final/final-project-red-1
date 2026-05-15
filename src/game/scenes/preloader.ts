@@ -87,15 +87,11 @@ export class Preloader extends Scene {
             "assets/candle.png",
         ); /* Credit goes to Leif Kaine */
         this.load.image(
-            "flask",
-            "assets/flash.png",
-        ); /* Credit goes to Leif Kaine */
-        this.load.image(
             "Hole",
             "assets/Hole.png",
         ); /* Credit goes to Leif Kaine */
         this.load.image(
-            "Potions",
+            "potions",
             "assets/potions.png",
         ); /* Credit goes to Leif Kaine */
         this.load.image(
@@ -108,12 +104,9 @@ export class Preloader extends Scene {
         ); /* Credit goes to Leif Kaine */
         this.load.image(
             "flasks",
-            "assets/flasks.png",
-        ); /* Credit goes to https://opengameart.org/content/isometric-alchemist-flasks-with-and-without-magic-symbols by Varkalandar */
-        this.load.image(
-            "chemicals",
-            "assets/chemicals.png",
-        ); /* Credit goes to https://opengameart.org/content/potions-7 by chabull */
+            "assets/flash.png",
+        ); /* Credit goes to Leif Kaine */
+
         this.load.image(
             "key",
             "assets/key.png",

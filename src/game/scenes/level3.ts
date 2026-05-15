@@ -59,8 +59,9 @@ export class Level3 extends Scene {
     }
 
     create() {
-        this.cameras.main.setViewport(0, 0, 512, 768);
-        this.cameras.main.setBounds(0, 0, 512, 768);
+        this.camera = this.cameras.main;
+        this.cameras.main.setViewport(0, 0, 514, 768);
+        this.cameras.main.setBounds(0, 0, 514, 768);
 
         this.player = this.physics.add.sprite(100, 700, "player");
         this.player.setCollideWorldBounds(true);
@@ -74,11 +75,9 @@ export class Level3 extends Scene {
         this.book = this.physics.add.group({ allowGravity: false });
         this.book.create(300, 500, "book");
         this.camera = this.cameras.main;
-        this.camera.setBackgroundColor("#404040");
+        this.camera.setBackgroundColor("#020000");
 
         this.add.image(400, 400, "alchemy");
-        this.background = this.add.image(512, 384, "background");
-        this.background.setAlpha(0.5);
 
         const sound = this.sound.add("alchemyspace", { loop: false });
         sound.play();
@@ -86,7 +85,7 @@ export class Level3 extends Scene {
         this.timer = 100;
         this.timePaused = false;
 
-        this.timertext = this.add.text(100, 500, "Timer: 100", {
+        this.timertext = this.add.text(100, 100, "Timer: 100", {
             fontSize: "16px",
             color: "#326a42",
         });
@@ -111,11 +110,11 @@ export class Level3 extends Scene {
         this.flasks.create(200, 550, "flasks");
         this.flasks.create(200, 500, "flasks");
         this.chemicalsneutral = this.physics.add.staticGroup();
-        this.chemicalsneutral.create(200, 600, "chemicals");
+        this.chemicalsneutral.create(200, 600, "potions");
         this.chemicalsacid = this.physics.add.staticGroup();
-        this.chemicalsacid.create(200, 550, "chemicals");
+        this.chemicalsacid.create(200, 550, "potions");
         this.chemicalsbase = this.physics.add.staticGroup();
-        this.chemicalsbase.create(250, 550, "chemicals");
+        this.chemicalsbase.create(250, 550, "potions");
         this.wall = this.physics.add.group({ allowGravity: false });
         this.wall.create(400, 550, "wall");
         this.wall.create(400, 600, "wall");

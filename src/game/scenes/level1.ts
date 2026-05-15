@@ -39,9 +39,6 @@ export class Level1 extends Scene {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor("#000000");
 
-        this.background = this.add.image(512, 384, "background");
-        this.background.setAlpha(0.5);
-
         const sound = this.sound.add("battlemusic", { loop: false });
         sound.play();
 

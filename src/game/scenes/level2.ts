@@ -61,13 +61,12 @@ export class Level2 extends Scene {
         this.metal = this.physics.add.group({ allowGravity: false });
         this.metal.create(350, 500, "chain");
         // CAMERA
+        this.camera = this.cameras.main;
         this.cameras.main.setViewport(0, 0, 514, 768);
-        this.cameras.main.setBackgroundColor("#808080");
+        this.cameras.main.setBackgroundColor("#0c0000");
 
         // BACKGROUND
         this.add.image(400, 400, "torture");
-        this.background = this.add.image(512, 384, "background");
-        this.background.setAlpha(0.5);
 
         // PLAYER (IMPORTANT: FIRST PHYSICS OBJECT)
         this.player = this.physics.add.sprite(100, 700, "player");
